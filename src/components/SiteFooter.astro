@@ -1,0 +1,15 @@
+---
+// PLACEHOLDER footer — replaced later by the real footer lockup (logo 44px, Urdu signature, seven-link nav).
+const base = import.meta.env.BASE_URL;
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="name">Glacial</p>
+    <p class="note"><a href={`${base}quality-certs/`}>Quality Certs</a></p>
+  </div>
+</footer>
+<style>
+  .site-footer { background: var(--water-50); padding: var(--space-8) 0; margin-top: var(--space-12); }
+  .name { font-family: var(--font-brand); font-weight: 700; font-size: 22px; margin: 0 0 var(--space-2); }
+  .note { margin: 0; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
+</style>
