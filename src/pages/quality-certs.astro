@@ -21,12 +21,25 @@ items.sort((a, b) => b.year - a.year || b.month - a.month);
 const years = [...new Set(items.map((i) => i.year))];
 ---
 <Base title="Quality Certs — Glacial">
-  <div class="hero"><div class="wrap"><h1>Quality Certs</h1></div></div>
-  {years.length === 0 && <div class="wrap"><p>No reports yet.</p></div>}
+  <div class="hero">
+    <div class="wrap">
+      <h1>Quality Certs</h1>
+      <p class="lede">Every report we publish, newest first. Open any one and read it yourself.</p>
+      {items.length === 0 && <p class="marker">[HOW MANY REPORTS, AND WHICH MONTHS? — no report files loaded yet]</p>}
+    </div>
+  </div>
+  {years.length > 1 && (
+    <nav class="yearbar" aria-label="Jump to a year">
+      <div class="wrap bar">
+        {years.map((y, idx) => <a href={`#y${y}`} aria-current={idx === 0 ? 'true' : undefined}>{y}</a>)}
+      </div>
+    </nav>
+  )}
   {years.map((y, idx) => (
-    <section class:list={['year', { alt: idx % 2 === 1 }]} aria-labelledby={`y${y}`}>
+    <section id={`y${y}`} class:list={['year', { alt: idx % 2 === 1 }]} aria-labelledby={`h${y}`}>
       <div class="wrap">
-        <h2 id={`y${y}`}>{y}</h2>
+        <h2 id={`h${y}`}>{y}</h2>
+        {idx === 0 && <p class="note">Newest published report: {items[0].label}.</p>}
         <ul class="grid">
           {items.filter((i) => i.year === y).map((i) => (
             <li>
@@ -46,12 +59,18 @@ const years = [...new Set(items.map((i) => i.year))];
 </Base>
 <style>
   .hero { background: var(--navy); color: var(--on-navy); padding: var(--space-8) 0; }
-  .year { padding: var(--space-8) 0; }
+  .lede { margin: 10px 0 0; color: var(--water-200); }
+  .marker { margin: var(--space-2) 0 0; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--water-200); }
+  .yearbar { position: sticky; top: var(--header-height); z-index: 2; background: var(--water-50); border-bottom: var(--border-width) solid var(--water-200); padding: var(--space-3) 0; }
+  .bar { display: flex; gap: var(--space-2); overflow-x: auto; }
+  .bar a { flex: 0 0 auto; display: inline-flex; align-items: center; height: var(--chip-height); padding: 0 var(--space-4); border: var(--border-width) solid var(--glacier); border-radius: var(--radius-pill); background: var(--surface); color: var(--navy); font-size: var(--button-small-size); line-height: var(--button-small-line); font-weight: var(--button-small-weight); text-decoration: none; }
+  .bar a[aria-current] { background: var(--glacier); color: #fff; }
+  .year { padding: var(--space-8) 0; scroll-margin-top: 124px; }
   .year.alt { background: var(--water-50); }
-  .year h2 { margin-bottom: var(--space-4); }
-  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--grid-gutter); }
-  @media (min-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr); } .year { padding: var(--space-12) 0; } }
-  .tile { display: block; text-decoration: none; color: var(--ink); min-height: var(--touch-min); }
-  .tile img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--radius-sm); border: var(--border-width) solid var(--water-200); background: var(--surface); }
-  .cap { display: block; margin-top: var(--space-2); font-size: var(--body-small-size); line-height: var(--body-small-line); font-weight: var(--body-small-weight); }
+  .note { margin: var(--space-2) 0 0; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
+  .grid { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gutter); }
+  @media (min-width: 768px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .year { padding: var(--space-12) 0; } }
+  .tile { display: flex; flex-direction: column; gap: var(--space-2); text-decoration: none; color: var(--navy); }
+  .tile img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--radius-sm); border: var(--border-width) solid var(--water-200); background: var(--water-50); }
+  .cap { font-size: var(--body-small-size); line-height: var(--body-small-line); font-weight: var(--body-small-weight); }
 </style>
