@@ -1,5 +1,5 @@
 // Shared facts used by the header, footer and order sheet. Sources: 00-INDEX D5 (phone), D34 (hours), D49 (seven footer links).
-// Links marked soon:true point at pages that are not built yet; they render as plain text until the page exists.
+// Links marked soon:true point at one-line "coming soon" stub pages (noindex) until the real page is built (D81 b).
 const base = import.meta.env.BASE_URL;
 export const phoneDisplay = '0311-1125124';
 export const phoneTel = '+923111125124';
