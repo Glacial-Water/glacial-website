@@ -19,19 +19,29 @@ for (const [path, img] of Object.entries(files)) {
 }
 items.sort((a, b) => b.year - a.year || b.month - a.month);
 const years = [...new Set(items.map((i) => i.year))];
+const recentYears = years.slice(0, 3);
+const earlierYears = years.slice(3);
 ---
 <Base title="Quality Certs — Glacial">
   <div class="hero">
     <div class="wrap">
       <h1>Quality Certs</h1>
-      <p class="lede">Every report we publish, newest first. Open any one and read it yourself.</p>
+      <p class="lede">Our published reports, newest first. Open any one and read it yourself.</p>
       {items.length === 0 && <p class="marker">[HOW MANY REPORTS, AND WHICH MONTHS? — no report files loaded yet]</p>}
     </div>
   </div>
   {years.length > 1 && (
     <nav class="yearbar" aria-label="Jump to a year">
       <div class="wrap bar">
-        {years.map((y, idx) => <a href={`#y${y}`} aria-current={idx === 0 ? 'true' : undefined}>{y}</a>)}
+        {recentYears.map((y, idx) => <a href={`#y${y}`} aria-current={idx === 0 ? 'true' : undefined}>{y}</a>)}
+        {earlierYears.length > 0 && (
+          <details class="earlier">
+            <summary>Earlier years</summary>
+            <div class="menu">
+              {earlierYears.map((y) => <a href={`#y${y}`}>{y}</a>)}
+            </div>
+          </details>
+        )}
       </div>
     </nav>
   )}
@@ -62,8 +72,12 @@ const years = [...new Set(items.map((i) => i.year))];
   .lede { margin: 10px 0 0; color: var(--water-200); }
   .marker { margin: var(--space-2) 0 0; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--water-200); }
   .yearbar { position: sticky; top: var(--header-height); z-index: 2; background: var(--water-50); border-bottom: var(--border-width) solid var(--water-200); padding: var(--space-3) 0; }
-  .bar { display: flex; gap: var(--space-2); overflow-x: auto; }
+  .bar { display: flex; gap: var(--space-2); flex-wrap: wrap; }
   .bar a { flex: 0 0 auto; display: inline-flex; align-items: center; height: var(--chip-height); padding: 0 var(--space-4); border: var(--border-width) solid var(--glacier); border-radius: var(--radius-pill); background: var(--surface); color: var(--navy); font-size: var(--button-small-size); line-height: var(--button-small-line); font-weight: var(--button-small-weight); text-decoration: none; }
+  .earlier { position: relative; flex: 0 0 auto; }
+  .earlier summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; height: var(--chip-height); padding: 0 var(--space-4); border: var(--border-width) solid var(--glacier); border-radius: var(--radius-pill); background: var(--surface); color: var(--navy); font-size: var(--button-small-size); line-height: var(--button-small-line); font-weight: var(--button-small-weight); }
+  .earlier summary::-webkit-details-marker { display: none; }
+  .earlier .menu { position: absolute; top: calc(var(--chip-height) + 6px); left: 0; z-index: 3; display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-3); background: var(--surface); border: var(--border-width) solid var(--water-200); border-radius: var(--radius-sm); max-height: 60vh; overflow-y: auto; }
   .bar a[aria-current] { background: var(--glacier); color: #fff; }
   .year { padding: var(--space-8) 0; scroll-margin-top: 124px; }
   .year.alt { background: var(--water-50); }
