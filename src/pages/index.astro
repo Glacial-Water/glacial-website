@@ -1,10 +1,297 @@
 ---
+// Home (variation B, D58). Built top to bottom from HomeB.dc.html (5,760px, 12 Oct 15:49) and the rulings D67-D78.
+// B3 = hero, Urdu line, quality-certified band, price grid with the two interactive tiles and the offer sheet.
+// B4 (next) = Lahore band, water splash, ten steps, badges, Google rating block, contact band.
+import { Image } from 'astro:assets';
+import '@fontsource/noto-naskh-arabic/arabic-600.css'; // Urdu font, self-hosted (D81 c); loaded on Home only
 import Base from '../layouts/Base.astro';
+import { whatsappUrl } from '../data/site';
+import hero from '../assets/home/hero-family.jpg';
+import seal from '../assets/home/seal.png';
+import bottle from '../assets/home/bottle.jpg';
+import truck from '../assets/home/truck.jpg';
+import rider from '../assets/home/rider.jpg';
+import rosette from '../assets/home/rosette.png';
+const base = import.meta.env.BASE_URL;
+const waGlyph = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>';
 ---
-<Base title="Glacial">
-  <div class="wrap" style="padding-top: var(--space-8)">
-    <h1>Glacial</h1>
-    <p>Preview build. The home page arrives in a later step.</p>
-    <p><a href={`${import.meta.env.BASE_URL}quality-certs/`}>Quality Certs</a></p>
-  </div>
+<Base title="Glacial — pure water, delivered across Lahore">
+  <figure class="hero-photo">
+    <Image src={hero} alt="Three generations of a family sitting together on a sofa at home, glasses of water in their hands, a Glacial dispenser behind them" widths={[393, 550]} sizes="100vw" loading="eager" />
+  </figure>
+
+  <section class="band navy">
+    <div class="col">
+      <p class="urdu" dir="rtl" lang="ur">بہترین پیو ، صحتمند جیو</p>
+      <h1>Certified &amp; pure.<br />At your door, every week.</h1>
+      <p class="sub">Pure water, tested every month, delivered across Lahore.</p>
+      <a class="wa" href={whatsappUrl}><Fragment set:html={waGlyph} />Order on WhatsApp</a>
+    </div>
+  </section>
+
+  <section class="band pale usp">
+    <div class="col usp-row">
+      <Image src={seal} alt="Stamp reading Quality Certified Every Month" width={104} class="seal" />
+      <div>
+        <h2>Quality certified every month</h2>
+        <p>Every month we test the water and publish the reports. Don’t take our word for it — read them.</p>
+        <a class="link" href={`${base}quality-certs/`}>See the reports →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band white prices" id="prices">
+    <div class="col">
+      <h2>Your first order, to the rupee</h2>
+      <p>Pick a bottle, set how many, see the whole price before you send a word.</p>
+
+      <h3>Start with the bottle</h3>
+      <div class="tiles">
+        <button type="button" class="tile" data-plan="new" aria-pressed="false">
+          <span class="crop bottle-crop">
+            <Image src={bottle} alt="A blue Glacial 19-litre bottle" widths={[300, 450]} sizes="45vw" />
+            <span class="slot" aria-hidden="true" style="left:72%;top:42%"><span class="u">Rs</span><span class="v small">1,300</span></span>
+          </span>
+          <span class="tile-text"><b>New bottle</b><small>Rs 1,300 deposit, refundable</small></span>
+        </button>
+        <button type="button" class="tile" data-plan="exchange" aria-pressed="false">
+          <span class="swap">
+            <svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="#0a6f8f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Two bottles being swapped"><path d="M22 30h6v-6h-6z"/><path d="M20 36h10l5 7v26a4 4 0 0 1-4 4H19a4 4 0 0 1-4-4V43z"/><path d="M68 30h6v-6h-6z"/><path d="M66 36h10l5 7v26a4 4 0 0 1-4 4H65a4 4 0 0 1-4-4V43z"/><path d="M42 44h12l-4-5"/><path d="M54 58H42l4 5"/></svg>
+          </span>
+          <span class="tile-text"><b>Exchange yours</b><small>Rs 650, by condition</small></span>
+        </button>
+      </div>
+
+      <div class="plan" id="plan" hidden>
+        <p class="plan-title" id="planTitle"></p>
+        <p class="plan-note" id="planNote"></p>
+        <div class="stepper-row">
+          <span class="lbl">How many bottles?</span>
+          <span class="stepper">
+            <button type="button" id="dec" aria-label="One bottle fewer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+            <span class="count" id="count" aria-live="polite">2</span>
+            <button type="button" id="inc" aria-label="One bottle more"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+          </span>
+        </div>
+        <div class="total-row"><span class="lbl" id="secLabel"></span><span class="total" id="secTotal"></span></div>
+        <p class="foot" id="secFoot"></p>
+        <button type="button" class="navy-btn" id="openOffer">See my total and my offer →</button>
+      </div>
+
+      <h3 class="three">Then water, three ways</h3>
+
+      <div class="card walkin">
+        <div class="shop">
+          <svg width="138" height="117" viewBox="0 0 66 56" fill="none" stroke="#1a2a5b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="A Glacial Water shop, bottles in the window"><path d="M3 19.5 11.5 5h43L63 19.5z"/><path d="M6.5 19.5V52h53V19.5"/><path d="M22 52V34.5h13.5V52"/><path d="M43.5 31.5h12.5V44H43.5z"/><path d="M47.5 31.5v-3.5h4.5v3.5"/><path d="M14 26h12"/></svg>
+          <span class="marker shop-marker">[SHOP ILLUSTRATION — LICENSED FILE NEEDED]</span>
+          <Image src={rosette} alt="" width={106} class="rosette" />
+        </div>
+        <div class="card-body">
+          <div class="name-row"><h4>Walk-in refill</h4><p class="price">Rs 200</p></div>
+          <p class="strong">Ten refills, the eleventh on us.</p>
+          <p class="small">Carry your bottle into either shop, nine to nine, any day.</p>
+          <a class="link small-link" href={`${base}delivery/`}>Where the shops are →</a>
+        </div>
+      </div>
+
+      <div class="card outline">
+        <span class="crop wide-crop truck-crop">
+          <Image src={truck} alt="A Glacial delivery truck loaded with water bottles" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" />
+          <span class="slot" aria-hidden="true" style="left:82%;top:19.1cqw"><span class="u">Rs</span><span class="v">260</span></span>
+        </span>
+        <div class="card-body">
+          <div class="name-row"><h4>Weekly delivery</h4><p class="price">Rs 260</p></div>
+          <p class="strong">Like clockwork. You never have to ring.</p>
+          <p class="small muted">Same day, same time, every week. Two bottles or more.</p>
+          <div class="live">
+            <div class="live-row"><span class="lbl s">Weekly, <span class="cnt">2 bottles</span></span><span class="live-total" id="weeklyTotal" aria-live="polite">Rs 520</span></div>
+            <div class="live-row month"><span class="small muted">About a month (× 4 weeks)</span><span class="month-total" id="monthlyTotal">Rs 2,080</span></div>
+            <p class="foot">[MONTHLY FORMULA — CONFIRM: how many deliveries a month are billed]</p>
+            <p class="foot" id="weeklyNote">Delivered the same day each week.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card outline">
+        <span class="crop wide-crop rider-crop">
+          <Image src={rider} alt="A Glacial rider on a scooter with a bottle in the carrier box" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" />
+          <span class="slot" aria-hidden="true" style="left:80.5%;top:18.2cqw"><span class="u">Rs</span><span class="v">280</span></span>
+        </span>
+        <div class="card-body">
+          <div class="name-row"><h4>Express delivery</h4><p class="price">Rs 280</p></div>
+          <p class="strong">Run dry at nine? A bottle by eleven.</p>
+          <p class="small muted">On-call delivery in 90 minutes or less<a href="#express-note" class="star" aria-label="See the note on delivery times">*</a></p>
+        </div>
+      </div>
+
+      <p class="foot" id="express-note">* Delivery times vary by location. We confirm your time when you place the order.</p>
+      <a class="link" href={`${base}prices/`}>All prices →</a>
+    </div>
+  </section>
+
+  <!-- B4 follows: Lahore band, water splash, ten steps, badges, Google rating block, contact band -->
+
+  <dialog id="offer-sheet" class="sheet" aria-labelledby="offer-title">
+    <div class="handle" aria-hidden="true"></div>
+    <h2 id="offer-title">Here's your order</h2>
+    <p class="foot top">Nothing is charged here. We confirm everything on WhatsApp.</p>
+    <dl>
+      <div><dt>Bottle</dt><dd id="oPlan"></dd></div>
+      <div><dt>How many</dt><dd id="oCount"></dd></div>
+      <div><dt id="oSecLabel"></dt><dd><s id="oSecTotal"></s> <b id="oSecOffer"></b></dd></div>
+      <div><dt>Weekly delivery</dt><dd id="oWeekly"></dd></div>
+      <div><dt>About a month (× 4 weeks)</dt><dd id="oMonthly"></dd></div>
+    </dl>
+    <p class="foot">[MONTHLY FORMULA — CONFIRM]</p>
+    <p class="offer">Book from the website and we take Rs 100 off your deposit.</p>
+    <p class="foot">Your code WEB100 travels with the message. <span id="oFoot"></span></p>
+    <a class="wa" id="oHref" href={whatsappUrl}><Fragment set:html={waGlyph} />Claim my offer on WhatsApp</a>
+    <button type="button" class="cancel" data-close-offer>Not yet — keep looking</button>
+  </dialog>
 </Base>
+
+<script>
+  // Prices: 00-INDEX D42/D63 (new bottle Rs 1,300 deposit; exchange Rs 650; weekly Rs 260 a bottle). Offer: D69/D73 (WEB100, Rs 100 off the deposit).
+  const WA = 'https://wa.me/923111125124';
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const rs = (n: number) => 'Rs ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  let plan: 'new' | 'exchange' | null = null;
+  let count = 2;
+  const sheet = $('offer-sheet') as HTMLDialogElement;
+  const tiles = document.querySelectorAll<HTMLButtonElement>('.tile');
+  function render() {
+    const ex = plan === 'exchange';
+    const unit = ex ? 650 : 1300;
+    const sec = unit * count, weekly = 260 * count, monthly = weekly * 4;
+    const label = count === 1 ? '1 bottle' : count + ' bottles';
+    const planTitle = ex ? 'Exchange your bottle' : 'New bottle';
+    const secLabel = (ex ? 'Exchange, ' : 'Deposit, ') + label;
+    const foot = ex ? 'The final price depends on your bottle’s condition.' : 'The deposit comes back to you when you return the bottle.';
+    tiles.forEach((t) => t.setAttribute('aria-pressed', String(t.dataset.plan === plan)));
+    ($('plan') as HTMLElement).hidden = plan === null;
+    $('planTitle').textContent = planTitle;
+    $('planNote').textContent = ex ? 'Rs 650 a bottle, by condition.' : 'Rs 1,300 a bottle, refundable.';
+    $('count').textContent = String(count);
+    $('secLabel').textContent = secLabel; $('secTotal').textContent = rs(sec); $('secFoot').textContent = foot;
+    $('weeklyTotal').textContent = rs(weekly); $('monthlyTotal').textContent = rs(monthly);
+    document.querySelectorAll('.cnt').forEach((e) => (e.textContent = label));
+    $('weeklyNote').textContent = count < 2 ? 'Weekly delivery starts at two bottles.' : 'Delivered the same day each week.';
+    $('oPlan').textContent = planTitle; $('oCount').textContent = label; $('oSecLabel').textContent = secLabel;
+    $('oSecTotal').textContent = rs(sec); $('oSecOffer').textContent = rs(sec - 100);
+    $('oWeekly').textContent = rs(weekly); $('oMonthly').textContent = rs(monthly); $('oFoot').textContent = foot;
+    const lines = ['Hi Glacial, I’d like to start a water service.', planTitle + ' × ' + count + ' — ' + rs(sec), 'Weekly delivery — ' + rs(weekly) + ' a week', 'Website offer code: WEB100 (Rs 100 off the deposit)'];
+    ($('oHref') as HTMLAnchorElement).href = WA + '?text=' + encodeURIComponent(lines.join('\n'));
+  }
+  tiles.forEach((t) => t.addEventListener('click', () => { plan = t.dataset.plan as 'new' | 'exchange'; render(); }));
+  $('inc').addEventListener('click', () => { count = Math.min(10, count + 1); render(); });
+  $('dec').addEventListener('click', () => { count = Math.max(1, count - 1); render(); });
+  let opener: HTMLElement | null = null;
+  $('openOffer').addEventListener('click', (e) => { opener = e.currentTarget as HTMLElement; sheet.showModal(); });
+  sheet.addEventListener('click', (e) => { const t = e.target as HTMLElement; if (t === sheet || t.closest('[data-close-offer]')) sheet.close(); });
+  sheet.addEventListener('close', () => opener?.focus());
+  render();
+</script>
+
+<style>
+  .col { width: 100%; max-width: var(--grid-phone-max); margin: 0 auto; padding: 0 var(--space-5); }
+  .band { padding: 26px 0 32px; }
+  .navy { background: var(--navy); color: var(--on-navy); }
+  .pale { background: var(--water-50); }
+  .white { background: var(--surface); }
+  .hero-photo { margin: 0; line-height: 0; background: var(--water-50); }
+  .hero-photo :global(img) { display: block; width: 100%; height: clamp(286px, 52vw, 420px); object-fit: cover; }
+  .urdu { margin: 0; font-family: var(--font-urdu); font-size: var(--tagline-ur-hero-size); line-height: var(--tagline-ur-hero-line); font-weight: var(--tagline-ur-hero-weight); color: #fff; }
+  .navy h1 { margin-top: 4px; color: #fff; }
+  .sub { margin: 10px 0 0; color: var(--water-200); }
+  .wa { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; margin-top: 20px; padding: 0 18px; border-radius: var(--radius-md); background: var(--whatsapp); color: var(--on-whatsapp); font-size: var(--button-whatsapp-size); line-height: var(--button-whatsapp-line); font-weight: var(--button-whatsapp-weight); text-decoration: none; }
+  .wa:hover { background: var(--whatsapp-hover); color: var(--on-whatsapp); }
+  .wa:active { background: var(--whatsapp-active); }
+  .navy :focus-visible { outline-color: var(--water-200); }
+  .usp { padding: 26px 0; }
+  .usp-row { display: flex; align-items: flex-start; gap: var(--space-3-5); }
+  .usp-row > div { flex: 1 1 auto; min-width: 0; }
+  .usp :global(.seal) { flex: 0 0 auto; width: 104px; height: auto; }
+  .usp h2 { color: var(--ink); }
+  .usp p { margin: 6px 0 0; }
+  .link { display: inline-flex; align-items: center; min-height: var(--touch-min); font-weight: 600; text-decoration: none; }
+  .prices { padding: 32px 0 28px; }
+  .prices p { margin: 8px 0 0; }
+  h3 { margin: 22px 0 0; font-size: 17px; line-height: 24px; font-weight: 700; }
+  h3.three { margin-top: 26px; }
+  .tiles { margin-top: 12px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+  .tile { display: flex; flex-direction: column; padding: 0; text-align: left; cursor: pointer; background: var(--surface); border: 2px solid var(--water-200); border-radius: var(--radius-md); overflow: hidden; font-family: inherit; color: var(--ink); }
+  .tile[aria-pressed="true"] { background: var(--water-50); border-color: var(--glacier); }
+  .crop { position: relative; display: block; overflow: hidden; line-height: 0; container-type: inline-size; }
+  .crop :global(img) { display: block; width: 100%; height: auto; }
+  .bottle-crop { width: 100%; aspect-ratio: 160 / 148; }
+  .bottle-crop :global(img) { margin-top: -13.75cqw; }
+  .swap { display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 160 / 148; background: var(--water-50); }
+  .tile-text { display: block; padding: 10px 12px 12px; }
+  .tile-text b { display: block; font-size: 16px; line-height: 22px; }
+  .tile-text small { display: block; margin-top: 2px; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
+  .slot { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; line-height: normal; }
+  .slot .u { font-size: 11px; line-height: 13px; font-weight: 600; letter-spacing: 0.04em; }
+  .slot .v { font-size: 22px; line-height: 25px; font-weight: 700; }
+  .slot .v.small { font-size: 15px; line-height: 18px; }
+  .plan { margin-top: 12px; padding: var(--space-4); background: var(--water-50); border-radius: var(--radius-md); }
+  .plan[hidden] { display: none; }
+  .plan p { margin: 0; }
+  .plan-title { font-size: 17px; line-height: 24px; font-weight: 700; }
+  .plan-note { margin-top: 4px; font-size: var(--body-small-size); line-height: var(--body-small-line); }
+  .stepper-row, .total-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-top: 14px; }
+  .total-row { align-items: baseline; padding-top: 14px; border-top: 1px solid var(--water-200); }
+  .lbl { font-size: 16px; line-height: 22px; font-weight: 600; }
+  .lbl.s { font-size: 15px; line-height: 21px; }
+  .total { font-size: var(--h2-size); line-height: var(--h2-line); font-weight: 700; white-space: nowrap; }
+  .stepper { display: flex; align-items: center; gap: 6px; }
+  .stepper button { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid var(--line-strong); border-radius: var(--radius-pill); cursor: pointer; }
+  .count { min-width: 34px; text-align: center; font-size: var(--h2-size); line-height: var(--h2-line); font-weight: 700; }
+  .foot { margin: 6px 0 0; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
+  .navy-btn { margin-top: 16px; width: 100%; min-height: var(--button-height); background: var(--navy); color: #fff; border: 0; border-radius: var(--radius-md); font-family: inherit; font-size: var(--button-size); line-height: var(--button-line); font-weight: 700; cursor: pointer; }
+  .navy-btn:hover { background: var(--navy-hover); }
+  .navy-btn:active { background: var(--navy-active); }
+  .card { margin-top: 12px; border-radius: var(--radius-md); overflow: hidden; }
+  .walkin { background: var(--water-100); }
+  .outline { background: #fff; border: 1px solid var(--water-200); }
+  .shop { position: relative; height: 186px; background: var(--water-50); border-bottom: 1px solid var(--water-200); display: flex; align-items: center; justify-content: center; }
+  .marker { position: absolute; left: 12px; bottom: 10px; max-width: 218px; padding: 5px 8px; background: #fff; border: 1px dashed var(--ink-muted); border-radius: 8px; font-size: 11px; line-height: 15px; font-weight: 600; color: var(--ink-muted); }
+  .shop :global(.rosette) { position: absolute; right: 10px; top: 14px; width: 106px; height: auto; }
+  .wide-crop { width: 100%; }
+  .truck-crop { aspect-ratio: 351 / 268; }
+  .truck-crop :global(img) { margin-top: -35.6cqw; }
+  .rider-crop { aspect-ratio: 351 / 280; }
+  .rider-crop :global(img) { margin-top: -33.6cqw; }
+  .card-body { padding: 14px var(--space-4) var(--space-4); }
+  .name-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+  h4 { margin: 0; font-size: 19px; line-height: 25px; font-weight: 700; }
+  .card-body p { margin: 0; }
+  .price { font-size: var(--h2-size); line-height: var(--h2-line); font-weight: 700; white-space: nowrap; }
+  .strong { margin-top: 6px !important; font-size: 17px; line-height: 24px; font-weight: 700; }
+  .small { margin-top: 4px !important; font-size: var(--body-small-size); line-height: var(--body-small-line); }
+  .muted { color: var(--ink-muted); }
+  .small-link { font-size: var(--body-small-size); line-height: var(--body-small-line); }
+  .star { text-decoration: none; font-weight: 700; }
+  .live { margin-top: 12px; padding: 12px 14px; background: var(--water-50); border-radius: var(--radius-sm); }
+  .live-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+  .live-row.month { margin-top: 6px; }
+  .live-total { font-size: 19px; line-height: 25px; font-weight: 700; white-space: nowrap; }
+  .month-total { font-size: 17px; line-height: 24px; font-weight: 700; color: var(--ink-muted); white-space: nowrap; }
+  .live .foot { margin-top: 8px; }
+  #express-note { margin-top: 14px; }
+  /* offer sheet (D69): opens only on the visitor's tap */
+  .sheet { margin: auto 0 0; width: 100%; max-width: none; border: 0; padding: 12px var(--space-5) var(--space-6); background: var(--surface); border-radius: var(--radius-lg) var(--radius-lg) 0 0; color: var(--ink); max-height: 92vh; overflow: auto; }
+  .sheet::backdrop { background: rgba(15, 26, 58, 0.55); }
+  .sheet[open] { display: flex; flex-direction: column; }
+  .sheet > * { width: 100%; max-width: var(--grid-phone-max); margin-left: auto; margin-right: auto; }
+  .handle { width: 40px; height: 4px; border-radius: var(--radius-pill); background: var(--water-200); align-self: center; margin-bottom: 14px; }
+  .sheet .foot.top { margin: 4px auto 14px; font-size: var(--body-small-size); line-height: var(--body-small-line); }
+  dl { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  dl > div { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+  dt { font-size: var(--body-small-size); line-height: var(--body-small-line); color: var(--ink-muted); }
+  dd { margin: 0; text-align: right; font-size: 16px; line-height: 22px; font-weight: 600; }
+  dd s { font-size: var(--body-small-size); color: var(--ink-muted); }
+  dd b { margin-left: 8px; font-size: 19px; line-height: 25px; }
+  .offer { margin: 14px auto 0; padding: 12px 14px; background: var(--glacier-tint); border-radius: var(--radius-sm); font-weight: 700; line-height: 24px; }
+  .cancel { margin-top: 10px; min-height: var(--control-height); background: #fff; border: 0; border-radius: var(--radius-md); color: var(--ink-muted); font-family: inherit; font-size: var(--button-size); line-height: var(--button-line); font-weight: 600; cursor: pointer; }
+  @media (min-width: 768px) { .band { padding-top: 40px; padding-bottom: 48px; } }
+</style>
