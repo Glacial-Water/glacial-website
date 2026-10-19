@@ -1,19 +1,24 @@
 ---
 // Home (variation B, D58). Built top to bottom from HomeB.dc.html (5,760px, 12 Oct 15:49) and the rulings D67-D78.
 // B3 = hero, Urdu line, quality-certified band, price grid with the two interactive tiles and the offer sheet.
-// B4 (next) = Lahore band, water splash, ten steps, badges, Google rating block, contact band.
+// B4 (done) = Lahore band, water splash, ten steps, badges, Google rating block, contact band.
 import { Image } from 'astro:assets';
 import '@fontsource/noto-naskh-arabic/arabic-600.css'; // Urdu font, self-hosted (D81 c); loaded on Home only
 import Base from '../layouts/Base.astro';
-import { whatsappUrl } from '../data/site';
+import { whatsappUrl, phoneDisplay, phoneTel } from '../data/site';
 import hero from '../assets/home/hero-family.jpg';
 import seal from '../assets/home/seal.png';
 import bottle from '../assets/home/bottle.jpg';
 import truck from '../assets/home/truck.jpg';
 import rider from '../assets/home/rider.jpg';
 import rosette from '../assets/home/rosette.png';
+import splash from '../assets/home/splash.jpg';
+import badgeChlorine from '../assets/home/badge-chlorine-free.png';
+import badge10 from '../assets/home/badge-10-step.png';
 const base = import.meta.env.BASE_URL;
 const waGlyph = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>';
+const steps = ["Underground water sourcing", "Multimedia filtration", "Activated carbon", "Ultra-filtration", "Reverse osmosis", "Mineral fortification", "Ozonisation", "Ultra-filtration|A second pass, after ozonisation.", "UV filtration", "Sterilised bottles"];
+const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z';
 ---
 <Base title="Glacial — pure water, delivered across Lahore">
   <figure class="hero-photo">
@@ -129,7 +134,68 @@ const waGlyph = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" str
     </div>
   </section>
 
-  <!-- B4 follows: Lahore band, water splash, ten steps, badges, Google rating block, contact band -->
+  <figure class="splash">
+    <Image src={splash} alt="" width={551} loading="lazy" />
+  </figure>
+  <section class="band pale lahore">
+    <div class="col">
+      <h2>We deliver across most of Lahore.</h2>
+      <p>Send us your block — we'll tell you straight away.</p>
+      <a class="wa" href={whatsappUrl}><Fragment set:html={waGlyph} />Check my area</a>
+    </div>
+  </section>
+
+  <section class="band navy steps-head">
+    <div class="col">
+      <h2>Ten steps between the ground and your glass</h2>
+      <p class="sub">Chlorine-free, every bottle, every week.</p>
+    </div>
+  </section>
+  <section class="band white steps-body">
+    <div class="col">
+      <ol class="steps">
+        {steps.map((st, i) => { const [name, note] = st.split('|'); return (
+          <li><span class="node" aria-hidden="true">{i + 1}</span><span class="label">{name}{note && <span class="note">{note}</span>}</span></li>
+        ); })}
+      </ol>
+    </div>
+  </section>
+
+  <section class="band white badges">
+    <div class="col">
+      <ul>
+        <li><Image src={badgeChlorine} alt="" width={96} /><b>Chlorine-free</b><small>No chlorine taste, ever.</small></li>
+        <li><Image src={badge10} alt="" width={78} /><b>10-step purification</b><small>Every bottle, no shortcuts.</small></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band pale reviews">
+    <div class="col">
+      <h2>What Lahore says</h2>
+      <div class="rating">
+        <span class="glogo" aria-hidden="true">GOOGLE LOGO</span>
+        <div class="rating-text"><p class="r-big">[RATING] out of 5</p><p class="r-sub">on Google, from [COUNT] reviews</p></div>
+        <span class="stars" aria-hidden="true">
+          {[1, 2, 3, 4, 5].map((n) => <svg width="18" height="18" viewBox="0 0 24 24" fill={n < 5 ? '#1a2a5b' : '#b9dcee'}><path d={star} /></svg>)}
+        </span>
+      </div>
+      <p class="foot">[GOOGLE LOGO — drop in the official brand asset at build. Stars shown are a stand-in until [RATING] arrives.]</p>
+      {[1, 2, 3].map((n) => (
+        <blockquote><p>[REVIEW {n} — REAL WORDS FROM THE GOOGLE PROFILE]</p><footer>[FIRST NAME], Lahore</footer></blockquote>
+      ))}
+      <p class="foot">[LINK TO THE GOOGLE PROFILE — CONFIRM] — "See all reviews on Google →"</p>
+    </div>
+  </section>
+
+  <section class="band navy contact">
+    <div class="col">
+      <h2>Your first bottle is one message away</h2>
+      <p class="sub">Send your address. We'll confirm your delivery time the same day.</p>
+      <a class="wa" href={whatsappUrl}><Fragment set:html={waGlyph} />Message on WhatsApp</a>
+      <a class="call" href={`tel:${phoneTel}`}>{phoneDisplay}</a>
+    </div>
+  </section>
 
   <dialog id="offer-sheet" class="sheet" aria-labelledby="offer-title">
     <div class="handle" aria-hidden="true"></div>
@@ -293,5 +359,45 @@ const waGlyph = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" str
   dd b { margin-left: 8px; font-size: 19px; line-height: 25px; }
   .offer { margin: 14px auto 0; padding: 12px 14px; background: var(--glacier-tint); border-radius: var(--radius-sm); font-weight: 700; line-height: 24px; }
   .cancel { margin-top: 10px; min-height: var(--control-height); background: #fff; border: 0; border-radius: var(--radius-md); color: var(--ink-muted); font-family: inherit; font-size: var(--button-size); line-height: var(--button-line); font-weight: 600; cursor: pointer; }
+  /* B4 */
+  .splash { margin: 0; line-height: 0; background: var(--water-50); }
+  .splash :global(img) { display: block; width: 100%; height: 78px; object-fit: cover; }
+  .lahore { padding: 20px 0 32px; }
+  .lahore p { margin: 8px 0 0; }
+  .lahore .wa { margin-top: 14px; }
+  .steps-head { padding: 32px 0 26px; }
+  .steps-head h2 { color: #fff; }
+  .steps-head .sub { margin-top: 8px; }
+  .steps-body { padding: 26px 0 30px; }
+  .steps { list-style: none; margin: 0; padding: 0; }
+  .steps > li { position: relative; display: flex; gap: var(--space-3-5); padding-bottom: var(--space-4); }
+  .steps > li:last-child { padding-bottom: 0; }
+  .steps > li::before { content: ""; position: absolute; left: 16px; top: 36px; bottom: 0; width: 2px; background: var(--water-200); }
+  .steps > li:last-child::before { display: none; }
+  .node { flex: 0 0 auto; width: 34px; height: 34px; border-radius: var(--radius-pill); background: var(--water-50); border: 2px solid var(--glacier); color: var(--glacier); font-size: 15px; line-height: 30px; font-weight: 700; text-align: center; }
+  .label { padding-top: 5px; font-size: 16px; line-height: 24px; font-weight: 600; }
+  .note { display: block; margin-top: 2px; font-size: var(--caption-size); line-height: var(--caption-line); font-weight: 400; color: var(--ink-muted); }
+  .badges { padding: 28px 0 32px; }
+  .badges ul { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); align-items: start; }
+  .badges li { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+  .badges :global(img) { height: auto; }
+  .badges b { font-size: var(--body-small-size); line-height: var(--body-small-line); }
+  .badges small { font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
+  .reviews { padding: 32px 0; }
+  .rating { margin-top: 14px; padding: var(--space-4); background: #fff; border: 1px solid var(--water-200); border-radius: var(--radius-md); display: flex; align-items: center; gap: var(--space-3-5); }
+  .glogo { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; width: 54px; height: 54px; border: 1px dashed var(--ink-muted); border-radius: var(--radius-sm); font-size: 10px; line-height: 12px; font-weight: 600; color: var(--ink-muted); text-align: center; }
+  .rating-text { flex: 1 1 auto; min-width: 0; }
+  .rating p { margin: 0; }
+  .r-big { font-size: var(--h2-size); line-height: var(--h2-line); font-weight: 700; }
+  .r-sub { margin-top: 2px !important; font-size: var(--body-small-size); line-height: var(--body-small-line); color: var(--ink-muted); }
+  .stars { flex: 0 0 auto; display: flex; gap: 2px; }
+  .reviews .foot { margin-top: 8px; }
+  blockquote { margin: 12px 0 0; padding: var(--space-4); background: #fff; border-radius: var(--radius-md); }
+  blockquote p { margin: 0; }
+  blockquote footer { margin-top: 8px; font-size: var(--body-small-size); line-height: var(--body-small-line); font-weight: 500; color: var(--ink-muted); }
+  .contact { padding: 32px 0; }
+  .contact .sub { margin: 10px 0 16px; }
+  .contact .wa { margin-top: 0; }
+  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
   @media (min-width: 768px) { .band { padding-top: 40px; padding-bottom: 48px; } }
 </style>
