@@ -1,15 +1,30 @@
 ---
-// PLACEHOLDER footer — replaced later by the real footer lockup (logo 44px, Urdu signature, seven-link nav).
-const base = import.meta.env.BASE_URL;
+// Shared footer lockup: logo 44px, seven-link nav (D49), tagline, hours (D34), contact. Replaceable component.
+import { Image } from 'astro:assets';
+import logo from '../assets/glacial-logo.png';
+import { navLinks, hoursLine, phoneDisplay } from '../data/site';
 ---
 <footer class="site-footer">
-  <div class="wrap">
-    <p class="name">Glacial</p>
-    <p class="note"><a href={`${base}quality-certs/`}>Quality Certs</a></p>
+  <div class="wrap inner">
+    <nav aria-label="Footer">
+      <ul>
+        {navLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <Image class="logo" src={logo} alt="Glacial Water" height={44} width={146} />
+    <p class="tag">water as nature intended</p>
+    <p class="small">{hoursLine}</p>
+    <p class="small">Lahore · info@glacial.pk · {phoneDisplay}</p>
   </div>
 </footer>
 <style>
-  .site-footer { background: var(--water-50); padding: var(--space-8) 0; margin-top: var(--space-12); }
-  .name { font-family: var(--font-brand); font-weight: 700; font-size: 22px; margin: 0 0 var(--space-2); }
-  .note { margin: 0; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
+  .site-footer { background: var(--surface); padding: var(--space-8) 0; margin-top: var(--space-12); border-top: var(--border-width) solid var(--water-200); }
+  .inner { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  nav { width: 100%; }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px var(--space-3); text-align: left; }
+  li a { display: flex; align-items: center; min-height: 36px; font-size: var(--body-small-size); line-height: var(--body-small-line); font-weight: 500; text-decoration: none; }
+  .logo { height: var(--logo-footer); width: auto; display: block; margin-top: var(--space-5); }
+  .tag { margin: var(--space-3) 0 0; font-family: var(--font-brand); font-size: 15px; line-height: 22px; font-weight: 500; color: var(--navy); }
+  .small { margin: var(--space-2) 0 0; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
+  @media (min-width: 768px) { ul { grid-template-columns: repeat(4, auto); justify-content: center; gap: 4px var(--space-8); } }
 </style>

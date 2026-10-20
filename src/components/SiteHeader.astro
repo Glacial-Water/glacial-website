@@ -1,16 +1,50 @@
 ---
-// PLACEHOLDER header — replaced later by the real shared header (58px, logo 34px, Order pill).
+// Shared header: 58px, logo 34px, Order pill, menu. Identical on every page (replaceable component).
+import { Image } from 'astro:assets';
+import logo from '../assets/glacial-logo.png';
+import { navLinks } from '../data/site';
 const base = import.meta.env.BASE_URL;
 ---
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href={base}>Glacial</a>
-    <span class="order-pill" aria-hidden="true">Order</span>
+    <a class="brand" href={`${base}`}><Image src={logo} alt="Glacial Water — home" height={34} width={113} loading="eager" /></a>
+    <div class="actions">
+      <button type="button" class="order-pill" data-open-order aria-haspopup="dialog">Order</button>
+      <button type="button" class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
   </div>
+  <nav class="menu-panel" id="menu-panel" aria-label="Site" hidden>
+    <div class="wrap">
+      <ul>
+        {navLinks.map((l) => <li>{l.soon ? <span class="soon">{l.label}</span> : <a href={l.href}>{l.label}</a>}</li>)}
+      </ul>
+    </div>
+  </nav>
 </header>
+<script>
+  const btn = document.getElementById('menu-btn');
+  const panel = document.getElementById('menu-panel');
+  if (btn && panel) {
+    const set = (open: boolean) => { panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu'); };
+    btn.addEventListener('click', () => set(panel.hidden));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) { set(false); btn.focus(); } });
+  }
+</script>
 <style>
-  .site-header { position: sticky; top: 0; z-index: 5; height: var(--header-height); background: var(--surface); border-bottom: var(--border-width) solid var(--line); }
-  .bar { height: 100%; display: flex; align-items: center; justify-content: space-between; }
-  .brand { font-family: var(--font-brand); font-weight: 700; font-size: 22px; color: var(--navy); text-decoration: none; }
-  .order-pill { background: var(--navy); color: var(--on-navy); border-radius: var(--radius-pill); padding: 8px 18px; font-size: var(--button-small-size); line-height: var(--button-small-line); font-weight: var(--button-small-weight); }
+  .site-header { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: var(--border-width) solid var(--water-200); }
+  .bar { height: var(--header-height); display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+  .brand { display: flex; align-items: center; }
+  .brand img { height: var(--logo-header); width: auto; display: block; }
+  .actions { display: flex; align-items: center; gap: var(--space-1); }
+  .order-pill { height: 36px; min-width: 76px; padding: 0 var(--space-4); margin: 4px 0; background: var(--navy); color: var(--on-navy); border: 0; border-radius: var(--radius-pill); font: inherit; font-size: var(--button-small-size); line-height: var(--button-small-line); font-weight: var(--button-small-weight); cursor: pointer; }
+  .order-pill:hover { background: var(--navy-hover); }
+  .order-pill:active { background: var(--navy-active); }
+  .menu-btn { width: var(--touch-min); height: var(--touch-min); display: flex; align-items: center; justify-content: center; background: var(--surface); color: var(--navy); border: 0; border-radius: var(--radius-sm); cursor: pointer; }
+  .menu-panel { border-top: var(--border-width) solid var(--water-200); background: var(--surface); padding: var(--space-2) 0 var(--space-3); }
+  .menu-panel[hidden] { display: none; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li a, li .soon { display: flex; align-items: center; min-height: var(--touch-min); font-size: var(--body-small-size); line-height: var(--body-small-line); font-weight: 500; text-decoration: none; }
+  li .soon { color: var(--ink-muted); }
 </style>

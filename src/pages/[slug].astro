@@ -1,0 +1,19 @@
+---
+// "Coming soon" stub pages (D81 b) for footer links whose real pages are not built yet. Noindex. Delete a link's `soon` flag in
+// src/data/site.ts and add the real page file when it is built; the real file wins over this one.
+import Base from '../layouts/Base.astro';
+import { navLinks } from '../data/site';
+export function getStaticPaths() {
+  return navLinks
+    .filter((l) => l.soon)
+    .map((l) => ({ params: { slug: l.href.replace(/^.*\/([^/]+)\/$/, '$1') }, props: { label: l.label } }));
+}
+const { label } = Astro.props;
+---
+<Base title={`${label} — Glacial`} noindex>
+  <div class="wrap"><h1>{label}</h1><p>This page is coming soon.</p></div>
+</Base>
+<style>
+  .wrap { padding-top: var(--space-12); padding-bottom: var(--space-12); }
+  p { margin: var(--space-3) 0 0; }
+</style>

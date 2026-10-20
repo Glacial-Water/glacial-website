@@ -1,0 +1,54 @@
+---
+// Shared order sheet (replaceable). Opens from any element with [data-open-order].
+// Uses the browser's own <dialog>: Escape closes it, focus returns to the button that opened it.
+import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
+---
+<dialog id="order-sheet" class="order-sheet" aria-labelledby="order-title">
+  <div class="handle" aria-hidden="true"></div>
+  <h2 id="order-title">Order water</h2>
+  <p class="lead">Pick whichever is easier for you.</p>
+  <a class="wa" href={whatsappUrl}>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>
+    <span><b>WhatsApp</b><small>Message us — fastest reply</small></span>
+  </a>
+  <a class="call" href={`tel:${phoneTel}`}>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16.9v2.6a1.7 1.7 0 0 1-1.9 1.7 17 17 0 0 1-7.4-2.6 16.6 16.6 0 0 1-5.1-5.1A17 17 0 0 1 4 6.1 1.7 1.7 0 0 1 5.7 4.2h2.6a1.7 1.7 0 0 1 1.7 1.5c.1.8.3 1.6.6 2.4a1.7 1.7 0 0 1-.4 1.8l-1.1 1.1a13.6 13.6 0 0 0 5.1 5.1l1.1-1.1a1.7 1.7 0 0 1 1.8-.4c.8.3 1.6.5 2.4.6a1.7 1.7 0 0 1 1.5 1.7z"/></svg>
+    <span><b>Call {phoneDisplay}</b><small>Bookings until 7pm</small></span>
+  </a>
+  <button type="button" class="cancel" data-close-order>Cancel</button>
+</dialog>
+<script>
+  const sheet = document.getElementById('order-sheet') as HTMLDialogElement | null;
+  if (sheet) {
+    let opener: HTMLElement | null = null;
+    document.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      const open = t.closest('[data-open-order]') as HTMLElement | null;
+      if (open) { opener = open; sheet.showModal(); return; }
+      if (t.closest('[data-close-order]') || t === sheet) sheet.close(); // t === sheet: tap on the dim backdrop
+    });
+    sheet.addEventListener('close', () => { opener?.focus(); });
+  }
+</script>
+<style>
+  .order-sheet { margin: auto 0 0; width: 100%; max-width: none; border: 0; padding: 12px var(--space-5) var(--space-6); background: var(--surface); border-radius: var(--radius-lg) var(--radius-lg) 0 0; color: var(--ink); }
+  .order-sheet::backdrop { background: rgba(15, 26, 58, 0.55); }
+  .order-sheet > * { max-width: var(--grid-phone-max); margin-left: auto; margin-right: auto; }
+  .order-sheet[open] { display: flex; flex-direction: column; }
+  .handle { width: 40px; height: 4px; border-radius: var(--radius-pill); background: var(--water-200); align-self: center; margin-bottom: var(--space-4); }
+  h2 { margin: 0; }
+  .lead { margin: 4px auto 18px; color: var(--ink-muted); width: 100%; }
+  .wa, .call { width: 100%; display: flex; align-items: center; gap: var(--space-3); padding: 14px var(--space-4); border-radius: var(--radius-md); text-decoration: none; }
+  .wa { min-height: 56px; background: var(--whatsapp); color: var(--on-whatsapp); }
+  .wa:hover { background: var(--whatsapp-hover); color: var(--on-whatsapp); }
+  .wa:active { background: var(--whatsapp-active); }
+  .wa:focus-visible { outline-color: var(--water-200); }
+  .call { margin-top: var(--space-3); min-height: 52px; border: 1px solid var(--line-strong); color: var(--navy); }
+  .call:hover { background: var(--water-50); color: var(--navy); }
+  span { display: flex; flex-direction: column; }
+  b { font-size: 19px; line-height: 26px; font-weight: 700; }
+  .call b { font-size: 17px; line-height: 24px; }
+  small { font-size: 15px; line-height: 21px; }
+  .call small { font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+  .cancel { margin: var(--space-3) auto 0; min-height: 45px; background: var(--surface); border: 0; border-radius: var(--radius-md); color: var(--ink-muted); font: inherit; font-weight: 600; cursor: pointer; width: 100%; }
+</style>
