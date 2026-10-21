@@ -110,8 +110,6 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
           <p class="small muted">Same day, same time, every week. Two bottles or more.</p>
           <div class="live">
             <div class="live-row"><span class="lbl s">Weekly, <span class="cnt">2 bottles</span></span><span class="live-total" id="weeklyTotal" aria-live="polite">Rs 520</span></div>
-            <div class="live-row month"><span class="small muted">About a month (× 4 weeks)</span><span class="month-total" id="monthlyTotal">Rs 2,080</span></div>
-            <p class="foot">[MONTHLY FORMULA — CONFIRM: how many deliveries a month are billed]</p>
             <p class="foot" id="weeklyNote">Delivered the same day each week.</p>
           </div>
         </div>
@@ -206,9 +204,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
       <div><dt>How many</dt><dd id="oCount"></dd></div>
       <div><dt id="oSecLabel"></dt><dd><s id="oSecTotal"></s> <b id="oSecOffer"></b></dd></div>
       <div><dt>Weekly delivery</dt><dd id="oWeekly"></dd></div>
-      <div><dt>About a month (× 4 weeks)</dt><dd id="oMonthly"></dd></div>
     </dl>
-    <p class="foot">[MONTHLY FORMULA — CONFIRM]</p>
     <p class="offer">Book from the website and we take Rs 100 off your deposit.</p>
     <p class="foot">Your code WEB100 travels with the message. <span id="oFoot"></span></p>
     <a class="wa" id="oHref" href={whatsappUrl}><Fragment set:html={waGlyph} />Claim my offer on WhatsApp</a>
@@ -228,7 +224,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   function render() {
     const ex = plan === 'exchange';
     const unit = ex ? 650 : 1300;
-    const sec = unit * count, weekly = 260 * count, monthly = weekly * 4;
+    const sec = unit * count, weekly = 260 * count;
     const label = count === 1 ? '1 bottle' : count + ' bottles';
     const planTitle = ex ? 'Exchange your bottle' : 'New bottle';
     const secLabel = (ex ? 'Exchange, ' : 'Deposit, ') + label;
@@ -239,12 +235,12 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
     $('planNote').textContent = ex ? 'Rs 650 a bottle, by condition.' : 'Rs 1,300 a bottle, refundable.';
     $('count').textContent = String(count);
     $('secLabel').textContent = secLabel; $('secTotal').textContent = rs(sec); $('secFoot').textContent = foot;
-    $('weeklyTotal').textContent = rs(weekly); $('monthlyTotal').textContent = rs(monthly);
+    $('weeklyTotal').textContent = rs(weekly);
     document.querySelectorAll('.cnt').forEach((e) => (e.textContent = label));
     $('weeklyNote').textContent = count < 2 ? 'Weekly delivery starts at two bottles.' : 'Delivered the same day each week.';
     $('oPlan').textContent = planTitle; $('oCount').textContent = label; $('oSecLabel').textContent = secLabel;
     $('oSecTotal').textContent = rs(sec); $('oSecOffer').textContent = rs(sec - 100);
-    $('oWeekly').textContent = rs(weekly); $('oMonthly').textContent = rs(monthly); $('oFoot').textContent = foot;
+    $('oWeekly').textContent = rs(weekly); $('oFoot').textContent = foot;
     const lines = ['Hi Glacial, I’d like to start a water service.', planTitle + ' × ' + count + ' — ' + rs(sec), 'Weekly delivery — ' + rs(weekly) + ' a week', 'Website offer code: WEB100 (Rs 100 off the deposit)'];
     ($('oHref') as HTMLAnchorElement).href = WA + '?text=' + encodeURIComponent(lines.join('\n'));
   }
@@ -339,9 +335,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   .star { text-decoration: none; font-weight: 700; }
   .live { margin-top: 12px; padding: 12px 14px; background: var(--water-50); border-radius: var(--radius-sm); }
   .live-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
-  .live-row.month { margin-top: 6px; }
   .live-total { font-size: 19px; line-height: 25px; font-weight: 700; white-space: nowrap; }
-  .month-total { font-size: 17px; line-height: 24px; font-weight: 700; color: var(--ink-muted); white-space: nowrap; }
   .live .foot { margin-top: 8px; }
   #express-note { margin-top: 14px; }
   /* offer sheet (D69): opens only on the visitor's tap */
