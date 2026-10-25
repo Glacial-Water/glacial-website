@@ -9,7 +9,7 @@ const base = import.meta.env.BASE_URL;
   <div class="wrap bar">
     <a class="brand" href={`${base}`}><Image src={logo} alt="Glacial Water — home" height={34} width={113} loading="eager" /></a>
     <div class="actions">
-      <button type="button" class="order-pill" data-open-order aria-haspopup="dialog">Order</button>
+      <a class="order-pill" href={`${base}order/`} aria-current={Astro.url.pathname.replace(/\/$/, '').endsWith('/order') ? 'page' : undefined}>Order</a>
       <button type="button" class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
@@ -38,7 +38,7 @@ const base = import.meta.env.BASE_URL;
   .brand { display: flex; align-items: center; }
   .brand img { height: var(--logo-header); width: auto; display: block; }
   .actions { display: flex; align-items: center; gap: var(--space-1); }
-  .order-pill { height: 36px; min-width: 76px; padding: 0 var(--space-4); margin: 4px 0; background: var(--navy); color: var(--on-navy); border: 0; border-radius: var(--radius-pill); font: inherit; font-size: var(--button-small-size); line-height: var(--button-small-line); font-weight: var(--button-small-weight); cursor: pointer; }
+  .order-pill { height: 36px; min-width: 76px; padding: 0 var(--space-4); margin: 4px 0; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; background: var(--navy); color: var(--on-navy); border: 0; border-radius: var(--radius-pill); font-size: var(--button-small-size); line-height: var(--button-small-line); font-weight: var(--button-small-weight); cursor: pointer; }
   .order-pill:hover { background: var(--navy-hover); }
   .order-pill:active { background: var(--navy-active); }
   .menu-btn { width: var(--touch-min); height: var(--touch-min); display: flex; align-items: center; justify-content: center; background: var(--surface); color: var(--navy); border: 0; border-radius: var(--radius-sm); cursor: pointer; }
