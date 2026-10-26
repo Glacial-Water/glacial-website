@@ -6,7 +6,7 @@ export const phoneTel = '+923111125124';
 export const whatsappUrl = 'https://wa.me/923111125124';
 export const hoursLine = 'Shops open 9am–9pm, every day · Delivery bookings until 7pm';
 export const navLinks: { label: string; href: string; soon?: boolean }[] = [
-  { label: 'Products and prices', href: `${base}prices/`, soon: true },
+  { label: 'Products and prices', href: `${base}prices/` },
   { label: 'How delivery works', href: `${base}delivery/`, soon: true },
   { label: 'Quality Certs', href: `${base}quality-certs/` },
   { label: 'For businesses', href: `${base}businesses/`, soon: true },
