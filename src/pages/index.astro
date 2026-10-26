@@ -196,7 +196,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
         <div class="field"><label for="a-name">Name</label><input id="a-name" type="text" autocomplete="name" /></div>
         <div class="field"><label for="a-phone">Phone</label><input id="a-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
         <div class="field"><label for="a-area">Area</label><input id="a-area" type="text" autocomplete="address-level3" placeholder="For example, Johar Town" aria-describedby="areaAnswer" /></div>
-        <p class="area-answer" id="areaAnswer" role="status" aria-live="polite" hidden></p>
+        <div class="area-live" id="areaAnswer" role="status" aria-live="polite" aria-atomic="true"></div>
       </div>
       <p class="foot">We'll message you about delivery in your area.</p>
       <a class="wa" id="areaHref" href={whatsappUrl}><Fragment set:html={waGlyph} />Check my area</a>
@@ -369,9 +369,20 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   function areaAnswer() {
     window.clearTimeout(answerTimer);
     const typed = val('a-area').replace(/\s+/g, ' ');
-    if (!typed) { answer.hidden = true; answer.textContent = ''; return; }
+    if (!typed) { answer.textContent = ''; return; }
     const hit = lookup(typed);
-    const show = () => { answer.hidden = false; answer.className = 'area-answer ' + (hit ? 'yes' : 'no'); answer.textContent = hit ? 'Yes — we deliver to ' + hit : 'Not in ' + typed + ' yet — message us and we\u2019ll check'; };
+    const show = () => {
+      const tick = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>';
+      const chat = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"></path></svg>';
+      answer.textContent = '';
+      const p = document.createElement('p');
+      p.className = 'area-answer ' + (hit ? 'yes' : 'no');
+      p.innerHTML = hit ? tick : chat;
+      const t = document.createElement('span');
+      t.textContent = hit ? 'Yes — we deliver to ' + hit : 'Not in ' + typed + ' yet — message us and we\u2019ll check';
+      p.appendChild(t);
+      answer.appendChild(p);
+    };
     if (hit) show(); else answerTimer = window.setTimeout(show, 600); // wait for a pause before saying "not yet" mid-word
   }
   $('a-area').addEventListener('input', areaAnswer);
@@ -550,7 +561,11 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
   /* labelled fields (D106, D109) */
   .fields { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; }
-  .area-answer { margin: -4px 0 0; font-size: 16px; line-height: 22px; font-weight: 600; color: var(--navy); } /* plain for now; the design agent draws the look (D118) */
+  /* area answer look (D120): same box, radius and icon slot for both states; words fixed by D96 a */
+  .area-live :global(.area-answer) { margin: 2px 0 0; display: flex; align-items: center; gap: 8px; padding: 10px 12px; box-sizing: border-box; border-radius: var(--radius-sm); font-size: var(--body-small-size); line-height: var(--body-small-line); }
+  .area-live :global(.area-answer svg) { flex: 0 0 auto; }
+  .area-live :global(.area-answer).yes { background: var(--success-tint); color: var(--success); font-weight: 700; }
+  .area-live :global(.area-answer).no { background: var(--glacier-tint); color: var(--navy); font-weight: 600; }
   .field { display: flex; flex-direction: column; gap: 6px; }
   .field label { font-size: 15px; line-height: 21px; font-weight: 600; color: var(--navy); }
   .field .opt { font-weight: 400; color: var(--ink-muted); }
