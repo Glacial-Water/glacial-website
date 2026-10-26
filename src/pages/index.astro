@@ -195,7 +195,8 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
       <div class="fields">
         <div class="field"><label for="a-name">Name</label><input id="a-name" type="text" autocomplete="name" /></div>
         <div class="field"><label for="a-phone">Phone</label><input id="a-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
-        <div class="field"><label for="a-area">Area</label><input id="a-area" type="text" autocomplete="address-level3" placeholder="For example, Johar Town" /></div>
+        <div class="field"><label for="a-area">Area</label><input id="a-area" type="text" autocomplete="address-level3" placeholder="For example, Johar Town" aria-describedby="areaAnswer" /></div>
+        <p class="area-answer" id="areaAnswer" role="status" aria-live="polite" hidden></p>
       </div>
       <p class="foot">We'll message you about delivery in your area.</p>
       <a class="wa" id="areaHref" href={whatsappUrl}><Fragment set:html={waGlyph} />Check my area</a>
@@ -282,6 +283,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
 </Base>
 
 <script>
+  import areaData from '../data/areas.json';
   // Prices: 00-INDEX D42/D63 (new bottle Rs 1,300 deposit; exchange Rs 650; weekly Rs 260 a bottle). Offer: D69/D73 (WEB100, Rs 100 off the deposit).
   // Mixed security (D95 e): each tile has its own stepper, both can be active, totals add, weekly count is the sum. No monthly total (D91).
   const WA = 'https://wa.me/923111125124';
@@ -334,6 +336,45 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
     const area = 'Area check: ' + (val('a-area') || '[area]') + ' — ' + (val('a-name') || '[name]') + (phone ? '\nPhone: ' + phone : '');
     ($('areaHref') as HTMLAnchorElement).href = WA + '?text=' + encodeURIComponent(area);
   }
+  // D118: the area check answers as the visitor types. The list is areas.json (141 areas, 30 sub-areas), read in the browser; no request to any server (D22).
+  // Matching (D118 b): case-insensitive on a name or an alias; plain "DHA" counts as served (parent of the DHA Phase areas); a sub-area alone ("Block R")
+  // does not; "Johar Town Block R" is the parent Johar Town. "Punjab Society" is served. "Park View Society" = Park View City.
+  // Bahria Town, Bahria Orchard and Nasheman Iqbal stay distinct: only exact names match, no prefix guessing beyond the Phase rule.
+  const norm = (t: string) => t.toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, ' ').trim();
+  const served = new Map<string, string>();
+  const subOf = new Map<string, string[]>();
+  for (const a of areaData.areas) {
+    served.set(norm(a.name), a.name);
+    a.aliases.forEach((x) => served.set(norm(x), a.name));
+    const m = /^(.*) phase \d+$/i.exec(a.name);
+    if (m && !served.has(norm(m[1]))) served.set(norm(m[1]), m[1]);
+    if (a.subAreas.length) subOf.set(norm(a.name), a.subAreas.map(norm));
+  }
+  served.set('park view society', 'Park View City'); // D118 b: Register S2 absorbs Park View Society into Park View City
+  function lookup(typed: string): string | null {
+    const q = norm(typed);
+    if (!q) return null;
+    const hit = served.get(q);
+    if (hit) return hit;
+    for (const [parent, subs] of subOf) {
+      if (q.startsWith(parent + ' ')) {
+        const rest = q.slice(parent.length + 1).replace(/^block /, '');
+        if (subs.some((x) => x === rest || x === 'block ' + rest)) return served.get(parent) || null;
+      }
+    }
+    return null;
+  }
+  const answer = $('areaAnswer');
+  let answerTimer: number | undefined;
+  function areaAnswer() {
+    window.clearTimeout(answerTimer);
+    const typed = val('a-area').replace(/\s+/g, ' ');
+    if (!typed) { answer.hidden = true; answer.textContent = ''; return; }
+    const hit = lookup(typed);
+    const show = () => { answer.hidden = false; answer.className = 'area-answer ' + (hit ? 'yes' : 'no'); answer.textContent = hit ? 'Yes — we deliver to ' + hit : 'Not in ' + typed + ' yet — message us and we\u2019ll check'; };
+    if (hit) show(); else answerTimer = window.setTimeout(show, 600); // wait for a pause before saying "not yet" mid-word
+  }
+  $('a-area').addEventListener('input', areaAnswer);
   ['o-name', 'o-wa', 'o-addr', 'o-mail', 'a-name', 'a-phone', 'a-area'].forEach((id) => $(id).addEventListener('input', links));
   $('incNew').addEventListener('click', () => { nNew = Math.min(10, nNew + 1); render(); });
   $('decNew').addEventListener('click', () => { nNew = Math.max(0, nNew - 1); render(); });
@@ -509,6 +550,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
   /* labelled fields (D106, D109) */
   .fields { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .area-answer { margin: -4px 0 0; font-size: 16px; line-height: 22px; font-weight: 600; color: var(--navy); } /* plain for now; the design agent draws the look (D118) */
   .field { display: flex; flex-direction: column; gap: 6px; }
   .field label { font-size: 15px; line-height: 21px; font-weight: 600; color: var(--navy); }
   .field .opt { font-weight: 400; color: var(--ink-muted); }
