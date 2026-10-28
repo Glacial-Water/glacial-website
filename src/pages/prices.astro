@@ -1,7 +1,7 @@
 ---
 // Products and prices (D120), built from PricesB.dc.html (canvas version 31). Replaces the old coming-soon stub.
 // Prices are D42/D63 and appear only as the design draws them. No motion on this page. No monthly figure (D91), no Rs 20 membership (D115 e).
-// [HOW YOU PAY — CONFIRM] stays a visible marker (placeholder 13) until Umer confirms it.
+// How you pay (D127, placeholder 13 closed): cash on delivery first, bank transfer, pay monthly. No bank details.
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { whatsappUrl, phoneDisplay, phoneTel } from '../data/site';
@@ -181,7 +181,7 @@ const glance = [
         </dl>
       </div>
       <p class="foot">Shops open 9am–9pm, every day. Delivery bookings until 7pm.</p>
-      <p class="foot">How you pay: [HOW YOU PAY — CONFIRM]</p>
+      <p class="foot">Pay cash when your water arrives. You can also pay by bank transfer, or pay monthly.</p>
       <p class="foot" id="p-express-note">* Delivery times vary by location. We confirm your time when you place the order.</p>
     </div>
   </section>
@@ -192,7 +192,7 @@ const glance = [
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1.5" /><path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2M10 21v-3h4v3" /></svg>
         <div>
           <h2>Water for your office?</h2>
-          <a class="go" href={`${base}businesses/`}>See business plans →</a>
+          <a class="go" href={`${base}for-businesses/`}>See business plans →</a>
         </div>
       </div>
     </div>

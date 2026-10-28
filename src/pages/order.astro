@@ -3,7 +3,7 @@
 // No form submission and no database (D22): the fields only fill the pre-filled WhatsApp message to wa.me/923111125124.
 // No motion on this page. Prices D42/D63; WEB100 only with a new-bottle deposit on a delivery order (D69, D115 b).
 // Copy fix D115 f: step 1 reads 'We confirm on WhatsApp — and tell you your delivery time.'
-// Placeholder 13 stays a visible marker: [HOW YOU PAY — CONFIRM].
+// How you pay (D127, placeholder 13 closed): cash on delivery first, bank transfer, pay monthly. No bank details, no monthly total (D91).
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
@@ -205,7 +205,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
           <p class="foot">Your code WEB100 is added to the message.</p>
         </div>
         <p class="foot" id="foot"></p>
-        <p class="foot">You pay nothing on this page. [HOW YOU PAY — CONFIRM]</p>
+        <p class="foot">You pay nothing on this page. Pay cash when your water arrives. You can also pay by bank transfer, or pay monthly.</p>
       </div>
       <a class="wa" id="sendHref" href={whatsappUrl}><Fragment set:html={waGlyph} /><span id="sendLabel">Send my order on WhatsApp</span></a>
       <a class="call" href={`tel:${phoneTel}`}>Or call {phoneDisplay}</a>
@@ -220,7 +220,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
         <ol class="steps">
           <li><span class="node" aria-hidden="true">1</span><span class="label">We confirm on WhatsApp — and tell you your delivery time.</span></li>
           <li><span class="node" aria-hidden="true">2</span><span class="label">Fresh, certified water at your door<span class="note" id="nextNote">Same day, same time, every week.</span></span></li>
-          <li><span class="node" aria-hidden="true">3</span><span class="label">You pay [HOW YOU PAY — CONFIRM]</span></li>
+          <li><span class="node" aria-hidden="true">3</span><span class="label">Pay cash when your water arrives. You can also pay by bank transfer, or pay monthly.</span></li>
         </ol>
       </div>
       <p class="foot" id="o-express-note">* Delivery times vary by location. We confirm your time when you place the order.</p>

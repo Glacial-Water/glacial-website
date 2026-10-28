@@ -1,7 +1,7 @@
 ---
 // How delivery works (D124), built from DeliveryB.dc.html (canvas version 32). Replaces the coming-soon stub.
 // ONE change from the drawing (D124 d): the bookings bar shows no start time (D34 gives only "until 7pm"); the text line stays.
-// Markers: [HOW YOU PAY — CONFIRM] (placeholder 13) and [SHOP 1/2 — NAME AND ADDRESS] (placeholder 27). Nothing invented.
+// How you pay (D127) and both shop addresses (D131 DHA, D132 Johar Town) are settled. Nothing invented.
 // Motion: CSS/SVG only, plays once when 35% of the picture is in view; reduced motion or no script shows the finished picture, no layout shift.
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
@@ -176,7 +176,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
           <div class="row first"><dt>Weekly subscription</dt><dd>Two bottles or more</dd></div>
           <div class="row"><dt>Your first bottle</dt><dd>Rs 1,300 deposit,<br />you get it back</dd></div>
           <div class="row"><dt>Have Glacial bottles?</dt><dd>No deposit</dd></div>
-          <div class="row"><dt>How you pay</dt><dd>[HOW YOU PAY — CONFIRM]</dd></div>
+          <div class="row"><dt>How you pay</dt><dd>Pay cash when your water arrives. You can also pay by bank transfer, or pay monthly.</dd></div>
         </dl>
       </div>
       <a class="go" href={`${base}prices/`}>All prices →</a>
@@ -202,7 +202,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
         </div>
       </article>
       <ul class="shops" id="d-shop-list">
-        {['[SHOP 1 — NAME AND ADDRESS]', '[SHOP 2 — NAME AND ADDRESS]'].map((s) => (
+        {['32/5 Block A, DHA Phase 1, Lahore', '358-E, Johar Town, Near Allah Hu Chowk, Lahore'].map((s) => (
           <li>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
             <span class="shop-text"><span class="shop-name">{s}</span><span class="dir">Directions →</span></span>
