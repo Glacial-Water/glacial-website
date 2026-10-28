@@ -1,0 +1,767 @@
+{
+ "source": "Glacial delivery areas — for the glacial.pk Home area check (first copy, 23 Oct 2026)",
+ "areas": [
+  {
+   "name": "Abdalians Cooperative Housing Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Abdullah Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Air Line Society",
+   "aliases": [
+    "Airline Society"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "Al Hamd Colony",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Ali Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Allama Iqbal Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Architect Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Askari 10",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Askari 11",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Askari 5",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Askari 9",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Audit And Account Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Awasia Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "AWT",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Bahria Orchard",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Bahria Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Bankers Housing Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Beaconhouse Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Bedian Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "BOR",
+   "aliases": [],
+   "subAreas": [
+    "Rehman Housing Society",
+    "Samanberg",
+    "Sikandar Homes"
+   ]
+  },
+  {
+   "name": "Canal Garden",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Canal View",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Cantt",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Cavalry Ground",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Central Park",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Chauburji",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "City Star Housing Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "College Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA 9 Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA EME",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA Phase 1",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA Phase 2",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA Phase 3",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA Phase 4",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA Phase 5",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA Phase 6",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA Phase 7",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA Phase 8",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA Phase 9",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "DHA Rahber",
+   "aliases": [
+    "DHA Rehbar"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "Dharampura",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Divine Gardens",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Doctor Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Eden Value Homes",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Engineers Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Etihad Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Faisal Garden",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Faisal Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Falcon Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Ferozepur Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Garden Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Ghari Shahu",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Green Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Gulberg",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Gulberg 2",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Gulberg 3",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Gulistan Colony",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Gulshan E Lahore",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Gulshan Ravi",
+   "aliases": [
+    "Gulshan Ravi Town"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "Habib Homes",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Hanjarwal",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "High Court Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Ichra",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Industrial Area",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Industrial Estate",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Iqbal Avenue",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Izmir Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Jail Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Jamal Homes",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Johar Town",
+   "aliases": [],
+   "subAreas": [
+    "Block A",
+    "Block A1",
+    "Block A2",
+    "Block A3",
+    "Block B1",
+    "Block B2",
+    "Block B3",
+    "Block C",
+    "Block D",
+    "Block D1",
+    "Block D2",
+    "Block E",
+    "Block E1",
+    "Block E2",
+    "Block F",
+    "Block F1",
+    "Block F2",
+    "Block G1",
+    "Block G2",
+    "Block H",
+    "Block J",
+    "Block L",
+    "Block M",
+    "Block P",
+    "Block Q",
+    "Block R"
+   ]
+  },
+  {
+   "name": "Judicial Colony Phase 1",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Judicial Colony Phase 2",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Kacha Jail Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Khayaban-e-Amin",
+   "aliases": [
+    "Khayaban e Amin"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "Lake City",
+   "aliases": [
+    "lake city"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "Mall Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Margazar Colony",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Mazong Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Military Accounts",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Model Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Model Town Link Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Moon Villas",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Moulana Shoukat Ali Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Multan Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Mustafa Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Nasheman Iqbal",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Nasheman Iqbal Phase 1",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Nasheman Iqbal Phase 2",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Nawab Colony",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Nazir Park",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "NESPAK Colony",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "New Garden Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "New Muslim Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "New Super Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "NFC Society",
+   "aliases": [
+    "NFC Housing"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "OPF Housing Scheme",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "P&D Colony",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Pak Arab Housing Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Paragon City",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Park View City",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Pasco Housing Society",
+   "aliases": [],
+   "subAreas": [
+    "Society Gate"
+   ]
+  },
+  {
+   "name": "PCSIR Phase 1",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "PCSIR Phase 2",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "PCSIR Staff",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Peco Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "PGECHS Phase 1",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "PGECHS Phase 2",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "PIA Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Public Health Housing Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "PUEHS",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Punjab Small Industries Cooprative Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Punjab Society",
+   "aliases": [
+    "punjab society"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "Punjab University",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Qasim Pura",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Quaid-e-Azam Industrial Estate",
+   "aliases": [
+    "Quaid-E-Azam Industrial"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "Railways Officers Colony",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Raiwind Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Rehman Park",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Revenue Housing Society",
+   "aliases": [
+    "Revenue Society"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "Sabzazar Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Saddar Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Sadi Park",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Samnabad",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Shadab Garden",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "State Life Society",
+   "aliases": [
+    "Statelife Society"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "Sui Gas Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Sukh Chain Garden",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Tariq Garden",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Thokar Niaz Baig",
+   "aliases": [
+    "Thokar"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "TIP Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Township",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Union Living Housing Society",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Upper Mall Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Valencia Town",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Wafaqi Colony",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Wahdat Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Walton Road",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Wapda Officer Colony",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Wapda Town Phase 1",
+   "aliases": [
+    "Wapda Town"
+   ],
+   "subAreas": []
+  },
+  {
+   "name": "Wapda Town Phase 2",
+   "aliases": [],
+   "subAreas": []
+  },
+  {
+   "name": "Zaman Park",
+   "aliases": [],
+   "subAreas": []
+  }
+ ]
+}

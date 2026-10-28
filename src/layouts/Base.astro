@@ -1,7 +1,6 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import OrderSheet from '../components/OrderSheet.astro';
 import '../styles/tokens.css';
 import '../styles/base.css';
 // Self-hosted fonts (D81 c): latin subset woff2, font-display swap, only the weights the system uses. No third-party request.
@@ -27,6 +26,5 @@ const { title, description = 'Glacial — pure water, delivered across Lahore.',
     <SiteHeader />
     <main id="main"><slot /></main>
     <SiteFooter />
-    <OrderSheet />
   </body>
 </html>

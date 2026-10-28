@@ -8,7 +8,7 @@ import { navLinks, hoursLine, phoneDisplay } from '../data/site';
   <div class="wrap inner">
     <nav aria-label="Footer">
       <ul>
-        {navLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        {navLinks.map((l) => <li><a href={l.href} aria-current={Astro.url.pathname.replace(/\/$/, '') === l.href.replace(/\/$/, '') ? 'page' : undefined}>{l.label}</a></li>)}
       </ul>
     </nav>
     <Image class="logo" src={logo} alt="Glacial Water" height={44} width={146} />
@@ -23,6 +23,7 @@ import { navLinks, hoursLine, phoneDisplay } from '../data/site';
   nav { width: 100%; }
   ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px var(--space-3); text-align: left; }
   li a { display: flex; align-items: center; min-height: 36px; font-size: var(--body-small-size); line-height: var(--body-small-line); font-weight: 500; text-decoration: none; }
+  li a[aria-current='page'] { font-weight: 700; color: var(--navy); }
   .logo { height: var(--logo-footer); width: auto; display: block; margin-top: var(--space-5); }
   .tag { margin: var(--space-3) 0 0; font-family: var(--font-brand); font-size: 15px; line-height: 22px; font-weight: 500; color: var(--navy); }
   .small { margin: var(--space-2) 0 0; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
