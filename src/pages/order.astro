@@ -1,8 +1,9 @@
 ---
 // Order page (D90, D101, D111, D115). Built from Order.dc.html, canvas version 29.
 // No form submission and no database (D22): the fields only fill the pre-filled WhatsApp message to wa.me/923111125124.
-// No motion on this page. Prices D42/D63; WEB100 only with a new-bottle deposit on a delivery order (D69, D115 b).
+// Motion: the three way-tile pictures only (D147, 30 Oct); the security tiles stay still. Prices D42/D63; WEB100 only with a new-bottle deposit on a delivery order (D69, D115 b).
 // Copy fix D115 f: step 1 reads 'We confirm on WhatsApp — and tell you your delivery time.'
+// 30 Oct (canvas v41, D148 d, D157): Walk-in first, Weekly preselected; way-tile motion; ?new=&ex= presets from Products and prices.
 // Round 5 (29 Oct, canvas v39; D144-D150): one-bottle New tile and one-old-one-new Exchange tile, one price-circle component, 'Shop Locations →', required Email, 'Every 11th refill is free.'
 // How you pay (D127, placeholder 13 closed): cash on delivery first, bank transfer, pay monthly. No bank details, no monthly total (D91).
 import { Image } from 'astro:assets';
@@ -10,6 +11,7 @@ import Base from '../layouts/Base.astro';
 import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
 import bottleNew from '../assets/home/bottle-new.webp';
 import '../styles/tiles.css';
+import '../styles/motion.css';
 import truck from '../assets/home/truck.jpg';
 import rider from '../assets/home/rider.jpg';
 import rosette from '../assets/home/rosette.png';
@@ -21,6 +23,9 @@ const minus = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" strok
 const plus = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
 const check = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 const u = (n: number) => `calc(${n} * var(--u))`;
+const poly = (pts: number[][]) => `polygon(${pts.map(([x, y]) => `${u(x)} ${u(y)}`).join(', ')})`;
+const truckClip = poly([[30,268],[30,170],[40,140],[58,112],[108,108],[110,82],[234,82],[238,96],[246,108],[258,117],[272,122],[287,124],[300,122],[308,120],[308,268]]);
+const scootClip = poly([[58,280],[58,100],[84,100],[86,28],[132,28],[134,60],[166,58],[166,24],[214,24],[222,60],[232,112],[252,118],[268,140],[290,170],[306,200],[306,280]]);
 const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
 ---
 <Base title="Order water — Glacial" description="Order Glacial water in one minute. Send your order on WhatsApp, or call us.">
@@ -119,9 +124,27 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
       <fieldset class="ways">
         <legend>2. How do you want your water?</legend>
 
+        <!-- 30 Oct (D148 d, canvas v41): Walk-in first, as on Home; Weekly stays preselected. D147 idle motion on the three pictures: Home's classes, once in view. -->
+        <label class="card" id="card-walk">
+          <span class="crop u351 truck-crop gl-mo">
+            <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" />
+            <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
+            <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">200</span></span>
+            <Image src={rosette} alt="Free refill offer: every 11th refill is free" width={84} class="rosette" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} />
+          </span>
+          <span class="card-body">
+            <span class="name-row"><input class="radio" type="radio" name="o-way" value="walk" /><span class="nm">Walk-in refill</span><span class="pr">Rs 200<small> /refill</small></span></span>
+            <span class="strong">Every 11th refill is free.</span>
+            <span class="small muted">Refill 10 times. The 11th is on us. Bring your bottle to any Glacial shop.</span>
+          </span>
+        </label>
+
         <label class="card on" id="card-weekly">
-          <span class="crop u351 truck-crop">
+          <span class="crop u351 truck-crop gl-mo">
             <Image src={truck} alt="A Glacial delivery truck loaded with water bottles" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" />
+            <span class="ov patch" aria-hidden="true" style={`--t:1.2s;clip-path:${truckClip};`}></span>
+            <span class="ov mover truck" aria-hidden="true" style={`clip-path:${truckClip};`}><Image src={truck} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
+            <svg class="ov lines lines-l" aria-hidden="true" viewBox="0 0 40 70" style={`left:${u(312)};top:${u(150)};width:${u(40)};height:${u(70)};`}><path d="M4 6h30M12 34h26M6 62h28" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg>
             <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">260</span></span>
           </span>
           <span class="card-body">
@@ -132,28 +155,19 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
         </label>
 
         <label class="card" id="card-express">
-          <span class="crop u351 rider-crop">
+          <span class="crop u351 rider-crop gl-mo">
             <Image src={rider} alt="A Glacial rider on a scooter with a bottle in the carrier box" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" />
+            <span class="ov patch" aria-hidden="true" style={`--t:0.95s;clip-path:${scootClip};`}></span>
+            <span class="ov mover scoot" aria-hidden="true" style={`clip-path:${scootClip};`}><Image src={rider} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
+            <svg class="ov lines lines-r" aria-hidden="true" viewBox="0 0 40 70" style={`left:${u(14)};top:${u(170)};width:${u(40)};height:${u(70)};`}><path d="M6 6h30M2 34h26M8 62h28" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg>
+            <svg class="gl-ov wheel" aria-hidden="true" viewBox="0 0 40 40" style={`left:${u(107)};top:${u(233)};width:${u(40)};height:${u(40)};`}><circle cx="20" cy="20" r="16" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="7 9" opacity="0.6" /></svg>
+            <svg class="gl-ov wheel" aria-hidden="true" viewBox="0 0 40 40" style={`left:${u(247)};top:${u(240)};width:${u(40)};height:${u(40)};`}><circle cx="20" cy="20" r="16" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="7 9" opacity="0.6" /></svg>
             <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">280</span></span>
           </span>
           <span class="card-body">
             <span class="name-row"><input class="radio" type="radio" name="o-way" value="express" /><span class="nm">Express delivery</span><span class="pr">Rs 280<small> /bottle</small></span></span>
             <span class="strong">Run out mid-week? A bottle at your door in 90 minutes.</span>
             <span class="small muted">Order any time. At your door in 90 minutes or less<a href="#o-express-note" class="star" aria-label="See the note on delivery times">*</a></span>
-          </span>
-        </label>
-
-        <label class="card" id="card-walk">
-          <span class="crop u351 truck-crop">
-            <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" />
-            <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
-            <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">200</span></span>
-            <Image src={rosette} alt="Free refill offer: every 11th refill is free" width={84} class="rosette" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} />
-          </span>
-          <span class="card-body">
-            <span class="name-row"><input class="radio" type="radio" name="o-way" value="walk" /><span class="nm">Walk-in refill</span><span class="pr">Rs 200<small> /refill</small></span></span>
-            <span class="strong">Every 11th refill is free.</span>
-            <span class="small muted">Refill 10 times. The 11th is on us. Bring your bottle to a Glacial shop, 9am–9pm, every day.</span>
           </span>
         </label>
       </fieldset>
@@ -231,6 +245,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
 </Base>
 
 <script>
+  import { armMotion } from '../lib/motion';
   // Prices: 00-INDEX D42/D63. Offer: D69/D115 b (WEB100, Rs 100 off the deposit, only with a new-bottle deposit on a delivery order).
   // Nothing is stored or sent anywhere except the pre-filled WhatsApp message the visitor chooses to send (D22).
   const P = { deposit: 1300, exchange: 650, weekly: 260, express: 280, walk: 200, offer: 100 };
@@ -242,6 +257,12 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
   let who: 'first' | 'returning' = 'first';
   let way: 'weekly' | 'express' | 'walk' = 'weekly';
   let nNew = 2, nEx = 0, nFill = 2;
+  // D157 (3): Products and prices opens /order/?new=N&ex=N. Each value must be a whole number 0 to 10; a missing or invalid one keeps Order's default.
+  const q = new URLSearchParams(location.search);
+  const preset = (key: string) => { const v = q.get(key); return v !== null && /^\d{1,2}$/.test(v) && Number(v) <= 10 ? Number(v) : null; };
+  const pNew = preset('new'), pEx = preset('ex');
+  if (pNew !== null) nNew = pNew;
+  if (pEx !== null) nEx = pEx;
 
   function render() {
     const isFirst = who === 'first';
@@ -260,6 +281,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
     const startPay = Math.max(0, start - (hasOffer ? P.offer : 0));
     const feet: string[] = [];
     if (isFirst && nNew > 0) feet.push('You get the full deposit back when you return the bottle.');
+    if (isFirst && nNew > 0 && nEx === 0) feet.push('Have an old bottle? Swap it for Rs 650 instead.'); // canvas v41 (D151 i)
     if (isFirst && nEx > 0) feet.push('The exchange price depends on your bottle’s condition.');
     if (way === 'walk') feet.push('Every 11th refill is free.');
     const weeklyShort = way === 'weekly' && count < 2;
@@ -335,6 +357,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
     if (!mail.checkValidity() || !mail.value.trim()) { e.preventDefault(); mail.reportValidity(); mail.focus(); }
   });
   render();
+  armMotion(); // D147: the way-tile pictures play once in view (src/lib/motion.ts)
 </script>
 
 <style>
