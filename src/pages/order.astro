@@ -2,7 +2,7 @@
 // Order page (D90, D101, D111, D115). Built from Order.dc.html, canvas version 29.
 // No form submission and no database (D22): the fields only fill the pre-filled WhatsApp message to wa.me/923111125124.
 // Motion: the three way-tile pictures only (D147, 30 Oct); the security tiles stay still. Prices D42/D63; WEB100 only with a new-bottle deposit on a delivery order (D69, D115 b).
-// Copy fix D115 f: step 1 reads 'We confirm on WhatsApp — and tell you your delivery time.'
+// Step 1 per D151 g (amends D115 f): 'We call you' / 'We call you to confirm your delivery day and time.'
 // 30 Oct (canvas v41, D148 d, D157): Walk-in first, Weekly preselected; way-tile motion; ?new=&ex= presets from Products and prices.
 // Round 5 (29 Oct, canvas v39; D144-D150): one-bottle New tile and one-old-one-new Exchange tile, one price-circle component, 'Shop Locations →', required Email, 'Every 11th refill is free.'
 // How you pay (D127, placeholder 13 closed): cash on delivery first, bank transfer, pay monthly. No bank details, no monthly total (D91).
@@ -234,9 +234,9 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
       <div id="next-delivery">
         <h2>What happens next</h2>
         <ol class="steps">
-          <li><span class="node" aria-hidden="true">1</span><span class="label">We confirm on WhatsApp — and tell you your delivery time.</span></li>
+          <li><span class="node" aria-hidden="true">1</span><span class="label">We call you<span class="note">We call you to confirm your delivery day and time.</span></span></li>
           <li><span class="node" aria-hidden="true">2</span><span class="label">Fresh, certified water at your door<span class="note" id="nextNote">Same day, same time, every week.</span></span></li>
-          <li><span class="node" aria-hidden="true">3</span><span class="label">Pay cash when your water arrives. You can also pay by bank transfer, or pay monthly.</span></li>
+          <li><span class="node" aria-hidden="true">3</span><span class="label">You pay cash when it arrives<span class="note">Or pay by bank transfer, or pay monthly.</span></span></li>
         </ol>
       </div>
       <p class="foot" id="o-express-note">* Delivery times vary by location. We confirm your time when you place the order.</p>
