@@ -1,0 +1,30 @@
+---
+// D163 (31 Oct): the shared way-tile motion layers, one piece for Home, Order, Products and prices and How delivery works.
+// Truck and scooter: real vector tyres drawn over the artwork's own tyres (same spot, same oval) that roll, and white wind lines.
+// Shop: the awning shifts slowly navy to glacier teal. Everything starts hidden; reduced motion or no script = the still picture.
+// `id` makes the scooter's clip-path ids unique per tile (a page can carry more than one copy). Units come from the tile's --u.
+interface Props { kind: 'truck' | 'scooter' | 'shop'; id?: string }
+const { kind, id = 'x' } = Astro.props;
+const u = (n: number) => `calc(${n} * var(--u))`;
+const tyre = '<circle r="80" fill="none" stroke="#44557f" stroke-width="9" stroke-dasharray="13 15"/><circle r="64" fill="#7f90b2"/><path d="M0 -56V0M53.3 -17.3L0 0M32.9 45.3L0 0M-32.9 45.3L0 0M-53.3 -17.3L0 0" fill="none" stroke="#c6cdd8" stroke-width="13" stroke-linecap="round"/><circle r="60" fill="none" stroke="#c6cdd8" stroke-width="9"/><circle r="15" fill="#2a3560" stroke="#c6cdd8" stroke-width="5"/>';
+const truckTyre = '<circle r="44" fill="none" stroke="#4b5c8c" stroke-width="7" stroke-dasharray="8 10"/><circle r="21" fill="#1b2a52" stroke="#eef1f5" stroke-width="12"/><circle r="21" fill="none" stroke="#1b2a52" stroke-width="13" stroke-dasharray="4 22.39"/><circle r="5" fill="#eef1f5"/>';
+---
+{kind === 'truck' && (<>
+  <span class="gl-ov gl-tyres gl-tyres-l" aria-hidden="true"><svg viewBox="0 0 900 1109" style={`top:${u(-125)}`}><g transform="translate(705 940) scale(0.74 1)"><g class="gl-tyre" set:html={truckTyre} /></g><g transform="translate(430 985) scale(0.93 1.37)"><g class="gl-tyre" set:html={truckTyre} /></g></svg></span>
+  <svg class="gl-ov gl-wind gl-wind-l" aria-hidden="true" viewBox="0 0 64 140" style={`left:${u(300)};top:${u(128)};width:${u(64)};height:${u(140)}`}><path d="M8 10h40"/><path d="M16 34h30" style="--w:0.3s"/><path d="M6 58h46" style="--w:0.6s"/><path d="M14 82h34" style="--w:0.9s"/><path d="M10 106h42" style="--w:1.2s"/><path d="M18 130h28" style="--w:1.5s"/></svg>
+</>)}
+{kind === 'scooter' && (<>
+  <span class="gl-ov gl-tyres gl-tyres-r" aria-hidden="true"><svg viewBox="0 0 900 1109" style={`top:${u(-118)}`}>
+    <defs>
+      <clipPath id={`gl-rr-${id}`}><polygon points="235,840 308,840 308,905 235,885"/><rect x="360" y="845" width="60" height="68"/><polygon points="230,940 250,940 365,978 460,978 460,1075 230,1075"/></clipPath>
+      <clipPath id={`gl-fr-${id}`}><rect x="580" y="888" width="200" height="190"/></clipPath>
+    </defs>
+    <g clip-path={`url(#gl-rr-${id})`}><g transform="translate(325 965) scale(0.85 1)"><g class="gl-tyre" set:html={tyre} /></g></g>
+    <g clip-path={`url(#gl-fr-${id})`}><g transform="translate(678 963) scale(0.85 1)"><g class="gl-tyre" set:html={tyre} /></g></g>
+    <path d="M638 885L673 963" fill="none" stroke="#cdd2db" stroke-width="17" stroke-linecap="round"/>
+  </svg></span>
+  <svg class="gl-ov gl-wind gl-wind-r" aria-hidden="true" viewBox="0 0 90 180" style={`left:0;top:${u(90)};width:${u(90)};height:${u(180)}`}><path d="M10 10h44"/><path d="M22 36h32" style="--w:0.25s"/><path d="M4 62h50" style="--w:0.5s"/><path d="M18 88h36" style="--w:0.75s"/><path d="M20 114h50" style="--w:1s"/><path d="M44 140h34" style="--w:1.25s"/><path d="M30 166h46" style="--w:1.5s"/></svg>
+</>)}
+{kind === 'shop' && (
+  <svg class="gl-ov gl-roof" aria-hidden="true" viewBox="0 0 900 1109" style={`top:${u(-125)}`}><rect x="108" y="600" width="558" height="44" rx="16"/><path d="M660 602L788 560Q800 556 800 568L800 590Q800 600 790 604L664 644Z"/><path d="M118 640h67v54h-67zM252 640h67v54h-67zM386 640h67v54h-67zM520 640h67v54h-67z"/><path d="M118 694q33.5 30 67 0ZM252 694q33.5 30 67 0ZM386 694q33.5 30 67 0ZM520 694q33.5 30 67 0Z"/><path d="M654 640L790 596L790 646L654 694Z"/></svg>
+)}

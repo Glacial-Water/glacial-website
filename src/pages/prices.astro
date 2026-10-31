@@ -1,44 +1,58 @@
 ---
-// Products and prices (D120), built from PricesB.dc.html (canvas version 31). Replaces the old coming-soon stub.
-// Prices are D42/D63 and appear only as the design draws them. No motion on this page. No monthly figure (D91), no Rs 20 membership (D115 e).
-// [HOW YOU PAY — CONFIRM] stays a visible marker (placeholder 13) until Umer confirms it.
+// Products and prices (D120, rebuilt 30 Oct from PricesB.dc.html canvas version 41 per D148 e/f, D151 a-e, D157).
+// Prices are D42/D63 and appear only as the design draws them. No monthly figure (D91), no Rs 20 membership (D115 e), no portal line.
+// How you pay (D127): cash on delivery first, bank transfer, pay monthly. No bank details. Hours (D34): the one line, no marker (D157 a, placeholder 30 void).
+// The two bottle tiles use the same counter, pictures and price circle as Home and Order (tiles.css); 'Order these bottles →' opens /order/?new=N&ex=N.
+// The three way tiles and the bottle tiles use Home's once-in-view motion (motion.css, src/lib/motion.ts); finished pose with reduced motion or no script.
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import { whatsappUrl, phoneDisplay, phoneTel } from '../data/site';
+import '../styles/tiles.css';
+import '../styles/motion.css';
+import WayMotion from '../components/WayMotion.astro';
+import { phoneDisplay, phoneTel } from '../data/site';
 import seal from '../assets/home/seal.png';
-import bottle from '../assets/home/bottle.jpg';
+import bottleNew from '../assets/home/bottle-new.webp';
 import truck from '../assets/home/truck.jpg';
 import rider from '../assets/home/rider.jpg';
 import rosette from '../assets/home/rosette.png';
-import badgeChlorine from '../assets/home/badge-chlorine-free.png';
-import badge10 from '../assets/home/badge-10-step.png';
+import badgeChlorine from '../assets/home/badge-chlorine-free-2.webp';
+import badge10 from '../assets/home/badge-10-step-2.webp';
+import markPsqca from '../assets/home/mark-psqca.webp';
+import sealPfa from '../assets/home/seal-pfa.webp';
 import shop from '../assets/home/shop.svg';
 import logo from '../assets/glacial-logo.png';
 const base = import.meta.env.BASE_URL;
 const u = (n: number) => `calc(${n} * var(--u))`;
+const poly = (pts: number[][]) => `polygon(${pts.map(([x, y]) => `${u(x)} ${u(y)}`).join(', ')})`;
+const truckClip = poly([[30,268],[30,170],[40,140],[58,112],[108,108],[110,82],[234,82],[238,96],[246,108],[258,117],[272,122],[287,124],[300,122],[308,120],[308,268]]);
+const scootClip = poly([[58,280],[58,100],[84,100],[86,28],[132,28],[134,60],[166,58],[166,24],[214,24],[222,60],[232,112],[252,118],[268,140],[290,170],[306,200],[306,280]]);
+const bottleClip = 'polygon(40% 0, 60% 0, 60% 14%, 96% 30%, 100% 40%, 100% 100%, 0 100%, 0 40%, 4% 30%, 40% 14%)';
+const sparkle = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z';
 const waGlyph = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>';
+const minus = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>';
+const plus = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
 const waPrice = 'https://wa.me/923111125124?text=' + encodeURIComponent('Hi Glacial, I have a question about your prices.');
-// 10 + 1: ten paid refills in Glacial blue, the eleventh in the accent with FREE (D42, D63)
+// 10 + 1, drawn: ten refills numbered 1 to 10, then the eleventh FREE. Counts only, no prices (D151 b).
 const tenPlusOne = Array.from({ length: 11 }, (_, i) => {
   const free = i === 10;
-  return { label: free ? 'FREE' : 'Rs 200', body: free ? '#0a6f8f' : '#6fb6dc', neck: free ? '#0a6f8f' : '#9ccbe6', ink: free ? '#0a6f8f' : '#5b6478' };
+  return { label: free ? 'FREE' : String(i + 1), body: free ? '#0a6f8f' : '#6fb6dc', neck: free ? '#0a6f8f' : '#9ccbe6', ink: free ? '#0a6f8f' : '#5b6478' };
 });
 const glance = [
   ['New bottle', 'Refundable deposit', 'Rs 1,300'],
-  ['Exchange your bottle', 'Depends on its condition', 'Rs 650'],
-  ['Walk-in refill', 'Buy 10, get 1 free', 'Rs 200'],
+  ['Exchange your bottle', 'Old for new, by its condition', 'Rs 650'],
+  ['Walk-in refill', 'Every 11th refill is free', 'Rs 200'],
   ['Weekly subscription', 'Per bottle, two bottles or more', 'Rs 260'],
   ['Express delivery', 'Per bottle, 90 minutes or less*', 'Rs 280'],
 ];
 ---
-<Base title="Products and prices — Glacial" description="Glacial prices: new bottle, exchange, walk-in refill, weekly subscription and express delivery across Lahore.">
+<Base fabHref={waPrice} title="Products and prices — Glacial" description="Glacial prices: new bottle, exchange, walk-in refill, weekly subscription and express delivery across Lahore.">
   <section class="band navy">
     <div class="col">
-      <h1>Certified water.<br />From Rs 200 a refill.</h1>
-      <p class="lede">Pick your bottle. Pick how you get it. Every price is on this page.</p>
+      <h1><a class="cert" href={`${base}quality-certs/`}>Certified</a> water.<br />From Rs 200 a refill.</h1>
+      <p class="lede">One bottle. Three ways to fill it. Every price on one page.</p>
       <nav aria-label="Jump to a price">
         <ul class="jump">
-          <li><a href="#p-walk"><span class="crop u112 mini"><img src={shop.src} alt="" width="900" height="1109" style={`margin-top:${u(-40)}`} /><span class="slot" aria-hidden="true" style={`left:82%;top:${u(21)}`}><span class="u">Rs</span><span class="v">200</span></span></span><span class="jt"><span class="jn">Walk-in</span><span class="jp">Rs 200</span></span></a></li>
+          <li><a href="#p-walk"><span class="crop u112 mini"><img src={shop.src} alt="" width="900" height="1109" style={`margin-top:${u(-40)}`} /><span class="slot" aria-hidden="true" style={`left:82%;top:${u(21)}`}><span class="u">Rs</span><span class="v">200</span></span><Image src={rosette} alt="" width={54} class="rosette" style={`left:${u(2)};top:${u(2)};width:${u(54)};height:${u(54)}`} /></span><span class="jt"><span class="jn">Walk-in</span><span class="jp">Rs 200</span><span class="free">11th FREE</span></span></a></li>
           <li><a href="#p-weekly"><span class="crop u112 mini"><Image src={truck} alt="" widths={[225, 340]} sizes="115px" style={`margin-top:${u(-40)}`} /><span class="slot" aria-hidden="true" style={`left:82%;top:${u(21)}`}><span class="u">Rs</span><span class="v">260</span></span></span><span class="jt"><span class="jn">Weekly</span><span class="jp">Rs 260</span></span></a></li>
           <li><a href="#p-express"><span class="crop u112 mini"><Image src={rider} alt="" widths={[225, 340]} sizes="115px" style={`margin-top:${u(-37)}`} /><span class="slot" aria-hidden="true" style={`left:80.5%;top:${u(20)}`}><span class="u">Rs</span><span class="v">280</span></span></span><span class="jt"><span class="jn">Express</span><span class="jp">Rs 280</span></span></a></li>
         </ul>
@@ -48,38 +62,65 @@ const glance = [
 
   <section class="white sec" id="p-bottle">
     <div class="col">
-      <h2>First, your bottle</h2>
-      <p class="p">Pay once for your bottle. Then pay only for the water.</p>
+      <h2>First, your bottles</h2>
+      <p class="p">Pay once for each bottle. After that, you pay for the water only.</p>
       <div class="tiles">
-        <div class="tile">
-          <span class="crop u166 tile-crop">
-            <Image src={bottle} alt="A new, sparkling blue Glacial 19-litre bottle" widths={[300, 450]} sizes="45vw" />
-            <span class="slot" aria-hidden="true" style={`left:72%;top:${u(58)}`}><span class="u">Rs</span><span class="v small">1,300</span></span>
-            <span class="pill">REFUNDABLE</span>
-          </span>
-          <span class="tile-text"><b>New bottle</b><small>Rs 1,300 deposit. <strong>You get it all back</strong> when you return the bottle.</small></span>
+        <div class="tile" id="tile-new" role="group" aria-labelledby="p-new-title">
+          <div class="gl-pic gl-mo">
+            <Image class="gl-btl" src={bottleNew} alt="One new, sparkling blue Glacial 19-litre bottle" width={124} height={231} style={`left:${u(40)};`} />
+            <span class="gl-ov shine" aria-hidden="true" style={`left:${u(40)};top:${u(36)};width:${u(52)};height:${u(97)};clip-path:${bottleClip};`}></span>
+            <svg class="gl-ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(76)};top:${u(38)};width:${u(12)};height:${u(12)};--d:0.45s;`}><path d={sparkle} fill="#fff" /></svg>
+            <svg class="gl-ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(30)};top:${u(72)};width:${u(10)};height:${u(10)};--d:0.6s;`}><path d={sparkle} fill="#fff" /></svg>
+            <svg class="gl-ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(84)};top:${u(114)};width:${u(9)};height:${u(9)};--d:0.75s;`}><path d={sparkle} fill="#fff" /></svg>
+            <span class="gl-price gl-price-sm" aria-hidden="true"><span class="u">Rs</span><span class="v">1,300</span></span>
+          </div>
+          <div class="gl-tile-copy">
+            <span class="gl-chip">REFUNDABLE</span>
+            <b class="gl-name" id="p-new-title">New bottle</b>
+            <small class="gl-desc">Rs 1,300 deposit. <strong>You get it all back</strong> when you return the bottle.</small>
+            <span class="stepper gl-stepper">
+              <button type="button" id="decNew" aria-label="One new bottle fewer" set:html={minus}></button>
+              <span class="count" id="nNew" aria-live="polite">2</span>
+              <button type="button" id="incNew" aria-label="One new bottle more" set:html={plus}></button>
+            </span>
+          </div>
         </div>
-        <div class="tile">
-          <span class="crop u166 tile-crop">
-            <Image src={bottle} alt="" widths={[300, 450]} sizes="45vw" />
-            <svg class="ov" role="img" aria-label="An old, scuffed bottle swapped for a new, sparkling Glacial bottle" viewBox="0 0 60 130" style={`left:${u(-30)};top:${u(10)};width:${u(60)};height:${u(130)};`}>
-              <defs><linearGradient id="glOldBodyP" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a89c82" /><stop offset="0.45" stop-color="#ddd4bd" /><stop offset="1" stop-color="#9c907a" /></linearGradient></defs>
-              <ellipse cx="30" cy="127" rx="24" ry="3" fill="#1a2a5b" opacity="0.18" />
-              <rect x="22" y="2" width="16" height="10" rx="3" fill="#8e969e" />
-              <rect x="24" y="11" width="12" height="14" fill="#cfc6ae" />
-              <path d="M24 24h12c8 6 20 10 20 22v72q0 10-10 10H14q-10 0-10-10V46c0-12 12-16 20-22z" fill="url(#glOldBodyP)" />
-              <rect x="4" y="62" width="52" height="6" fill="#8f846b" opacity="0.35" />
-              <rect x="4" y="96" width="52" height="6" fill="#8f846b" opacity="0.35" />
-              <rect x="12" y="48" width="5" height="60" rx="2.5" fill="#ffffff" opacity="0.3" />
-              <path d="M44 50q-6 8 0 16" fill="none" stroke="#7d7360" stroke-width="2" stroke-linecap="round" opacity="0.7" />
-              <path d="M36 76l7 3M38 82l5 2M14 108l6-3M18 112l4-2" fill="none" stroke="#7d7360" stroke-width="1.2" stroke-linecap="round" />
+        <div class="tile" id="tile-ex" role="group" aria-labelledby="p-ex-title">
+          <div class="gl-pic gl-mo">
+            <svg class="gl-ov old" role="img" aria-label="Your old bottle, swapped for one new, sparkling Glacial bottle" viewBox="0 0 470 876" style={`left:${u(3)};top:${u(36)};width:${u(52)};height:${u(97)};`}>
+              <defs><linearGradient id="glOldBodyP" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a89c82" /><stop offset="0.42" stop-color="#e2d9c3" /><stop offset="1" stop-color="#998d76" /></linearGradient></defs>
+              <path d="M192 74H280V122L348 140L405 167L440 197L458 232L463 272V822L450 852L420 870H60L25 852L8 822L6 342V262L20 227L55 196L100 167L150 142L192 124Z" fill="url(#glOldBodyP)" />
+              <rect x="186" y="5" width="98" height="64" rx="12" fill="#8e8778" />
+              <rect x="6" y="300" width="457" height="34" fill="#8f846b" opacity="0.3" />
+              <rect x="6" y="520" width="457" height="30" fill="#8f846b" opacity="0.3" />
+              <rect x="6" y="740" width="457" height="30" fill="#8f846b" opacity="0.3" />
+              <rect x="70" y="340" width="34" height="420" rx="17" fill="#ffffff" opacity="0.28" />
+              <path d="M340 400q-40 60 0 120M300 600l50 20M310 640l35 14M90 800l40-20M110 830l30-14" fill="none" stroke="#7d7360" stroke-width="10" stroke-linecap="round" opacity="0.75" />
             </svg>
-            <svg class="ov" aria-hidden="true" viewBox="0 0 32 32" style={`left:${u(14)};top:${u(62)};width:${u(32)};height:${u(32)};`}><circle cx="16" cy="16" r="15" fill="#1a2a5b" stroke="#ffffff" stroke-width="2" /><path d="M9 13h13l-3.5-3.5M23 19H10l3.5 3.5" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-            <span class="slot" aria-hidden="true" style={`left:72%;top:${u(58)}`}><span class="u">Rs</span><span class="v small">650</span></span>
-            <span class="pill">OLD FOR NEW</span>
-          </span>
-          <span class="tile-text"><b>Exchange your bottle</b><small>Rs 650 a bottle. The price depends on its condition.</small></span>
+            <Image class="gl-btl newin" src={bottleNew} alt="" width={124} height={231} style={`left:${u(60)};`} />
+            <span class="gl-ov shine" aria-hidden="true" style={`left:${u(60)};top:${u(36)};width:${u(52)};height:${u(97)};clip-path:${bottleClip};--d:1.05s;`}></span>
+            <svg class="gl-ov swap" aria-hidden="true" viewBox="0 0 32 32" style={`left:${u(43)};top:${u(74)};width:${u(30)};height:${u(30)};`}><circle cx="16" cy="16" r="15" fill="#1a2a5b" stroke="#ffffff" stroke-width="2" /><path d="M9 13h13l-3.5-3.5M23 19H10l3.5 3.5" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <svg class="gl-ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(64)};top:${u(56)};width:${u(11)};height:${u(11)};--d:1.15s;`}><path d={sparkle} fill="#fff" /></svg>
+            <svg class="gl-ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(104)};top:${u(114)};width:${u(9)};height:${u(9)};--d:1.3s;`}><path d={sparkle} fill="#fff" /></svg>
+            <span class="gl-price gl-price-sm" aria-hidden="true"><span class="u">Rs</span><span class="v">650</span></span>
+          </div>
+          <div class="gl-tile-copy">
+            <span class="gl-chip">OLD FOR NEW</span>
+            <b class="gl-name" id="p-ex-title">Exchange your bottle</b>
+            <small class="gl-desc">Swap your old bottle for a new one. Rs 650, by its condition.</small>
+            <span class="stepper gl-stepper">
+              <button type="button" id="decEx" aria-label="One exchange bottle fewer" set:html={minus}></button>
+              <span class="count" id="nEx" aria-live="polite">0</span>
+              <button type="button" id="incEx" aria-label="One exchange bottle more" set:html={plus}></button>
+            </span>
+          </div>
         </div>
+      </div>
+
+      <div class="btotal">
+        <div class="brow"><span class="lbl" id="bLabel">Your bottles, 2 bottles</span><span class="total" id="bTotal" aria-live="polite">Rs 2,600</span></div>
+        <p class="foot" id="bNote"></p>
+        <a class="navy-btn" id="orderBottles" href={`${base}order/?new=2&ex=0`} data-order={`${base}order/`} data-fab-hide>Order these bottles →</a>
       </div>
       <div class="returning">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5" /><path d="M7.5 12.5l3 3 6-6.5" /></svg>
@@ -93,24 +134,44 @@ const glance = [
       <h2>Then, your water. Three ways.</h2>
 
       <article class="card" id="p-walk">
-        <span class="crop u351 walk-crop">
+        <span class="crop u351 truck-crop gl-mo">
           <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" />
+          <WayMotion kind="shop" />
           <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
-          <span class="slot" aria-hidden="true" style={`left:82%;top:${u(67)}`}><span class="u">Rs</span><span class="v">200</span></span>
-          <Image src={rosette} alt="Free refill: buy 10, get 1 free" width={84} class="rosette" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} />
+          <Image src={rosette} alt="Free refill offer: every 11th refill is free" width={96} class="rosette gl-pulse" style={`left:${u(10)};top:${u(10)};width:${u(96)};height:${u(96)}`} />
+          <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">200</span></span>
         </span>
         <div class="card-body">
           <div class="name-row"><h3>Walk-in refill</h3><p class="price">Rs 200<span> /refill</span></p></div>
-          <p class="lead">Buy 10 refills, get 1 free.</p>
-          <p class="sub">Bring your bottle to a Glacial shop. Open 9am–9pm, every day.</p>
-          <a class="go" href={`${base}delivery/#d-shops`}>Where the shops are →</a>
+          <p class="offer-big">Every 11th refill is free.</p>
+          <p class="lead lead-tight">Refill 10 times. The 11th is on us.</p>
+          <ol class="bottles" role="img" aria-label="Ten refills, then the eleventh refill free">
+            {tenPlusOne.map((b) => (
+              <li>
+                <svg width="30" height="40" viewBox="0 0 36 48" aria-hidden="true">
+                  <rect x="13" y="1" width="10" height="6" rx="2" fill="#1a2a5b" />
+                  <rect x="14.5" y="6" width="7" height="6" fill={b.neck} />
+                  <path d="M14 11h8c5 3 11 6 11 13v19q0 4-4 4H7q-4 0-4-4V24c0-7 6-10 11-13z" fill={b.body} />
+                  <rect x="3" y="27" width="30" height="3" fill="#ffffff" opacity="0.35" />
+                  <rect x="3" y="37" width="30" height="3" fill="#ffffff" opacity="0.35" />
+                  <rect x="8" y="22" width="3" height="20" rx="1.5" fill="#ffffff" opacity="0.4" />
+                </svg>
+                <span class="bl" style={`color:${b.ink}`}>{b.label}</span>
+              </li>
+            ))}
+          </ol>
+          <p class="sub">Bring your bottle to any Glacial shop. It counts up, refill by refill.</p>
+          <a class="go" href={`${base}delivery/#d-shops`}>Shop Locations →</a>
         </div>
       </article>
 
       <article class="card" id="p-weekly">
-        <span class="crop u351 walk-crop">
+        <span class="crop u351 truck-crop gl-mo">
           <Image src={truck} alt="A Glacial delivery truck loaded with water bottles" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" />
-          <span class="slot" aria-hidden="true" style={`left:82%;top:${u(67)}`}><span class="u">Rs</span><span class="v">260</span></span>
+          <span class="ov patch" aria-hidden="true" style={`--t:1.2s;clip-path:${truckClip};`}></span>
+          <span class="ov mover truck" aria-hidden="true" style={`clip-path:${truckClip};`}><Image src={truck} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
+          <WayMotion kind="truck" />
+          <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">260</span></span>
         </span>
         <div class="card-body">
           <div class="name-row"><h3>Weekly subscription</h3><p class="price">Rs 260<span> /bottle</span></p></div>
@@ -121,9 +182,12 @@ const glance = [
       </article>
 
       <article class="card" id="p-express">
-        <span class="crop u351 rider-crop">
+        <span class="crop u351 rider-crop gl-mo">
           <Image src={rider} alt="A Glacial rider on a scooter with a bottle in the carrier box" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" />
-          <span class="slot" aria-hidden="true" style={`left:80.5%;top:${u(64)}`}><span class="u">Rs</span><span class="v">280</span></span>
+          <span class="ov patch" aria-hidden="true" style={`--t:0.95s;clip-path:${scootClip};`}></span>
+          <span class="ov mover scoot" aria-hidden="true" style={`clip-path:${scootClip};`}><Image src={rider} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
+          <WayMotion kind="scooter" id="prices" />
+          <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">280</span></span>
         </span>
         <div class="card-body">
           <div class="name-row"><h3>Express delivery</h3><p class="price">Rs 280<span> /bottle</span></p></div>
@@ -135,30 +199,7 @@ const glance = [
     </div>
   </section>
 
-  <section class="pale sec ten">
-    <div class="col">
-      <h2>Buy 10. The 11th is free.</h2>
-      <ul class="bottles" role="img" aria-label="Ten refills at Rs 200 each, and an eleventh refill free">
-        {tenPlusOne.map((b) => (
-          <li>
-            <svg width="36" height="48" viewBox="0 0 36 48" aria-hidden="true">
-              <rect x="13" y="1" width="10" height="6" rx="2" fill="#1a2a5b" />
-              <rect x="14.5" y="6" width="7" height="6" fill={b.neck} />
-              <path d="M14 11h8c5 3 11 6 11 13v19q0 4-4 4H7q-4 0-4-4V24c0-7 6-10 11-13z" fill={b.body} />
-              <rect x="3" y="27" width="30" height="3" fill="#ffffff" opacity="0.35" />
-              <rect x="3" y="37" width="30" height="3" fill="#ffffff" opacity="0.35" />
-              <rect x="8" y="22" width="3" height="20" rx="1.5" fill="#ffffff" opacity="0.4" />
-            </svg>
-            <span class="bl" style={`color:${b.ink}`}>{b.label}</span>
-          </li>
-        ))}
-      </ul>
-      <p class="strong2">10 refills × Rs 200 = Rs 2,000. The 11th: Rs 0.</p>
-      <p class="muted2">At any Glacial shop. Every eleventh refill, every time.</p>
-    </div>
-  </section>
-
-  <section class="white sec every">
+  <section class="pale sec every">
     <div class="col every-col">
       <Image src={seal} alt="Stamp reading Quality Certified Every Month" width={196} class="seal" />
       <h2>In every price: water certified every month</h2>
@@ -167,11 +208,14 @@ const glance = [
       <ul class="badges">
         <li class="badge"><Image src={badgeChlorine} alt="" width={120} /><span class="t">Chlorine-free</span><span class="s">No chlorine taste, ever.</span></li>
         <li class="badge"><Image src={badge10} alt="" width={120} /><span class="t">10-step purification</span><span class="s">Every bottle, all ten steps.</span></li>
+        <li class="badge"><Image src={markPsqca} alt="Pakistan Standards mark of PSQCA" width={120} /><span class="t">PSQCA licensed</span><span class="s">Pakistan Standards mark</span></li>
+        <li class="badge"><Image src={sealPfa} alt="Seal of the Punjab Food Authority" width={240} /><span class="t">PFA licensed</span><span class="s">Punjab Food Authority</span></li>
       </ul>
+      <p class="licensed-line">Licensed by PSQCA and the Punjab Food Authority</p>
     </div>
   </section>
 
-  <section class="pale sec glance">
+  <section class="white sec glance">
     <div class="col">
       <h2>All prices at a glance</h2>
       <div class="list">
@@ -180,8 +224,8 @@ const glance = [
           <div class="row"><dt>Order from the website<span>New bottle, delivery orders. Code WEB100.</span></dt><dd>Rs 100 off<br />your deposit</dd></div>
         </dl>
       </div>
+      <p class="foot">You pay nothing until your water arrives. Pay cash when it comes. You can also pay by bank transfer, or pay monthly.</p>
       <p class="foot">Shops open 9am–9pm, every day. Delivery bookings until 7pm.</p>
-      <p class="foot">How you pay: [HOW YOU PAY — CONFIRM]</p>
       <p class="foot" id="p-express-note">* Delivery times vary by location. We confirm your time when you place the order.</p>
     </div>
   </section>
@@ -192,7 +236,8 @@ const glance = [
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1.5" /><path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2M10 21v-3h4v3" /></svg>
         <div>
           <h2>Water for your office?</h2>
-          <a class="go" href={`${base}businesses/`}>See business plans →</a>
+          <p class="biz-sub">A price made for your volume. We call you back.</p>
+          <a class="go" href={`${base}for-businesses/`}>See business plans →</a>
         </div>
       </div>
     </div>
@@ -208,6 +253,38 @@ const glance = [
     </div>
   </section>
 </Base>
+
+<script>
+  import { armMotion } from '../lib/motion';
+  // D151 (a): the same two counters as Home and Order. Each tile keeps its own count; both can be active. Prices D42 (deposit Rs 1,300, exchange Rs 650).
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const rs = (n: number) => 'Rs ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const bottles = (n: number) => (n === 1 ? '1 bottle' : n + ' bottles');
+  let nNew = 2, nEx = 0;
+  function render() {
+    const count = nNew + nEx;
+    const notes: string[] = [];
+    if (nNew > 0) notes.push('You get the full deposit back when you return the bottle.');
+    if (nNew > 0 && nEx === 0) notes.push('Have an old bottle? Swap it for Rs 650 instead.'); // D151 i: deposit and exchange side by side
+    if (nEx > 0) notes.push('The exchange price depends on your bottle’s condition.');
+    if (count === 0) notes.push('Add a new bottle, or swap an old one, with the + buttons.');
+    $('nNew').textContent = String(nNew); $('nEx').textContent = String(nEx);
+    $('tile-new').classList.toggle('on', nNew > 0); $('tile-ex').classList.toggle('on', nEx > 0);
+    $('bLabel').textContent = count > 0 ? 'Your bottles, ' + bottles(count) : 'No bottles yet';
+    $('bTotal').textContent = rs(1300 * nNew + 650 * nEx);
+    $('bNote').textContent = notes.join(' ');
+    const go = $('orderBottles') as HTMLAnchorElement;
+    go.hidden = count === 0;
+    go.href = (go.dataset.order || '') + '?new=' + nNew + '&ex=' + nEx; // D157 (3): Order pre-sets its counters from these
+  }
+  $('incNew').addEventListener('click', () => { nNew = Math.min(10, nNew + 1); render(); });
+  $('decNew').addEventListener('click', () => { nNew = Math.max(0, nNew - 1); render(); });
+  $('incEx').addEventListener('click', () => { nEx = Math.min(10, nEx + 1); render(); });
+  $('decEx').addEventListener('click', () => { nEx = Math.max(0, nEx - 1); render(); });
+  render();
+  armMotion(); // D110 / D147: each picture plays once in view (src/lib/motion.ts)
+</script>
+
 <style>
   .col { width: 100%; max-width: var(--grid-phone-max); margin: 0 auto; padding: 0 var(--space-5); }
   .band { padding: 26px 0 24px; }
@@ -215,21 +292,24 @@ const glance = [
   .pale { background: var(--water-50); }
   .white { background: var(--surface); }
   .navy h1, .navy h2 { color: #fff; }
+  .cert { color: #fff; text-decoration: underline; text-decoration-color: var(--water-200); text-decoration-thickness: 3px; text-underline-offset: 5px; }
+  .cert:hover { color: #fff; }
   .lede { margin: 10px 0 0; color: var(--water-200); }
   .navy :focus-visible { outline-color: var(--water-200); }
   .sec { padding: 28px 0 8px; }
   .p { margin: 6px 0 0; }
+  [hidden] { display: none !important; }
   /* jump tiles in the hero (D61) */
   nav { margin-top: 20px; }
   .jump { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .jump a { display: flex; flex-direction: column; background: #fff; border-radius: 12px; overflow: hidden; text-decoration: none; color: var(--navy); }
+  .jump a { display: flex; flex-direction: column; height: 100%; background: #fff; border-radius: 12px; overflow: hidden; text-decoration: none; color: var(--navy); }
   .jt { padding: 8px 6px 10px; display: flex; flex-direction: column; align-items: center; text-align: center; }
   .jn { font-size: 14px; line-height: 18px; font-weight: 700; }
   .jp { font-size: 17px; line-height: 22px; font-weight: 700; }
+  .free { margin-top: 4px; padding: 2px 6px; border-radius: var(--radius-pill); background: var(--glacier); color: #fff; font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.02em; }
   .crop { position: relative; display: block; overflow: hidden; line-height: 0; container-type: inline-size; background: transparent; }
   .crop :global(img) { display: block; width: 100%; height: auto; }
   .u112 { --u: calc(100cqw / 112.33); }
-  .u166 { --u: calc(100cqw / 166.5); }
   .u351 { --u: calc(100cqw / 351); }
   .mini { width: 100%; aspect-ratio: 112.33 / 85; }
   .mini .slot .u { font-size: calc(6 * var(--u)); line-height: calc(7 * var(--u)); }
@@ -237,29 +317,34 @@ const glance = [
   .slot { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; line-height: normal; }
   .slot .u { font-size: 11px; line-height: 13px; font-weight: 600; letter-spacing: 0.04em; }
   .slot .v { font-size: 22px; line-height: 25px; font-weight: 700; }
-  .slot .v.small { font-size: 17px; line-height: 20px; }
   .ov { position: absolute; display: block; pointer-events: none; }
-  .pill { position: absolute; left: 8px; bottom: 8px; padding: 4px 9px; border-radius: var(--radius-pill); background: var(--navy); color: #fff; font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.08em; }
-  /* bottle tiles */
+  /* the two bottle tiles (same as Home and Order) */
   .tiles { margin-top: 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
   .tile { display: flex; flex-direction: column; background: var(--surface); border: 2px solid var(--water-200); border-radius: var(--radius-md); overflow: hidden; }
-  .tile-crop { width: 100%; aspect-ratio: 166.5 / 140; }
-  .tile-crop :global(img) { margin-top: calc(-26 * var(--u)); }
-  .tile-text { display: flex; flex-direction: column; padding: 10px 12px 12px; }
-  .tile-text b { font-size: 16px; line-height: 22px; }
-  .tile-text small { margin-top: 2px; font-size: var(--caption-size); line-height: var(--caption-line); }
-  .returning { margin-top: 12px; display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--water-50); border-radius: var(--radius-md); }
+  .tile.on { background: var(--water-50); border-color: var(--glacier); }
+  .stepper { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 10px; }
+  .stepper button { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid var(--line-strong); border-radius: var(--radius-pill); cursor: pointer; padding: 0; }
+  .count { min-width: 30px; text-align: center; font-size: var(--h2-size); line-height: var(--h2-line); font-weight: 700; }
+  .btotal { margin-top: 12px; padding: 14px 16px 16px; background: var(--water-50); border-radius: var(--radius-md); }
+  .brow { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+  .lbl { font-size: 16px; line-height: 22px; font-weight: 600; }
+  .total { font-size: var(--h2-size); line-height: var(--h2-line); font-weight: 700; white-space: nowrap; }
+  .btotal .foot { margin: 6px 0 0; }
+  .navy-btn { margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: var(--button-height); box-sizing: border-box; background: var(--navy); color: #fff; border-radius: var(--radius-md); font-size: var(--button-size); line-height: var(--button-line); font-weight: 700; text-decoration: none; }
+  .navy-btn:hover { background: var(--navy-hover); color: #fff; }
+  .navy-btn:active { background: var(--navy-active); }
+  .returning { margin-top: 12px; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--water-200); border-radius: var(--radius-md); }
   .returning svg { flex: 0 0 auto; }
   .returning p { margin: 0; font-size: var(--body-small-size); line-height: var(--body-small-line); }
-  /* way cards */
+  /* way tiles */
   .ways { padding-top: 24px; }
   .card { margin-top: 12px; background: #fff; border: 2px solid var(--water-200); border-radius: var(--radius-md); overflow: hidden; scroll-margin-top: 70px; }
   .ways h2 + .card { margin-top: 14px; }
-  .walk-crop { aspect-ratio: 351 / 268; }
-  .walk-crop :global(img) { margin-top: calc(-125 * var(--u)); }
+  .truck-crop { aspect-ratio: 351 / 268; }
+  .truck-crop :global(img) { margin-top: calc(-125 * var(--u)); }
   .rider-crop { aspect-ratio: 351 / 280; }
   .rider-crop :global(img) { margin-top: calc(-118 * var(--u)); }
-  .sign { position: absolute; display: flex; align-items: center; justify-content: center; gap: calc(5 * var(--u)); background: #fff; border-radius: calc(6 * var(--u)); color: var(--navy); font-size: calc(15 * var(--u)); line-height: calc(18 * var(--u)); font-weight: 700; letter-spacing: 0.06em; }
+  .sign { position: absolute; display: flex; align-items: center; justify-content: center; gap: calc(5 * var(--u)); box-sizing: border-box; background: #fff; border-radius: calc(6 * var(--u)); color: var(--navy); font-size: calc(15 * var(--u)); line-height: calc(18 * var(--u)); font-weight: 700; letter-spacing: 0.06em; }
   .crop .sign :global(img) { width: auto; height: calc(19 * var(--u)); margin: 0; }
   .crop :global(.rosette) { position: absolute; margin: 0; max-width: none; }
   .card-body { padding: 14px var(--space-4) 12px; }
@@ -267,33 +352,34 @@ const glance = [
   .name-row h3 { flex: 1 1 auto; margin: 0; font-size: 19px; line-height: 25px; font-weight: 700; }
   .price { margin: 0; font-size: 19px; line-height: 25px; font-weight: 700; white-space: nowrap; }
   .price span { font-size: 14px; font-weight: 500; color: var(--ink-muted); }
+  .offer-big { margin: 10px 0 0; font-size: 26px; line-height: 32px; font-weight: 700; color: var(--glacier); }
   .lead { margin: 6px 0 0; font-size: 17px; line-height: 24px; font-weight: 700; }
+  .lead-tight { margin-top: 2px; }
   .sub { margin: 4px 0 0; font-size: var(--body-small-size); line-height: var(--body-small-line); color: var(--ink-muted); }
   .go, .link { display: inline-flex; align-items: center; min-height: var(--touch-min); font-size: 17px; line-height: 24px; font-weight: 600; text-decoration: none; }
   .go { margin-top: 4px; }
   .star { text-decoration: none; font-weight: 700; }
-  /* ten plus one */
-  .ten { margin-top: 20px; padding: 28px 0; }
-  .bottles { margin: 18px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px 6px; justify-items: center; }
-  .bottles li { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  .bl { font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.04em; }
-  .strong2 { margin: 16px 0 0; font-size: 17px; line-height: 24px; font-weight: 700; }
-  .muted2 { margin: 4px 0 0; font-size: var(--body-small-size); line-height: var(--body-small-line); color: var(--ink-muted); }
+  /* ten plus one, inside the walk-in tile: counts only, no prices (D151 b) */
+  .bottles { margin: 14px 0 0; padding: 12px 8px; box-sizing: border-box; list-style: none; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px 4px; justify-items: center; background: var(--water-50); border-radius: 12px; }
+  .bottles li { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .bl { font-size: 13px; line-height: 16px; font-weight: 700; }
+  .bottles + .sub { margin-top: 10px; }
   /* in every price */
-  .every { padding: 26px 0 28px; }
+  .every { padding: 26px 0 28px; margin-top: 20px; }
   .every-col { display: flex; flex-direction: column; align-items: center; text-align: center; }
   .every :global(.seal) { width: 196px; height: auto; display: block; }
   .every h2 { margin-top: 10px; font-size: 26px; line-height: 32px; }
   .every .p { max-width: 320px; }
   .badges { margin: 14px 0 0; padding: 0; width: 100%; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); align-items: stretch; }
-  .badge { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 10px 16px; background: #fff; border: 1px solid var(--water-200); border-radius: 14px; text-align: center; }
+  .badge { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 10px 16px; box-sizing: border-box; background: #fff; border: 1px solid var(--water-200); border-radius: 14px; text-align: center; }
   .badge :global(img) { display: block; width: 120px; height: 88px; object-fit: contain; }
   .badge .t { font-size: 15px; line-height: 21px; font-weight: 700; color: var(--navy); }
   .badge .s { font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+  .licensed-line { margin: 16px 0 0; font-size: 17px; line-height: 24px; font-weight: 700; text-align: center; }
   /* all prices at a glance */
   .glance { padding: 28px 0 24px; }
   .glance h2 { margin-bottom: 12px; }
-  .list { padding: 4px 16px; background: #fff; border-radius: var(--radius-md); }
+  .list { padding: 4px 16px; background: var(--water-50); border-radius: var(--radius-md); }
   dl { margin: 0; }
   .row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--water-200); }
   .row.first { border-top: 0; }
@@ -303,10 +389,12 @@ const glance = [
   .foot { margin: 4px 0 0; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
   .list + .foot { margin-top: 12px; }
   /* business line */
-  .biz { padding: 24px 0; }
+  .biz { padding: 8px 0 24px; }
   .biz-box { display: flex; align-items: center; gap: 14px; padding: 16px; border: 1px solid var(--water-200); border-radius: var(--radius-md); }
   .biz-box svg { flex: 0 0 auto; }
-  .biz-box h2 { font-size: 19px; line-height: 25px; }
+  .biz-box div { flex: 1 1 auto; min-width: 0; }
+  .biz-box h2 { margin: 0; font-size: 19px; line-height: 25px; }
+  .biz-sub { margin: 2px 0 0; font-size: var(--body-small-size); line-height: var(--body-small-line); color: var(--ink-muted); }
   .biz-box .go { margin-top: 0; }
   /* contact band */
   .contact { padding: 32px 0; }
