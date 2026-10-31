@@ -2,6 +2,8 @@
 // Home (variation B, D58). Built top to bottom from HomeB.dc.html (5,760px, 12 Oct 15:49) and the rulings D67-D78.
 // B3 = hero, Urdu line, quality-certified band, price grid with the two interactive tiles and the offer sheet.
 // B4 (done) = Lahore band, water splash, ten steps, badges, Google rating block, contact band.
+// B7 (29 Oct) = round 5 from canvas version 39 (D144-D150, D155): one-bottle New tile and one-old-one-new Exchange tile, equal text height,
+// one price-circle component, 'Shop Locations →', the ten step names, cropped PFA seal, idle motion (D147), required Email, floating WhatsApp button (in Base).
 // B6 (23 Oct) = round 4 from canvas version 28 (D105-D110): uniform badges, three-field area check, plain-English copy (D108),
 // four-field offer sheet (D109), shop redraw (D107) and the once-only CSS/SVG motion on the price grid (D110).
 // B5 (21 Oct) = the redraw from HomeB.dc.html canvas version 23 (D95-D97, D101): hero centred, larger seal, Licensed strip,
@@ -9,10 +11,12 @@
 import { Image } from 'astro:assets';
 import '@fontsource/noto-naskh-arabic/arabic-600.css'; // Urdu font, self-hosted (D81 c); loaded on Home only
 import Base from '../layouts/Base.astro';
+import '../styles/tiles.css';
+import '../styles/motion.css';
 import { whatsappUrl, phoneDisplay, phoneTel } from '../data/site';
 import hero from '../assets/home/hero-family.jpg';
 import seal from '../assets/home/seal.png';
-import bottle from '../assets/home/bottle.jpg';
+import bottleNew from '../assets/home/bottle-new.webp';
 import truck from '../assets/home/truck.jpg';
 import rider from '../assets/home/rider.jpg';
 import rosette from '../assets/home/rosette.png';
@@ -27,13 +31,13 @@ import logo from '../assets/glacial-logo.png';
 const hasReviews = Object.keys(import.meta.glob('../data/reviews.json')).length > 0;
 const base = import.meta.env.BASE_URL;
 const waGlyph = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>';
-const steps = ["Underground water sourcing", "Multimedia filtration", "Activated carbon", "Ultra-filtration", "Reverse osmosis", "Mineral fortification", "Ozonisation", "Ultra-filtration|A second pass, after ozonisation.", "UV filtration", "Sterilised bottles"];
+const steps = ["Deep Underground Water Sourcing", "Multimedia Filtration", "Activated Carbon", "Ultra-Filtration", "Reverse Osmosis", "Mineral Fortification", "Ozone Sterilization", "Ultra-Filtration|A second pass, after ozone sterilization.", "UV Sterilization", "Sterilized Bottles"];
 // Canvas pixel -> fluid length. Each picture frame sets --u = frame width / canvas width, so overlays stay glued to the artwork at any width.
 const u = (n: number) => `calc(${n} * var(--u))`;
 const poly = (pts: number[][]) => `polygon(${pts.map(([x, y]) => `${u(x)} ${u(y)}`).join(', ')})`;
 const truckClip = poly([[30,268],[30,170],[40,140],[58,112],[108,108],[110,82],[234,82],[238,96],[246,108],[258,117],[272,122],[287,124],[300,122],[308,120],[308,268]]);
 const scootClip = poly([[58,280],[58,100],[84,100],[86,28],[132,28],[134,60],[166,58],[166,24],[214,24],[222,60],[232,112],[252,118],[268,140],[290,170],[306,200],[306,280]]);
-const bottleClip = 'polygon(32% 0, 68% 0, 68% 22%, 96% 32%, 100% 40%, 100% 100%, 0 100%, 0 40%, 4% 32%, 32% 22%)';
+const bottleClip = 'polygon(40% 0, 60% 0, 60% 14%, 96% 30%, 100% 40%, 100% 100%, 0 100%, 0 40%, 4% 30%, 40% 14%)';
 const sparkle = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z';
 const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z';
 ---
@@ -68,56 +72,57 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
       <h3>First, your bottles</h3>
       <div class="tiles">
         <div class="tile" id="tile-new" role="group" aria-labelledby="b-new-title">
-          <span class="crop u166 tile-crop gl-mo">
-            <Image src={bottle} alt="A new, sparkling blue Glacial 19-litre bottle" widths={[300, 450]} sizes="45vw" />
-            <span class="ov shine" aria-hidden="true" style={`left:${u(29)};top:${u(6)};width:${u(84)};height:${u(134)};clip-path:${bottleClip};`}></span>
-            <svg class="ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(80)};top:${u(8)};width:${u(14)};height:${u(14)};--d:0.45s;`}><path d={sparkle} fill="#fff" /></svg>
-            <svg class="ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(30)};top:${u(44)};width:${u(11)};height:${u(11)};--d:0.6s;`}><path d={sparkle} fill="#fff" /></svg>
-            <svg class="ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(94)};top:${u(98)};width:${u(10)};height:${u(10)};--d:0.75s;`}><path d={sparkle} fill="#fff" /></svg>
-            <span class="slot" aria-hidden="true" style={`left:72%;top:${u(58)}`}><span class="u">Rs</span><span class="v small">1,300</span></span>
-            <span class="refundable">REFUNDABLE</span>
-          </span>
-          <span class="tile-text">
-            <b id="b-new-title">New bottle</b>
-            <small>Rs 1,300 deposit. <strong>You get it all back</strong> when you return the bottle.</small>
-            <span class="stepper tile-stepper">
+          <!-- D144 (1): ONE sparkling Glacial bottle, no swap here. A light shine sweeps once, then three sparkles idle gently. -->
+          <div class="gl-pic gl-mo">
+            <Image class="gl-btl" src={bottleNew} alt="One new, sparkling blue Glacial 19-litre bottle" width={124} height={231} style={`left:${u(40)};`} />
+            <span class="gl-ov shine" aria-hidden="true" style={`left:${u(40)};top:${u(36)};width:${u(52)};height:${u(97)};clip-path:${bottleClip};`}></span>
+            <svg class="gl-ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(76)};top:${u(38)};width:${u(12)};height:${u(12)};--d:0.45s;`}><path d={sparkle} fill="#fff" /></svg>
+            <svg class="gl-ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(30)};top:${u(72)};width:${u(10)};height:${u(10)};--d:0.6s;`}><path d={sparkle} fill="#fff" /></svg>
+            <svg class="gl-ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(84)};top:${u(114)};width:${u(9)};height:${u(9)};--d:0.75s;`}><path d={sparkle} fill="#fff" /></svg>
+            <span class="gl-price gl-price-sm" aria-hidden="true"><span class="u">Rs</span><span class="v">1,300</span></span>
+          </div>
+          <div class="gl-tile-copy">
+            <span class="gl-chip">REFUNDABLE</span>
+            <b class="gl-name" id="b-new-title">New bottle</b>
+            <small class="gl-desc">Rs 1,300 deposit. <strong>You get it all back</strong> when you return the bottle.</small>
+            <span class="stepper gl-stepper">
               <button type="button" id="decNew" aria-label="One new bottle fewer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
               <span class="count" id="newCount" aria-live="polite">2</span>
               <button type="button" id="incNew" aria-label="One new bottle more"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
             </span>
-          </span>
+          </div>
         </div>
         <div class="tile" id="tile-ex" role="group" aria-labelledby="b-ex-title">
-          <span class="crop u166 tile-crop gl-mo">
-            <Image src={bottle} alt="" widths={[300, 450]} sizes="45vw" />
-            <span class="ov shine" aria-hidden="true" style={`left:${u(29)};top:${u(6)};width:${u(84)};height:${u(134)};clip-path:${bottleClip};--d:1.05s;`}></span>
-            <svg class="ov old" role="img" aria-label="An old, scuffed bottle swapped for a new, sparkling Glacial bottle" viewBox="0 0 60 130" style={`left:${u(-30)};top:${u(10)};width:${u(60)};height:${u(130)};`}>
-              <defs><linearGradient id="glOldBody" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a89c82" /><stop offset="0.45" stop-color="#ddd4bd" /><stop offset="1" stop-color="#9c907a" /></linearGradient></defs>
-              <ellipse cx="30" cy="127" rx="24" ry="3" fill="#1a2a5b" opacity="0.18" />
-              <rect x="22" y="2" width="16" height="10" rx="3" fill="#8e969e" />
-              <rect x="24" y="11" width="12" height="14" fill="#cfc6ae" />
-              <path d="M24 24h12c8 6 20 10 20 22v72q0 10-10 10H14q-10 0-10-10V46c0-12 12-16 20-22z" fill="url(#glOldBody)" />
-              <rect x="4" y="62" width="52" height="6" fill="#8f846b" opacity="0.35" />
-              <rect x="4" y="96" width="52" height="6" fill="#8f846b" opacity="0.35" />
-              <rect x="12" y="48" width="5" height="60" rx="2.5" fill="#ffffff" opacity="0.3" />
-              <path d="M44 50q-6 8 0 16" fill="none" stroke="#7d7360" stroke-width="2" stroke-linecap="round" opacity="0.7" />
-              <path d="M36 76l7 3M38 82l5 2M14 108l6-3M18 112l4-2" fill="none" stroke="#7d7360" stroke-width="1.2" stroke-linecap="round" />
+          <!-- D144 (1): exactly ONE old bottle and ONE new bottle, the swap badge between them; same sky, bottle drawing, size and price circle as the New tile.
+               Motion (once): the old bottle wobbles, the swap badge spins in, the new bottle rises in and shines. -->
+          <div class="gl-pic gl-mo">
+            <svg class="gl-ov old" role="img" aria-label="Your old bottle, swapped for one new, sparkling Glacial bottle" viewBox="0 0 470 876" style={`left:${u(3)};top:${u(36)};width:${u(52)};height:${u(97)};`}>
+              <defs><linearGradient id="glOldBody" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a89c82" /><stop offset="0.42" stop-color="#e2d9c3" /><stop offset="1" stop-color="#998d76" /></linearGradient></defs>
+              <path d="M192 74H280V122L348 140L405 167L440 197L458 232L463 272V822L450 852L420 870H60L25 852L8 822L6 342V262L20 227L55 196L100 167L150 142L192 124Z" fill="url(#glOldBody)" />
+              <rect x="186" y="5" width="98" height="64" rx="12" fill="#8e8778" />
+              <rect x="6" y="300" width="457" height="34" fill="#8f846b" opacity="0.3" />
+              <rect x="6" y="520" width="457" height="30" fill="#8f846b" opacity="0.3" />
+              <rect x="6" y="740" width="457" height="30" fill="#8f846b" opacity="0.3" />
+              <rect x="70" y="340" width="34" height="420" rx="17" fill="#ffffff" opacity="0.28" />
+              <path d="M340 400q-40 60 0 120M300 600l50 20M310 640l35 14M90 800l40-20M110 830l30-14" fill="none" stroke="#7d7360" stroke-width="10" stroke-linecap="round" opacity="0.75" />
             </svg>
-            <svg class="ov swap" aria-hidden="true" viewBox="0 0 32 32" style={`left:${u(14)};top:${u(62)};width:${u(32)};height:${u(32)};`}><circle cx="16" cy="16" r="15" fill="#1a2a5b" stroke="#ffffff" stroke-width="2" /><path d="M9 13h13l-3.5-3.5M23 19H10l3.5 3.5" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-            <svg class="ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(80)};top:${u(8)};width:${u(14)};height:${u(14)};--d:1.15s;`}><path d={sparkle} fill="#fff" /></svg>
-            <svg class="ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(98)};top:${u(100)};width:${u(10)};height:${u(10)};--d:1.3s;`}><path d={sparkle} fill="#fff" /></svg>
-            <span class="slot" aria-hidden="true" style={`left:72%;top:${u(58)}`}><span class="u">Rs</span><span class="v small">650</span></span>
-            <span class="refundable">OLD FOR NEW</span>
-          </span>
-          <span class="tile-text">
-            <b id="b-ex-title">Exchange your bottle</b>
-            <small>Rs 650 a bottle. The price depends on its condition.</small>
-            <span class="stepper tile-stepper">
+            <Image class="gl-btl newin" src={bottleNew} alt="" width={124} height={231} style={`left:${u(60)};`} />
+            <span class="gl-ov shine" aria-hidden="true" style={`left:${u(60)};top:${u(36)};width:${u(52)};height:${u(97)};clip-path:${bottleClip};--d:1.05s;`}></span>
+            <svg class="gl-ov swap" aria-hidden="true" viewBox="0 0 32 32" style={`left:${u(43)};top:${u(74)};width:${u(30)};height:${u(30)};`}><circle cx="16" cy="16" r="15" fill="#1a2a5b" stroke="#ffffff" stroke-width="2" /><path d="M9 13h13l-3.5-3.5M23 19H10l3.5 3.5" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <svg class="gl-ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(64)};top:${u(56)};width:${u(11)};height:${u(11)};--d:1.15s;`}><path d={sparkle} fill="#fff" /></svg>
+            <svg class="gl-ov spark" aria-hidden="true" viewBox="0 0 24 24" style={`left:${u(104)};top:${u(114)};width:${u(9)};height:${u(9)};--d:1.3s;`}><path d={sparkle} fill="#fff" /></svg>
+            <span class="gl-price gl-price-sm" aria-hidden="true"><span class="u">Rs</span><span class="v">650</span></span>
+          </div>
+          <div class="gl-tile-copy">
+            <span class="gl-chip">OLD FOR NEW</span>
+            <b class="gl-name" id="b-ex-title">Exchange your bottle</b>
+            <small class="gl-desc">Swap your old bottle for a new one. Rs 650, by its condition.</small>
+            <span class="stepper gl-stepper">
               <button type="button" id="decEx" aria-label="One exchange bottle fewer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
               <span class="count" id="exCount" aria-live="polite">0</span>
               <button type="button" id="incEx" aria-label="One exchange bottle more"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
             </span>
-          </span>
+          </div>
         </div>
       </div>
 
@@ -128,7 +133,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
         </dl>
         <div class="total-row"><span class="lbl" id="secLabel"></span><span class="total" id="secTotal"></span></div>
         <p class="foot" id="secFoot"></p>
-        <button type="button" class="navy-btn" id="openOffer">See my total and my offer →</button>
+        <button type="button" class="navy-btn" id="openOffer" data-fab-hide>See my total and my offer →</button>
       </div>
 
       <h3 class="three">Then choose how you get your water</h3>
@@ -137,14 +142,14 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
         <span class="crop u351 truck-crop gl-mo">
           <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" />
           <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
-          <span class="slot" aria-hidden="true" style={`left:82%;top:${u(67)}`}><span class="u">Rs</span><span class="v">200</span></span>
-          <Image src={rosette} alt="Free refill: buy 10, get 1 free" width={84} class="rosette" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} />
+          <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">200</span></span>
+          <Image src={rosette} alt="Free refill offer: every 11th refill is free" width={84} class="rosette" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} />
         </span>
         <div class="card-body">
           <div class="name-row"><h4>Walk-in refill</h4><p class="price">Rs 200</p></div>
-          <p class="strong">Buy 10 refills, get 1 free.</p>
-          <p class="small muted">Bring your bottle to a Glacial shop. Open 9am–9pm, every day.</p>
-          <a class="link small-link" href={`${base}delivery/`}>Where the shops are →</a>
+          <p class="strong">Every 11th refill is free.</p>
+          <p class="small muted">Refill 10 times. The 11th is on us. Bring your bottle to a Glacial shop, 9am–9pm, every day.</p>
+          <a class="link small-link" href={`${base}delivery/#d-shops`}>Shop Locations →</a>
         </div>
       </div>
 
@@ -154,7 +159,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
           <span class="ov patch" aria-hidden="true" style={`--t:1.2s;clip-path:${truckClip};`}></span>
           <span class="ov mover truck" aria-hidden="true" style={`clip-path:${truckClip};`}><Image src={truck} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
           <svg class="ov lines lines-l" aria-hidden="true" viewBox="0 0 40 70" style={`left:${u(312)};top:${u(150)};width:${u(40)};height:${u(70)};`}><path d="M4 6h30M12 34h26M6 62h28" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg>
-          <span class="slot" aria-hidden="true" style={`left:82%;top:${u(67)}`}><span class="u">Rs</span><span class="v">260</span></span>
+          <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">260</span></span>
         </span>
         <div class="card-body">
           <div class="name-row"><h4>Weekly subscription</h4><p class="price">Rs 260</p></div>
@@ -173,7 +178,10 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
           <span class="ov patch" aria-hidden="true" style={`--t:0.95s;clip-path:${scootClip};`}></span>
           <span class="ov mover scoot" aria-hidden="true" style={`clip-path:${scootClip};`}><Image src={rider} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
           <svg class="ov lines lines-r" aria-hidden="true" viewBox="0 0 40 70" style={`left:${u(14)};top:${u(170)};width:${u(40)};height:${u(70)};`}><path d="M6 6h30M2 34h26M8 62h28" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg>
-          <span class="slot" aria-hidden="true" style={`left:80.5%;top:${u(64)}`}><span class="u">Rs</span><span class="v">280</span></span>
+          <!-- D147: once parked, the wheels turn (a soft dashed ring over each hub) -->
+          <svg class="gl-ov wheel" aria-hidden="true" viewBox="0 0 40 40" style={`left:${u(107)};top:${u(233)};width:${u(40)};height:${u(40)};`}><circle cx="20" cy="20" r="16" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="7 9" opacity="0.6" /></svg>
+          <svg class="gl-ov wheel" aria-hidden="true" viewBox="0 0 40 40" style={`left:${u(247)};top:${u(240)};width:${u(40)};height:${u(40)};`}><circle cx="20" cy="20" r="16" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="7 9" opacity="0.6" /></svg>
+          <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">280</span></span>
         </span>
         <div class="card-body">
           <div class="name-row"><h4>Express delivery</h4><p class="price">Rs 280</p></div>
@@ -227,7 +235,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
         <li class="badge"><Image src={badgeChlorine} alt="" width={120} /><span class="t">Chlorine-free</span><span class="s">No chlorine taste, ever.</span></li>
         <li class="badge"><Image src={badge10} alt="" width={120} /><span class="t">10-step purification</span><span class="s">Every bottle, all ten steps.</span></li>
         <li class="badge"><Image src={markPsqca} alt="Pakistan Standards mark of PSQCA" width={120} /><span class="t">PSQCA licensed</span><span class="s">Pakistan Standards mark</span></li>
-        <li class="badge"><Image src={sealPfa} alt="Seal of the Punjab Food Authority" width={120} /><span class="t">PFA licensed</span><span class="s">Punjab Food Authority</span></li>
+        <li class="badge"><Image src={sealPfa} alt="Seal of the Punjab Food Authority" width={240} /><span class="t">PFA licensed</span><span class="s">Punjab Food Authority</span></li>
       </ul>
       <p class="licensed-line">Licensed by PSQCA and the Punjab Food Authority</p>
     </div>
@@ -256,7 +264,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   <section class="band navy contact">
     <div class="col">
       <h2>Order your first bottle on WhatsApp</h2>
-      <p class="sub">Send your address. We'll confirm your delivery time the same day.</p>
+      <p class="sub">Send your address on WhatsApp. We call you to confirm your delivery day and time.</p>
       <a class="wa" href={whatsappUrl}><Fragment set:html={waGlyph} />Message on WhatsApp</a>
       <a class="call" href={`tel:${phoneTel}`}>{phoneDisplay}</a>
     </div>
@@ -278,9 +286,9 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
       <div class="field"><label for="o-name">Name</label><input id="o-name" type="text" autocomplete="name" /></div>
       <div class="field"><label for="o-wa">WhatsApp number</label><input id="o-wa" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
       <div class="field"><label for="o-addr">Delivery address</label><input id="o-addr" type="text" autocomplete="street-address" /></div>
-      <div class="field"><label for="o-mail">Email <span class="opt">(optional)</span></label><input id="o-mail" type="email" autocomplete="email" /></div>
+      <div class="field"><label for="o-mail">Email</label><input id="o-mail" type="email" autocomplete="email" required /></div>
     </div>
-    <p class="foot">We'll confirm your order on WhatsApp.</p>
+    <p class="foot">We call you to confirm your delivery day and time.</p>
     <a class="wa" id="oHref" href={whatsappUrl}><Fragment set:html={waGlyph} />Claim my offer on WhatsApp</a>
     <button type="button" class="cancel" data-close-offer>Not yet — keep looking</button>
   </dialog>
@@ -288,6 +296,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
 
 <script>
   import { lookupArea } from '../lib/areaMatch';
+  import { armMotion } from '../lib/motion';
   // Prices: 00-INDEX D42/D63 (new bottle Rs 1,300 deposit; exchange Rs 650; weekly Rs 260 a bottle). Offer: D69/D73 (WEB100, Rs 100 off the deposit).
   // Mixed security (D95 e): each tile has its own stepper, both can be active, totals add, weekly count is the sum. No monthly total (D91).
   const WA = 'https://wa.me/923111125124';
@@ -301,6 +310,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
     const newSum = 1300 * nNew, exSum = 650 * nEx, sec = newSum + exSum, weekly = 260 * count;
     const feet: string[] = [];
     if (hasNew) feet.push('You get the full deposit back when you return the bottle.');
+    if (hasNew && !hasEx) feet.push('Have an old bottle? Swap it for Rs 650 instead.'); // D151 i: deposit and exchange side by side
     if (hasEx) feet.push('The exchange price depends on your bottle’s condition.');
     const foot = feet.join(' ');
     const newLine = 'New bottle deposit × ' + nNew, exLine = 'Exchange × ' + nEx;
@@ -334,7 +344,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   function links() {
     const m = lines.slice();
     m.push('Name: ' + val('o-name'), 'WhatsApp number: ' + val('o-wa'), 'Delivery address: ' + val('o-addr'));
-    if (val('o-mail')) m.push('Email: ' + val('o-mail'));
+    m.push('Email: ' + val('o-mail')); // D148 (8): the email is required and travels in the message
     ($('oHref') as HTMLAnchorElement).href = WA + '?text=' + encodeURIComponent(m.join('\n'));
     const phone = val('a-phone');
     const area = 'Area check: ' + (val('a-area') || '[area]') + ' — ' + (val('a-name') || '[name]') + (phone ? '\nPhone: ' + phone : '');
@@ -365,6 +375,11 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
     if (hit) show(); else answerTimer = window.setTimeout(show, 600); // wait for a pause before saying "not yet" mid-word
   }
   $('a-area').addEventListener('input', areaAnswer);
+  // D148 (8): Email is required. The button is a link, so check the field ourselves before it opens WhatsApp.
+  $('oHref').addEventListener('click', (e) => {
+    const mail = $('o-mail') as HTMLInputElement;
+    if (!mail.checkValidity() || !mail.value.trim()) { e.preventDefault(); mail.reportValidity(); mail.focus(); }
+  });
   ['o-name', 'o-wa', 'o-addr', 'o-mail', 'a-name', 'a-phone', 'a-area'].forEach((id) => $(id).addEventListener('input', links));
   $('incNew').addEventListener('click', () => { nNew = Math.min(10, nNew + 1); render(); });
   $('decNew').addEventListener('click', () => { nNew = Math.max(0, nNew - 1); render(); });
@@ -375,17 +390,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   sheet.addEventListener('click', (e) => { const t = e.target as HTMLElement; if (t === sheet || t.closest('[data-close-offer]')) sheet.close(); });
   sheet.addEventListener('close', () => opener?.focus());
   render();
-  // D110: each picture on the price grid plays once, when 35% of it scrolls into view. With reduced motion, or without
-  // IntersectionObserver, nothing is armed and every picture simply shows its finished pose.
-  const mo = Array.from(document.querySelectorAll<HTMLElement>('.gl-mo'));
-  if (mo.length && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
-      if (!en.isIntersecting) return;
-      (en.target as HTMLElement).classList.add('is-on');
-      io.unobserve(en.target);
-    }), { threshold: 0.35 });
-    mo.forEach((el) => { el.classList.add('is-armed'); io.observe(el); });
-  }
+  armMotion(); // D110 / D147: each picture plays once when 35% of it is in view (src/lib/motion.ts)
 </script>
 
 <style>
@@ -421,22 +426,9 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   .tile.on { background: var(--water-50); border-color: var(--glacier); }
   .crop { position: relative; display: block; overflow: hidden; line-height: 0; container-type: inline-size; }
   .crop :global(img) { display: block; width: 100%; height: auto; }
-  .u166 { --u: calc(100cqw / 166.5); }
   .u351 { --u: calc(100cqw / 351); }
-  .tile-crop { width: 100%; aspect-ratio: 166.5 / 140; }
-  .tile-crop :global(img) { margin-top: calc(-26 * var(--u)); }
-  .refundable { position: absolute; left: 8px; bottom: 8px; padding: 4px 9px; border-radius: var(--radius-pill); background: var(--navy); color: #fff; font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.08em; }
-  .tile-text { display: flex; flex-direction: column; padding: 10px 12px 12px; }
-  .tile-text b { display: block; font-size: 16px; line-height: 22px; }
-  .tile-text small { display: block; margin-top: 2px; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
-  .slot { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; line-height: normal; }
-  .slot .u { font-size: 11px; line-height: 13px; font-weight: 600; letter-spacing: 0.04em; }
-  .slot .v { font-size: 22px; line-height: 25px; font-weight: 700; }
-  .slot .v.small { font-size: 15px; line-height: 18px; }
   .plan { margin-top: 12px; padding: var(--space-4); background: var(--water-50); border-radius: var(--radius-md); }
   .plan[hidden] { display: none; }
-  .tile-text strong { font-weight: 700; }
-  .tile-stepper { margin-top: 10px; justify-content: space-between; }
   .plan-lines { gap: 8px; }
   .plan-lines dt { font-size: 16px; line-height: 22px; color: var(--ink); }
   .plan-lines dd { font-size: 17px; line-height: 24px; font-weight: 700; white-space: nowrap; }
@@ -553,46 +545,5 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   .sheet-fields { margin-top: 16px; }
   .sheet .fields + .foot { margin-top: 10px; }
   .sheet .wa { margin-top: 14px; }
-  /* D110 — imagery and motion on the price grid. CSS/SVG only, no GIF, video or library. Each picture plays ONCE when 35% of it is
-     in view (script adds .is-on); sparkles then idle gently, everything else is still. The finished pose is the resting design, so with
-     no script, or with reduced motion, each picture just shows its finished state. Only transform and opacity move, on absolutely placed
-     layers: no layout shift. Truck and scooter reuse the same image file (no extra download). */
-  .ov { position: absolute; display: block; pointer-events: none; }
-  .shine { overflow: hidden; }
-  .shine::before { content: ""; position: absolute; top: -10%; bottom: -10%; left: 0; width: calc(34 * var(--u)); background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.8), rgba(255,255,255,0)); opacity: 0; transform: translateX(calc(-60 * var(--u))) skewX(-18deg); }
-  .spark { filter: drop-shadow(0 0 2px rgba(255,255,255,0.95)); }
-  .patch { inset: 0; opacity: 0; background: linear-gradient(#d3eff3 0, #c7e5f0 calc(60 * var(--u)), #badbee calc(120 * var(--u)), #aacee6 calc(180 * var(--u)), #9cc0e2 calc(240 * var(--u)), #95b9de calc(280 * var(--u))); }
-  .mover { inset: 0; transform-origin: 50% 100%; }
-  .mover :global(img) { display: block; width: 100%; height: auto; }
-  .lines { opacity: 0; }
-  @media (prefers-reduced-motion: no-preference) {
-    .gl-mo.is-armed:not(.is-on) .spark, .gl-mo.is-armed:not(.is-on) .swap { opacity: 0; transform: scale(0); }
-    .gl-mo.is-armed:not(.is-on) .old { transform: translateX(calc(70 * var(--u))); }
-    .gl-mo.is-armed:not(.is-on) .patch { opacity: 1; }
-    .gl-mo.is-armed:not(.is-on) .truck { transform: translateX(calc(290 * var(--u))); }
-    .gl-mo.is-armed:not(.is-on) .scoot { transform: translateX(calc(-310 * var(--u))); }
-    .gl-mo.is-armed:not(.is-on) .sign { opacity: 0; }
-    .gl-mo.is-on .shine::before { animation: gl-shine 1s ease-in-out var(--d, 0.3s) both; }
-    .gl-mo.is-on .spark { animation: gl-pop 0.55s cubic-bezier(0.3, 1.6, 0.5, 1) var(--d, 0.4s) both, gl-twinkle 3.6s ease-in-out calc(var(--d, 0.4s) + 0.8s) infinite; }
-    .gl-mo.is-on .old { animation: gl-old 1s cubic-bezier(0.5, 0, 0.2, 1) 0.25s both; }
-    .gl-mo.is-on .swap { animation: gl-swap 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) 0.95s both; }
-    .gl-mo.is-on .patch { animation: gl-patch var(--t, 1.2s) linear both; }
-    .gl-mo.is-on .truck { animation: gl-drive-l 1.2s cubic-bezier(0.15, 0.6, 0.3, 1) both; }
-    .gl-mo.is-on .scoot { animation: gl-drive-r 0.95s cubic-bezier(0.15, 0.6, 0.3, 1) both; }
-    .gl-mo.is-on .lines-l { animation: gl-lines-l 1.2s cubic-bezier(0.15, 0.6, 0.3, 1) both; }
-    .gl-mo.is-on .lines-r { animation: gl-lines-r 0.95s cubic-bezier(0.15, 0.6, 0.3, 1) both; }
-    .gl-mo.is-on .sign { animation: gl-sign 0.8s cubic-bezier(0.3, 1.4, 0.5, 1) 0.2s both; }
-  }
-  @keyframes gl-shine { 0% { opacity: 0; transform: translateX(calc(-60 * var(--u))) skewX(-18deg); } 15%, 85% { opacity: 1; } 100% { opacity: 0; transform: translateX(calc(130 * var(--u))) skewX(-18deg); } }
-  @keyframes gl-pop { 0% { opacity: 0; transform: scale(0) rotate(-45deg); } 60% { opacity: 1; transform: scale(1.25) rotate(8deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
-  @keyframes gl-twinkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(0.8); } }
-  @keyframes gl-old { 0% { transform: translateX(calc(70 * var(--u))) rotate(0); } 18% { transform: translateX(calc(70 * var(--u))) rotate(-5deg); } 32% { transform: translateX(calc(70 * var(--u))) rotate(3deg); } 100% { transform: translateX(0) rotate(0); } }
-  @keyframes gl-swap { 0% { opacity: 0; transform: scale(0) rotate(-180deg); } 70% { opacity: 1; transform: scale(1.15) rotate(10deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
-  @keyframes gl-patch { 0%, 82% { opacity: 1; } 100% { opacity: 0; } }
-  @keyframes gl-drive-l { 0% { transform: translateX(calc(290 * var(--u))); } 65% { transform: translateX(calc(-5 * var(--u))); } 82% { transform: translateX(calc(2 * var(--u))) translateY(1px); } 100% { transform: translateX(0); } }
-  @keyframes gl-drive-r { 0% { transform: translateX(calc(-310 * var(--u))) rotate(0); } 62% { transform: translateX(calc(6 * var(--u))) rotate(-1.5deg); } 82% { transform: translateX(calc(-2 * var(--u))) rotate(0.5deg); } 100% { transform: translateX(0) rotate(0); } }
-  @keyframes gl-lines-l { 0% { opacity: 0.9; transform: translateX(calc(290 * var(--u))); } 65% { opacity: 0.9; transform: translateX(calc(-5 * var(--u))); } 100% { opacity: 0; transform: translateX(0); } }
-  @keyframes gl-lines-r { 0% { opacity: 0.9; transform: translateX(calc(-310 * var(--u))); } 62% { opacity: 0.9; transform: translateX(calc(6 * var(--u))); } 100% { opacity: 0; transform: translateX(0); } }
-  @keyframes gl-sign { 0% { opacity: 0; transform: translateY(-12px) rotate(-6deg); } 60% { opacity: 1; transform: translateY(1px) rotate(2deg); } 100% { opacity: 1; transform: none; } }
   @media (min-width: 768px) { .band { padding-top: 40px; padding-bottom: 48px; } }
 </style>

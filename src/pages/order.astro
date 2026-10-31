@@ -1,13 +1,17 @@
 ---
 // Order page (D90, D101, D111, D115). Built from Order.dc.html, canvas version 29.
 // No form submission and no database (D22): the fields only fill the pre-filled WhatsApp message to wa.me/923111125124.
-// No motion on this page. Prices D42/D63; WEB100 only with a new-bottle deposit on a delivery order (D69, D115 b).
-// Copy fix D115 f: step 1 reads 'We confirm on WhatsApp — and tell you your delivery time.'
+// Motion: the three way-tile pictures only (D147, 30 Oct); the security tiles stay still. Prices D42/D63; WEB100 only with a new-bottle deposit on a delivery order (D69, D115 b).
+// Step 1 per D151 g (amends D115 f): 'We call you' / 'We call you to confirm your delivery day and time.'
+// 30 Oct (canvas v41, D148 d, D157): Walk-in first, Weekly preselected; way-tile motion; ?new=&ex= presets from Products and prices.
+// Round 5 (29 Oct, canvas v39; D144-D150): one-bottle New tile and one-old-one-new Exchange tile, one price-circle component, 'Shop Locations →', required Email, 'Every 11th refill is free.'
 // How you pay (D127, placeholder 13 closed): cash on delivery first, bank transfer, pay monthly. No bank details, no monthly total (D91).
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
-import bottle from '../assets/home/bottle.jpg';
+import bottleNew from '../assets/home/bottle-new.webp';
+import '../styles/tiles.css';
+import '../styles/motion.css';
 import truck from '../assets/home/truck.jpg';
 import rider from '../assets/home/rider.jpg';
 import rosette from '../assets/home/rosette.png';
@@ -19,6 +23,9 @@ const minus = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" strok
 const plus = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
 const check = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 const u = (n: number) => `calc(${n} * var(--u))`;
+const poly = (pts: number[][]) => `polygon(${pts.map(([x, y]) => `${u(x)} ${u(y)}`).join(', ')})`;
+const truckClip = poly([[30,268],[30,170],[40,140],[58,112],[108,108],[110,82],[234,82],[238,96],[246,108],[258,117],[272,122],[287,124],[300,122],[308,120],[308,268]]);
+const scootClip = poly([[58,280],[58,100],[84,100],[86,28],[132,28],[134,60],[166,58],[166,24],[214,24],[222,60],[232,112],[252,118],[268,140],[290,170],[306,200],[306,280]]);
 const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
 ---
 <Base title="Order water — Glacial" description="Order Glacial water in one minute. Send your order on WhatsApp, or call us.">
@@ -49,55 +56,55 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
 
       <div class="tiles" id="first-panel">
         <div class="tile" id="tile-new" role="group" aria-labelledby="o-new-title">
-          <span class="crop u166 tile-crop">
-            <Image src={bottle} alt="A new, sparkling blue Glacial 19-litre bottle" widths={[300, 450]} sizes="45vw" loading="eager" />
-            <span class="slot" aria-hidden="true" style={`left:72%;top:${u(58)}`}><span class="u">Rs</span><span class="v small">1,300</span></span>
-            <span class="refundable">REFUNDABLE</span>
-          </span>
-          <span class="tile-text">
-            <b id="o-new-title">New bottle</b>
-            <small>Rs 1,300 deposit. <strong>You get it all back</strong> when you return the bottle.</small>
-            <span class="stepper">
+          <!-- D144 (1): ONE sparkling Glacial bottle, no swap here. Same picture as Home B (D115); no motion on this page. -->
+          <div class="gl-pic">
+            <Image class="gl-btl" src={bottleNew} alt="One new, sparkling blue Glacial 19-litre bottle" width={124} height={231} loading="eager" style={`left:${u(40)};`} />
+            <span class="gl-price gl-price-sm" aria-hidden="true"><span class="u">Rs</span><span class="v">1,300</span></span>
+          </div>
+          <div class="gl-tile-copy">
+            <span class="gl-chip">REFUNDABLE</span>
+            <b class="gl-name" id="o-new-title">New bottle</b>
+            <small class="gl-desc">Rs 1,300 deposit. <strong>You get it all back</strong> when you return the bottle.</small>
+            <span class="stepper gl-stepper">
               <button type="button" id="decNew" aria-label="One new bottle fewer" set:html={minus}></button>
               <span class="count" id="nNew" aria-live="polite">2</span>
               <button type="button" id="incNew" aria-label="One new bottle more" set:html={plus}></button>
             </span>
-          </span>
+          </div>
         </div>
         <div class="tile" id="tile-ex" role="group" aria-labelledby="o-ex-title">
-          <span class="crop u166 tile-crop">
-            <Image src={bottle} alt="" widths={[300, 450]} sizes="45vw" />
-            <svg class="ov" role="img" aria-label="An old, scuffed bottle swapped for a new, sparkling Glacial bottle" viewBox="0 0 60 130" style={`left:${u(-30)};top:${u(10)};width:${u(60)};height:${u(130)};`}>
-              <defs><linearGradient id="glOldBodyO" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a89c82" /><stop offset="0.45" stop-color="#ddd4bd" /><stop offset="1" stop-color="#9c907a" /></linearGradient></defs>
-              <ellipse cx="30" cy="127" rx="24" ry="3" fill="#1a2a5b" opacity="0.18" />
-              <rect x="22" y="2" width="16" height="10" rx="3" fill="#8e969e" />
-              <rect x="24" y="11" width="12" height="14" fill="#cfc6ae" />
-              <path d="M24 24h12c8 6 20 10 20 22v72q0 10-10 10H14q-10 0-10-10V46c0-12 12-16 20-22z" fill="url(#glOldBodyO)" />
-              <rect x="4" y="62" width="52" height="6" fill="#8f846b" opacity="0.35" />
-              <rect x="4" y="96" width="52" height="6" fill="#8f846b" opacity="0.35" />
-              <rect x="12" y="48" width="5" height="60" rx="2.5" fill="#ffffff" opacity="0.3" />
-              <path d="M44 50q-6 8 0 16" fill="none" stroke="#7d7360" stroke-width="2" stroke-linecap="round" opacity="0.7" />
-              <path d="M36 76l7 3M38 82l5 2M14 108l6-3M18 112l4-2" fill="none" stroke="#7d7360" stroke-width="1.2" stroke-linecap="round" />
+          <!-- D144 (1): exactly ONE old bottle and ONE new bottle, the swap badge between them. Home B's picture at rest. -->
+          <div class="gl-pic">
+            <svg class="gl-ov" role="img" aria-label="Your old bottle, swapped for one new, sparkling Glacial bottle" viewBox="0 0 470 876" style={`left:${u(3)};top:${u(36)};width:${u(52)};height:${u(97)};`}>
+              <defs><linearGradient id="glOldBodyO" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a89c82" /><stop offset="0.42" stop-color="#e2d9c3" /><stop offset="1" stop-color="#998d76" /></linearGradient></defs>
+              <path d="M192 74H280V122L348 140L405 167L440 197L458 232L463 272V822L450 852L420 870H60L25 852L8 822L6 342V262L20 227L55 196L100 167L150 142L192 124Z" fill="url(#glOldBodyO)" />
+              <rect x="186" y="5" width="98" height="64" rx="12" fill="#8e8778" />
+              <rect x="6" y="300" width="457" height="34" fill="#8f846b" opacity="0.3" />
+              <rect x="6" y="520" width="457" height="30" fill="#8f846b" opacity="0.3" />
+              <rect x="6" y="740" width="457" height="30" fill="#8f846b" opacity="0.3" />
+              <rect x="70" y="340" width="34" height="420" rx="17" fill="#ffffff" opacity="0.28" />
+              <path d="M340 400q-40 60 0 120M300 600l50 20M310 640l35 14M90 800l40-20M110 830l30-14" fill="none" stroke="#7d7360" stroke-width="10" stroke-linecap="round" opacity="0.75" />
             </svg>
-            <svg class="ov" aria-hidden="true" viewBox="0 0 32 32" style={`left:${u(14)};top:${u(62)};width:${u(32)};height:${u(32)};`}><circle cx="16" cy="16" r="15" fill="#1a2a5b" stroke="#ffffff" stroke-width="2" /><path d="M9 13h13l-3.5-3.5M23 19H10l3.5 3.5" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-            <span class="slot" aria-hidden="true" style={`left:72%;top:${u(58)}`}><span class="u">Rs</span><span class="v small">650</span></span>
-            <span class="refundable">OLD FOR NEW</span>
-          </span>
-          <span class="tile-text">
-            <b id="o-ex-title">Exchange your bottle</b>
-            <small>Rs 650 a bottle. The price depends on its condition.</small>
-            <span class="stepper">
+            <Image class="gl-btl" src={bottleNew} alt="" width={124} height={231} loading="eager" style={`left:${u(60)};`} />
+            <svg class="gl-ov" aria-hidden="true" viewBox="0 0 32 32" style={`left:${u(43)};top:${u(74)};width:${u(30)};height:${u(30)};`}><circle cx="16" cy="16" r="15" fill="#1a2a5b" stroke="#ffffff" stroke-width="2" /><path d="M9 13h13l-3.5-3.5M23 19H10l3.5 3.5" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <span class="gl-price gl-price-sm" aria-hidden="true"><span class="u">Rs</span><span class="v">650</span></span>
+          </div>
+          <div class="gl-tile-copy">
+            <span class="gl-chip">OLD FOR NEW</span>
+            <b class="gl-name" id="o-ex-title">Exchange your bottle</b>
+            <small class="gl-desc">Swap your old bottle for a new one. Rs 650, by its condition.</small>
+            <span class="stepper gl-stepper">
               <button type="button" id="decEx" aria-label="One exchange bottle fewer" set:html={minus}></button>
               <span class="count" id="nEx" aria-live="polite">0</span>
               <button type="button" id="incEx" aria-label="One exchange bottle more" set:html={plus}></button>
             </span>
-          </span>
+          </div>
         </div>
       </div>
 
       <div id="ret-panel" hidden>
         <div class="fill" role="group" aria-labelledby="o-fill-title">
-          <span class="crop fill-crop"><Image src={bottle} alt="" widths={[156, 312]} sizes="156px" /></span>
+          <span class="gl-pic fill-pic"><Image class="gl-btl" src={bottleNew} alt="" width={124} height={231} style="left: 22px; top: 12px; width: 52px; height: 97px;" /></span>
           <div class="fill-body">
             <span id="o-fill-title" class="fill-title">Bottles to fill</span>
             <span class="stepper">
@@ -117,10 +124,28 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
       <fieldset class="ways">
         <legend>2. How do you want your water?</legend>
 
+        <!-- 30 Oct (D148 d, canvas v41): Walk-in first, as on Home; Weekly stays preselected. D147 idle motion on the three pictures: Home's classes, once in view. -->
+        <label class="card" id="card-walk">
+          <span class="crop u351 truck-crop gl-mo">
+            <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" />
+            <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
+            <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">200</span></span>
+            <Image src={rosette} alt="Free refill offer: every 11th refill is free" width={84} class="rosette" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} />
+          </span>
+          <span class="card-body">
+            <span class="name-row"><input class="radio" type="radio" name="o-way" value="walk" /><span class="nm">Walk-in refill</span><span class="pr">Rs 200<small> /refill</small></span></span>
+            <span class="strong">Every 11th refill is free.</span>
+            <span class="small muted">Refill 10 times. The 11th is on us. Bring your bottle to any Glacial shop.</span>
+          </span>
+        </label>
+
         <label class="card on" id="card-weekly">
-          <span class="crop u351 truck-crop">
+          <span class="crop u351 truck-crop gl-mo">
             <Image src={truck} alt="A Glacial delivery truck loaded with water bottles" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" />
-            <span class="slot" aria-hidden="true" style={`left:82%;top:${u(67)}`}><span class="u">Rs</span><span class="v">260</span></span>
+            <span class="ov patch" aria-hidden="true" style={`--t:1.2s;clip-path:${truckClip};`}></span>
+            <span class="ov mover truck" aria-hidden="true" style={`clip-path:${truckClip};`}><Image src={truck} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
+            <svg class="ov lines lines-l" aria-hidden="true" viewBox="0 0 40 70" style={`left:${u(312)};top:${u(150)};width:${u(40)};height:${u(70)};`}><path d="M4 6h30M12 34h26M6 62h28" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg>
+            <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">260</span></span>
           </span>
           <span class="card-body">
             <span class="name-row"><input class="radio" type="radio" name="o-way" value="weekly" checked /><span class="nm">Weekly subscription</span><span class="pr">Rs 260<small> /bottle</small></span></span>
@@ -130,28 +155,19 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
         </label>
 
         <label class="card" id="card-express">
-          <span class="crop u351 rider-crop">
+          <span class="crop u351 rider-crop gl-mo">
             <Image src={rider} alt="A Glacial rider on a scooter with a bottle in the carrier box" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" />
-            <span class="slot" aria-hidden="true" style={`left:80.5%;top:${u(64)}`}><span class="u">Rs</span><span class="v">280</span></span>
+            <span class="ov patch" aria-hidden="true" style={`--t:0.95s;clip-path:${scootClip};`}></span>
+            <span class="ov mover scoot" aria-hidden="true" style={`clip-path:${scootClip};`}><Image src={rider} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
+            <svg class="ov lines lines-r" aria-hidden="true" viewBox="0 0 40 70" style={`left:${u(14)};top:${u(170)};width:${u(40)};height:${u(70)};`}><path d="M6 6h30M2 34h26M8 62h28" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg>
+            <svg class="gl-ov wheel" aria-hidden="true" viewBox="0 0 40 40" style={`left:${u(107)};top:${u(233)};width:${u(40)};height:${u(40)};`}><circle cx="20" cy="20" r="16" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="7 9" opacity="0.6" /></svg>
+            <svg class="gl-ov wheel" aria-hidden="true" viewBox="0 0 40 40" style={`left:${u(247)};top:${u(240)};width:${u(40)};height:${u(40)};`}><circle cx="20" cy="20" r="16" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="7 9" opacity="0.6" /></svg>
+            <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">280</span></span>
           </span>
           <span class="card-body">
             <span class="name-row"><input class="radio" type="radio" name="o-way" value="express" /><span class="nm">Express delivery</span><span class="pr">Rs 280<small> /bottle</small></span></span>
             <span class="strong">Run out mid-week? A bottle at your door in 90 minutes.</span>
             <span class="small muted">Order any time. At your door in 90 minutes or less<a href="#o-express-note" class="star" aria-label="See the note on delivery times">*</a></span>
-          </span>
-        </label>
-
-        <label class="card" id="card-walk">
-          <span class="crop u351 truck-crop">
-            <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" />
-            <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
-            <span class="slot" aria-hidden="true" style={`left:82%;top:${u(67)}`}><span class="u">Rs</span><span class="v">200</span></span>
-            <Image src={rosette} alt="Free refill: buy 10, get 1 free" width={84} class="rosette" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} />
-          </span>
-          <span class="card-body">
-            <span class="name-row"><input class="radio" type="radio" name="o-way" value="walk" /><span class="nm">Walk-in refill</span><span class="pr">Rs 200<small> /refill</small></span></span>
-            <span class="strong">Buy 10 refills, get 1 free.</span>
-            <span class="small muted">Bring your bottle to a Glacial shop. Open 9am–9pm, every day.</span>
           </span>
         </label>
       </fieldset>
@@ -171,9 +187,9 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
         <div class="field"><label for="o-name">Name</label><input id="o-name" type="text" autocomplete="name" /></div>
         <div class="field"><label for="o-wa">WhatsApp number</label><input id="o-wa" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
         <div class="field"><label for="o-addr">Delivery address</label><input id="o-addr" type="text" autocomplete="street-address" placeholder="House, street, area" /></div>
-        <div class="field"><label for="o-mail">Email <span class="opt">(optional)</span></label><input id="o-mail" type="email" autocomplete="email" /></div>
+        <div class="field"><label for="o-mail">Email</label><input id="o-mail" type="email" autocomplete="email" required /></div>
       </div>
-      <p class="foot">We'll confirm your order on WhatsApp.</p>
+      <p class="foot">We call you to confirm your delivery day and time.</p>
     </div>
   </section>
 
@@ -187,13 +203,13 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
           <p class="small2">Walk in with your bottle, 9am–9pm, every day.</p>
         </div>
       </div>
-      <a class="link" href={`${base}delivery/`}>Where the shops are →</a>
+      <a class="link" href={`${base}delivery/#d-shops`}>Shop Locations →</a>
     </div>
   </section>
 
   <section class="sec send">
     <div class="col">
-      <div class="summary">
+      <div class="summary" data-fab-hide>
         <h2>Your order</h2>
         <dl id="lines"></dl>
         <div class="total-row" id="start-row" hidden>
@@ -218,9 +234,9 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
       <div id="next-delivery">
         <h2>What happens next</h2>
         <ol class="steps">
-          <li><span class="node" aria-hidden="true">1</span><span class="label">We confirm on WhatsApp — and tell you your delivery time.</span></li>
+          <li><span class="node" aria-hidden="true">1</span><span class="label">We call you<span class="note">We call you to confirm your delivery day and time.</span></span></li>
           <li><span class="node" aria-hidden="true">2</span><span class="label">Fresh, certified water at your door<span class="note" id="nextNote">Same day, same time, every week.</span></span></li>
-          <li><span class="node" aria-hidden="true">3</span><span class="label">Pay cash when your water arrives. You can also pay by bank transfer, or pay monthly.</span></li>
+          <li><span class="node" aria-hidden="true">3</span><span class="label">You pay cash when it arrives<span class="note">Or pay by bank transfer, or pay monthly.</span></span></li>
         </ol>
       </div>
       <p class="foot" id="o-express-note">* Delivery times vary by location. We confirm your time when you place the order.</p>
@@ -229,6 +245,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
 </Base>
 
 <script>
+  import { armMotion } from '../lib/motion';
   // Prices: 00-INDEX D42/D63. Offer: D69/D115 b (WEB100, Rs 100 off the deposit, only with a new-bottle deposit on a delivery order).
   // Nothing is stored or sent anywhere except the pre-filled WhatsApp message the visitor chooses to send (D22).
   const P = { deposit: 1300, exchange: 650, weekly: 260, express: 280, walk: 200, offer: 100 };
@@ -240,6 +257,12 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
   let who: 'first' | 'returning' = 'first';
   let way: 'weekly' | 'express' | 'walk' = 'weekly';
   let nNew = 2, nEx = 0, nFill = 2;
+  // D157 (3): Products and prices opens /order/?new=N&ex=N. Each value must be a whole number 0 to 10; a missing or invalid one keeps Order's default.
+  const q = new URLSearchParams(location.search);
+  const preset = (key: string) => { const v = q.get(key); return v !== null && /^\d{1,2}$/.test(v) && Number(v) <= 10 ? Number(v) : null; };
+  const pNew = preset('new'), pEx = preset('ex');
+  if (pNew !== null) nNew = pNew;
+  if (pEx !== null) nEx = pEx;
 
   function render() {
     const isFirst = who === 'first';
@@ -258,8 +281,9 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
     const startPay = Math.max(0, start - (hasOffer ? P.offer : 0));
     const feet: string[] = [];
     if (isFirst && nNew > 0) feet.push('You get the full deposit back when you return the bottle.');
+    if (isFirst && nNew > 0 && nEx === 0) feet.push('Have an old bottle? Swap it for Rs 650 instead.'); // canvas v41 (D151 i)
     if (isFirst && nEx > 0) feet.push('The exchange price depends on your bottle’s condition.');
-    if (way === 'walk') feet.push('Buy 10 refills, get 1 free.');
+    if (way === 'walk') feet.push('Every 11th refill is free.');
     const weeklyShort = way === 'weekly' && count < 2;
 
     // choices
@@ -295,11 +319,12 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
       m.push(wayLine[0] + ' — ' + wayLine[1]);
       if (hasOffer) m.push('Website offer code: WEB100 (Rs 100 off the deposit)');
       m.push('Name: ' + val('o-name'), 'WhatsApp number: ' + val('o-wa'), 'Delivery address: ' + val('o-addr'));
-      if (val('o-mail')) m.push('Email: ' + val('o-mail'));
+      m.push('Email: ' + val('o-mail')); // D148 (8): the email is required and travels in the message
       href.href = WA + '?text=' + encodeURIComponent(m.join('\n'));
     } else {
       href.href = WA;
     }
+    (document.getElementById('fab') as HTMLAnchorElement | null)?.setAttribute('href', href.href); // D150: the floating button opens this page's main message
 
     // tracker
     const done1 = count > 0 && !weeklyShort;
@@ -325,7 +350,14 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
   $('incFill').addEventListener('click', () => { nFill = Math.min(10, nFill + 1); render(); });
   $('decFill').addEventListener('click', () => { nFill = Math.max(1, nFill - 1); render(); });
   $('makeTwo').addEventListener('click', () => { if (who === 'first') nNew += Math.max(0, 2 - (nNew + nEx)); else nFill = 2; render(); });
+  // D148 (8): Email is required for a delivery order. The send button is a link, so check the field before it opens WhatsApp.
+  $('sendHref').addEventListener('click', (e) => {
+    if (way === 'walk') return;
+    const mail = $('o-mail') as HTMLInputElement;
+    if (!mail.checkValidity() || !mail.value.trim()) { e.preventDefault(); mail.reportValidity(); mail.focus(); }
+  });
   render();
+  armMotion(); // D147: the way-tile pictures play once in view (src/lib/motion.ts)
 </script>
 
 <style>
@@ -359,28 +391,16 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
   .crop :global(img) { display: block; width: 100%; height: auto; }
   .u166 { --u: calc(100cqw / 166.5); }
   .u351 { --u: calc(100cqw / 351); }
-  .tile-crop { width: 100%; aspect-ratio: 166.5 / 140; }
-  .tile-crop :global(img) { margin-top: calc(-26 * var(--u)); }
   .truck-crop { aspect-ratio: 351 / 268; }
   .truck-crop :global(img) { margin-top: calc(-125 * var(--u)); }
   .rider-crop { aspect-ratio: 351 / 280; }
   .rider-crop :global(img) { margin-top: calc(-118 * var(--u)); }
   .ov { position: absolute; display: block; pointer-events: none; }
-  .slot { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; line-height: normal; }
-  .slot .u { font-size: 11px; line-height: 13px; font-weight: 600; letter-spacing: 0.04em; }
-  .slot .v { font-size: 22px; line-height: 25px; font-weight: 700; }
-  .slot .v.small { font-size: 15px; line-height: 18px; }
-  .refundable { position: absolute; left: 8px; bottom: 8px; padding: 4px 9px; border-radius: var(--radius-pill); background: var(--navy); color: #fff; font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.08em; }
-  .tile-text { display: flex; flex-direction: column; padding: 10px 12px 12px; }
-  .tile-text b { font-size: 16px; line-height: 22px; }
-  .tile-text small { display: block; margin-top: 2px; font-size: var(--caption-size); line-height: var(--caption-line); }
-  .tile-text strong { font-weight: 700; }
   .stepper { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 10px; }
   .stepper button { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid var(--line-strong); border-radius: var(--radius-pill); cursor: pointer; padding: 0; }
   .count { min-width: 30px; text-align: center; font-size: var(--h2-size); line-height: var(--h2-line); font-weight: 700; }
   .fill { margin-top: 14px; display: flex; align-items: center; gap: 12px; padding: 0 14px 0 0; background: var(--water-50); border: 2px solid var(--glacier); border-radius: var(--radius-md); overflow: hidden; }
-  .fill-crop { flex: 0 0 auto; width: 96px; height: 118px; }
-  .fill-crop :global(img) { width: 156px; max-width: none; margin: -22px 0 0 -14px; }
+  .fill-pic { flex: 0 0 auto; width: 96px; height: 118px; aspect-ratio: auto; }
   .fill-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 0; }
   .fill-body .stepper { margin-top: 8px; }
   .fill-title { font-size: 16px; line-height: 22px; font-weight: 700; }

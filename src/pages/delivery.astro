@@ -26,7 +26,7 @@ const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const mark = 3;
 const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay: `${(0.2 + Math.floor(i / 7) * 0.25).toFixed(2)}s` }));
 ---
-<Base title="How delivery works — Glacial" description="How Glacial delivery works in Lahore: weekly subscription, express delivery in 90 minutes or less, delivery hours and our shops.">
+<Base fabHref={waDelivery} title="How delivery works — Glacial" description="How Glacial delivery works in Lahore: weekly subscription, express delivery in 90 minutes or less, delivery hours and our shops.">
   <section class="band navy">
     <div class="col">
       <h1>Same day. Same time.<br />Every week.</h1>

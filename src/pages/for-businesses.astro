@@ -33,11 +33,11 @@ const pays = [
 ];
 const steps = [
   'Tell us how many bottles a week|Send your details below. About one minute.',
-  'We fix your delivery day|We confirm the day and time on WhatsApp.',
+  'We fix your delivery day|We call you to confirm your delivery day and time.',
   'Full bottles in, empties out|Every week, like clockwork. You never have to call.',
 ];
 ---
-<Base title="For businesses — Glacial" description="Certified, chlorine-free water for your office, shop, school or restaurant in Lahore. Full bottles every week, on time. Get a business quote on WhatsApp.">
+<Base title="For businesses — Glacial" description="Certified, chlorine-free water for your office, shop, school or restaurant in Lahore. Full bottles every week, on time. Ask for a business quote on WhatsApp; we call you back with your price.">
   <section class="band navy">
     <div class="col">
       <h1>Your team never runs out.</h1>
@@ -93,7 +93,7 @@ const steps = [
         <li class="badge"><Image src={badgeChlorine} alt="" width={120} /><span class="t">Chlorine-free</span><span class="s">No chlorine taste, ever.</span></li>
         <li class="badge"><Image src={badge10} alt="" width={120} /><span class="t">10-step purification</span><span class="s">Every bottle, all ten steps.</span></li>
         <li class="badge"><Image src={markPsqca} alt="Pakistan Standards mark of PSQCA" width={120} /><span class="t">PSQCA licensed</span><span class="s">Pakistan Standards mark</span></li>
-        <li class="badge"><Image src={sealPfa} alt="Seal of the Punjab Food Authority" width={120} /><span class="t">PFA licensed</span><span class="s">Punjab Food Authority</span></li>
+        <li class="badge"><Image src={sealPfa} alt="Seal of the Punjab Food Authority" width={240} /><span class="t">PFA licensed</span><span class="s">Punjab Food Authority</span></li>
       </ul>
       <p class="licensed-line">Licensed by PSQCA and the Punjab Food Authority</p>
     </div>
@@ -163,7 +163,7 @@ const steps = [
           <div class="area-live" id="b-area-answer" role="status" aria-live="polite" aria-atomic="true"></div>
         </div>
       </div>
-      <p class="foot">We'll reply with your quote on WhatsApp.</p>
+      <p class="foot">We call you back with your price.</p>
       <a class="wa" id="b-send" href={WA}><Fragment set:html={waGlyph} />Send my quote request</a>
       <p class="foot" id="b-express-note">* Delivery times vary by location. We confirm your time when you place the order.</p>
     </div>
