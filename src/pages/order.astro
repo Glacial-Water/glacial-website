@@ -12,6 +12,7 @@ import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
 import bottleNew from '../assets/home/bottle-new.webp';
 import '../styles/tiles.css';
 import '../styles/motion.css';
+import WayMotion from '../components/WayMotion.astro';
 import truck from '../assets/home/truck.jpg';
 import rider from '../assets/home/rider.jpg';
 import rosette from '../assets/home/rosette.png';
@@ -128,9 +129,10 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
         <label class="card" id="card-walk">
           <span class="crop u351 truck-crop gl-mo">
             <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" />
+            <WayMotion kind="shop" />
             <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
             <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">200</span></span>
-            <Image src={rosette} alt="Free refill offer: every 11th refill is free" width={84} class="rosette" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} />
+            <Image src={rosette} alt="Free refill offer: every 11th refill is free" width={84} class="rosette gl-pulse" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} />
           </span>
           <span class="card-body">
             <span class="name-row"><input class="radio" type="radio" name="o-way" value="walk" /><span class="nm">Walk-in refill</span><span class="pr">Rs 200<small> /refill</small></span></span>
@@ -144,7 +146,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
             <Image src={truck} alt="A Glacial delivery truck loaded with water bottles" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" />
             <span class="ov patch" aria-hidden="true" style={`--t:1.2s;clip-path:${truckClip};`}></span>
             <span class="ov mover truck" aria-hidden="true" style={`clip-path:${truckClip};`}><Image src={truck} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
-            <svg class="ov lines lines-l" aria-hidden="true" viewBox="0 0 40 70" style={`left:${u(312)};top:${u(150)};width:${u(40)};height:${u(70)};`}><path d="M4 6h30M12 34h26M6 62h28" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg>
+            <WayMotion kind="truck" />
             <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">260</span></span>
           </span>
           <span class="card-body">
@@ -159,9 +161,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
             <Image src={rider} alt="A Glacial rider on a scooter with a bottle in the carrier box" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" />
             <span class="ov patch" aria-hidden="true" style={`--t:0.95s;clip-path:${scootClip};`}></span>
             <span class="ov mover scoot" aria-hidden="true" style={`clip-path:${scootClip};`}><Image src={rider} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
-            <svg class="ov lines lines-r" aria-hidden="true" viewBox="0 0 40 70" style={`left:${u(14)};top:${u(170)};width:${u(40)};height:${u(70)};`}><path d="M6 6h30M2 34h26M8 62h28" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg>
-            <svg class="gl-ov wheel" aria-hidden="true" viewBox="0 0 40 40" style={`left:${u(107)};top:${u(233)};width:${u(40)};height:${u(40)};`}><circle cx="20" cy="20" r="16" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="7 9" opacity="0.6" /></svg>
-            <svg class="gl-ov wheel" aria-hidden="true" viewBox="0 0 40 40" style={`left:${u(247)};top:${u(240)};width:${u(40)};height:${u(40)};`}><circle cx="20" cy="20" r="16" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="7 9" opacity="0.6" /></svg>
+            <WayMotion kind="scooter" id="order" />
             <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">280</span></span>
           </span>
           <span class="card-body">

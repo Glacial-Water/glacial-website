@@ -10,7 +10,6 @@
 .patch { inset: 0; opacity: 0; background: linear-gradient(#d3eff3 0, #c7e5f0 calc(60 * var(--u)), #badbee calc(120 * var(--u)), #aacee6 calc(180 * var(--u)), #9cc0e2 calc(240 * var(--u)), #95b9de calc(280 * var(--u))); }
 .mover { inset: 0; transform-origin: 50% 100%; }
 .mover img { display: block; width: 100%; height: auto; }
-.lines, .wheel { opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
   /* armed (script ran) but not yet in view: hold the opening pose */
   .gl-mo.is-armed:not(.is-on) .spark, .gl-mo.is-armed:not(.is-on) .swap { opacity: 0; transform: scale(0); }
@@ -29,19 +28,12 @@
   .gl-mo.is-on .patch { opacity: 1; }
   .gl-mo.is-on .truck { animation: gl-drive-l 1.2s cubic-bezier(0.15, 0.6, 0.3, 1) both, gl-bump 2.8s ease-in-out 1.6s infinite; }
   .gl-mo.is-on .scoot { animation: gl-drive-r 0.95s cubic-bezier(0.15, 0.6, 0.3, 1) both, gl-bump-s 1.9s ease-in-out 1.2s infinite; }
-  .gl-mo.is-on .lines-l { animation: gl-lines-l 1.2s cubic-bezier(0.15, 0.6, 0.3, 1) both, gl-air-l 3.2s ease-out 1.8s infinite; }
-  .gl-mo.is-on .lines-r { animation: gl-lines-r 0.95s cubic-bezier(0.15, 0.6, 0.3, 1) both, gl-air-r 2.4s ease-out 1.3s infinite; }
-  .gl-mo.is-on .wheel { animation: gl-fade-in 0.4s ease-out 1s both, gl-spin 1.4s linear 1s infinite; }
-  .gl-mo.is-on .sign { animation: gl-sign 0.8s cubic-bezier(0.3, 1.4, 0.5, 1) 0.2s both, gl-swing 5s ease-in-out 2.4s infinite; }
+  .gl-mo.is-on .sign { animation: gl-sign 0.8s cubic-bezier(0.3, 1.4, 0.5, 1) 0.2s both; }
 }
 @keyframes gl-newin { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: none; } }
 @keyframes gl-bump { 0%, 30%, 100% { transform: translateY(0); } 10% { transform: translateY(-1.5px); } 20% { transform: translateY(0.5px); } }
 @keyframes gl-bump-s { 0%, 40%, 100% { transform: translateY(0); } 15% { transform: translateY(-1px); } 28% { transform: translateY(0.4px); } }
-@keyframes gl-air-l { 0% { opacity: 0; transform: translateX(calc(-4 * var(--u))); } 25% { opacity: 0.5; } 100% { opacity: 0; transform: translateX(calc(16 * var(--u))); } }
-@keyframes gl-air-r { 0% { opacity: 0; transform: translateX(calc(4 * var(--u))); } 25% { opacity: 0.5; } 100% { opacity: 0; transform: translateX(calc(-14 * var(--u))); } }
 @keyframes gl-fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes gl-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-@keyframes gl-swing { 0%, 70%, 100% { transform: rotate(0deg); } 78% { transform: rotate(2.5deg); } 86% { transform: rotate(-2deg); } 93% { transform: rotate(1deg); } }
 @keyframes gl-shine { 0% { opacity: 0; transform: translateX(calc(-60 * var(--u))) skewX(-18deg); } 15%, 85% { opacity: 1; } 100% { opacity: 0; transform: translateX(calc(130 * var(--u))) skewX(-18deg); } }
 @keyframes gl-pop { 0% { opacity: 0; transform: scale(0) rotate(-45deg); } 60% { opacity: 1; transform: scale(1.25) rotate(8deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
 @keyframes gl-twinkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(0.8); } }
@@ -49,10 +41,39 @@
 @keyframes gl-swap { 0% { opacity: 0; transform: scale(0) rotate(-180deg); } 70% { opacity: 1; transform: scale(1.15) rotate(10deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
 @keyframes gl-drive-l { 0% { transform: translateX(calc(290 * var(--u))); } 65% { transform: translateX(calc(-5 * var(--u))); } 82% { transform: translateX(calc(2 * var(--u))) translateY(1px); } 100% { transform: translateX(0); } }
 @keyframes gl-drive-r { 0% { transform: translateX(calc(-310 * var(--u))) rotate(0); } 62% { transform: translateX(calc(6 * var(--u))) rotate(-1.5deg); } 82% { transform: translateX(calc(-2 * var(--u))) rotate(0.5deg); } 100% { transform: translateX(0) rotate(0); } }
-@keyframes gl-lines-l { 0% { opacity: 0.9; transform: translateX(calc(290 * var(--u))); } 65% { opacity: 0.9; transform: translateX(calc(-5 * var(--u))); } 100% { opacity: 0; transform: translateX(0); } }
-@keyframes gl-lines-r { 0% { opacity: 0.9; transform: translateX(calc(-310 * var(--u))); } 62% { opacity: 0.9; transform: translateX(calc(6 * var(--u))); } 100% { opacity: 0; transform: translateX(0); } }
 @keyframes gl-sign { 0% { opacity: 0; transform: translateY(-12px) rotate(-6deg); } 60% { opacity: 1; transform: translateY(1px) rotate(2deg); } 100% { opacity: 1; transform: none; } }
 
 /* The wheel rings sit inside the way-tile crop, not inside .gl-pic, so they need their own absolute placing (found 30 Oct: they were static, hence invisible) */
 .gl-mo .gl-ov { position: absolute; display: block; pointer-events: none; }
 .gl-mo .sign { transform-origin: 50% 0; }
+
+/* ===== 31 Oct (D163): one shared way-tile idle. Real tyres roll, white wind lines, awning shifts navy/teal, rosette pulses.
+   Replaces the dashed wheel ring, faint air lines and sign sway. Slow cycles (nothing faster than once a second), no smoke,
+   transform and opacity only on absolutely placed layers (no layout shift). Reduced motion or no script = still picture. */
+.gl-tyres, .gl-wind, .gl-roof { opacity: 0; }
+.gl-tyres { inset: 0; transform-origin: 50% 100%; }
+.gl-tyres svg, svg.gl-roof { position: absolute; left: 0; width: 100%; height: auto; aspect-ratio: 900 / 1109; overflow: visible; }
+.gl-tyre { transform-box: fill-box; transform-origin: center; }
+.gl-wind { filter: drop-shadow(0 0 1.5px rgba(26, 42, 91, 0.45)); }
+.gl-wind path { fill: none; stroke: #fff; stroke-width: 5; stroke-linecap: round; opacity: 0; }
+.gl-roof path, .gl-roof rect { fill: #0a6f8f; }
+.gl-pulse { transform-origin: 50% 50%; }
+@media (prefers-reduced-motion: no-preference) {
+  .gl-mo.is-armed .gl-tyres, .gl-mo.is-armed .gl-wind { opacity: 1; }
+  .gl-mo.is-armed:not(.is-on) .gl-tyres-l { transform: translateX(calc(290 * var(--u))); }
+  .gl-mo.is-armed:not(.is-on) .gl-tyres-r { transform: translateX(calc(-310 * var(--u))); }
+  .gl-mo.is-on .gl-tyres-l { animation: gl-drive-l 1.2s cubic-bezier(0.15, 0.6, 0.3, 1) both; }
+  .gl-mo.is-on .gl-tyres-r { animation: gl-drive-r 0.95s cubic-bezier(0.15, 0.6, 0.3, 1) both; }
+  .gl-mo.is-on .gl-tyres-l .gl-tyre { animation: gl-roll-l 1.5s linear infinite; }
+  .gl-mo.is-on .gl-tyres-r .gl-tyre { animation: gl-roll-r 1.3s linear infinite; }
+  .gl-mo.is-on .gl-wind-l path { animation: gl-wind-l 1.8s ease-out calc(1s + var(--w, 0s)) infinite; }
+  .gl-mo.is-on .gl-wind-r path { animation: gl-wind-r 1.6s ease-out calc(0.8s + var(--w, 0s)) infinite; }
+  .gl-mo.is-on .gl-roof { animation: gl-roof 8s ease-in-out 1.2s infinite; }
+  .gl-mo.is-on .gl-pulse { animation: gl-pulse 3.2s ease-in-out 1s infinite; }
+}
+@keyframes gl-roll-l { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
+@keyframes gl-roll-r { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes gl-wind-l { 0% { opacity: 0; transform: translateX(calc(-12 * var(--u))); } 20% { opacity: 0.95; } 100% { opacity: 0; transform: translateX(calc(28 * var(--u))); } }
+@keyframes gl-wind-r { 0% { opacity: 0; transform: translateX(calc(12 * var(--u))); } 20% { opacity: 0.95; } 100% { opacity: 0; transform: translateX(calc(-28 * var(--u))); } }
+@keyframes gl-roof { 0%, 100% { opacity: 0; } 45%, 60% { opacity: 0.9; } }
+@keyframes gl-pulse { 0%, 50%, 100% { transform: scale(1) rotate(0deg); } 25% { transform: scale(1.12) rotate(7deg); } 75% { transform: scale(0.94) rotate(-7deg); } }
