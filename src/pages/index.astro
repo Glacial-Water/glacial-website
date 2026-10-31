@@ -12,6 +12,7 @@ import { Image } from 'astro:assets';
 import '@fontsource/noto-naskh-arabic/arabic-600.css'; // Urdu font, self-hosted (D81 c); loaded on Home only
 import Base from '../layouts/Base.astro';
 import '../styles/tiles.css';
+import '../styles/motion.css';
 import { whatsappUrl, phoneDisplay, phoneTel } from '../data/site';
 import hero from '../assets/home/hero-family.jpg';
 import seal from '../assets/home/seal.png';
@@ -295,6 +296,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
 
 <script>
   import { lookupArea } from '../lib/areaMatch';
+  import { armMotion } from '../lib/motion';
   // Prices: 00-INDEX D42/D63 (new bottle Rs 1,300 deposit; exchange Rs 650; weekly Rs 260 a bottle). Offer: D69/D73 (WEB100, Rs 100 off the deposit).
   // Mixed security (D95 e): each tile has its own stepper, both can be active, totals add, weekly count is the sum. No monthly total (D91).
   const WA = 'https://wa.me/923111125124';
@@ -388,17 +390,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   sheet.addEventListener('click', (e) => { const t = e.target as HTMLElement; if (t === sheet || t.closest('[data-close-offer]')) sheet.close(); });
   sheet.addEventListener('close', () => opener?.focus());
   render();
-  // D110: each picture on the price grid plays once, when 35% of it scrolls into view. With reduced motion, or without
-  // IntersectionObserver, nothing is armed and every picture simply shows its finished pose.
-  const mo = Array.from(document.querySelectorAll<HTMLElement>('.gl-mo'));
-  if (mo.length && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
-      if (!en.isIntersecting) return;
-      (en.target as HTMLElement).classList.add('is-on');
-      io.unobserve(en.target);
-    }), { threshold: 0.35 });
-    mo.forEach((el) => { el.classList.add('is-armed'); io.observe(el); });
-  }
+  armMotion(); // D110 / D147: each picture plays once when 35% of it is in view (src/lib/motion.ts)
 </script>
 
 <style>
@@ -553,58 +545,5 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   .sheet-fields { margin-top: 16px; }
   .sheet .fields + .foot { margin-top: 10px; }
   .sheet .wa { margin-top: 14px; }
-  /* D110 — imagery and motion on the price grid, with D147 idle motion. CSS/SVG only, no GIF, video or library. Each picture plays ONCE when 35% of it is
-     in view (script adds .is-on); then it keeps a gentle idle (sparkles twinkle, truck and scooter bounce, air lines drift, wheels turn, sign swings).
-     The finished pose is the resting design, so with no script, or with reduced motion, each picture just shows its finished state and nothing moves.
-     Only transform and opacity move, on absolutely placed layers: no layout shift. Truck and scooter reuse the same image file (no extra download). */
-  .ov { position: absolute; display: block; pointer-events: none; }
-  .shine { overflow: hidden; }
-  .shine::before { content: ""; position: absolute; top: -10%; bottom: -10%; left: 0; width: calc(34 * var(--u)); background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.8), rgba(255,255,255,0)); opacity: 0; transform: translateX(calc(-60 * var(--u))) skewX(-18deg); }
-  .spark { filter: drop-shadow(0 0 2px rgba(255,255,255,0.95)); }
-  .patch { inset: 0; opacity: 0; background: linear-gradient(#d3eff3 0, #c7e5f0 calc(60 * var(--u)), #badbee calc(120 * var(--u)), #aacee6 calc(180 * var(--u)), #9cc0e2 calc(240 * var(--u)), #95b9de calc(280 * var(--u))); }
-  .mover { inset: 0; transform-origin: 50% 100%; }
-  .mover :global(img) { display: block; width: 100%; height: auto; }
-  .lines, .wheel { opacity: 0; }
-  @media (prefers-reduced-motion: no-preference) {
-    /* armed (script ran) but not yet in view: hold the opening pose */
-    .gl-mo.is-armed:not(.is-on) .spark, .gl-mo.is-armed:not(.is-on) .swap { opacity: 0; transform: scale(0); }
-    .gl-mo.is-armed:not(.is-on) :global(.newin) { opacity: 0; transform: translateY(8px); }
-    .gl-mo.is-armed:not(.is-on) .patch { opacity: 1; }
-    .gl-mo.is-armed:not(.is-on) .truck { transform: translateX(calc(290 * var(--u))); }
-    .gl-mo.is-armed:not(.is-on) .scoot { transform: translateX(calc(-310 * var(--u))); }
-    .gl-mo.is-armed:not(.is-on) .sign { opacity: 0; }
-    /* in view: play once */
-    .gl-mo.is-on .shine::before { animation: gl-shine 1s ease-in-out var(--d, 0.3s) both; }
-    .gl-mo.is-on .spark { animation: gl-pop 0.55s cubic-bezier(0.3, 1.6, 0.5, 1) var(--d, 0.4s) both, gl-twinkle 3.6s ease-in-out calc(var(--d, 0.4s) + 0.8s) infinite; }
-    .gl-mo.is-on .old { transform-origin: 50% 100%; animation: gl-old 0.8s ease-in-out 0.15s both; }
-    .gl-mo.is-on .swap { animation: gl-swap 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) 0.55s both; }
-    .gl-mo.is-on :global(.newin) { animation: gl-newin 0.5s cubic-bezier(0.3, 1.4, 0.5, 1) 0.85s both; }
-    /* D147: the patch stays under the moving copy so the gentle bounce never shows a ghost */
-    .gl-mo.is-on .patch { opacity: 1; }
-    .gl-mo.is-on .truck { animation: gl-drive-l 1.2s cubic-bezier(0.15, 0.6, 0.3, 1) both, gl-bump 2.8s ease-in-out 1.6s infinite; }
-    .gl-mo.is-on .scoot { animation: gl-drive-r 0.95s cubic-bezier(0.15, 0.6, 0.3, 1) both, gl-bump-s 1.9s ease-in-out 1.2s infinite; }
-    .gl-mo.is-on .lines-l { animation: gl-lines-l 1.2s cubic-bezier(0.15, 0.6, 0.3, 1) both, gl-air-l 3.2s ease-out 1.8s infinite; }
-    .gl-mo.is-on .lines-r { animation: gl-lines-r 0.95s cubic-bezier(0.15, 0.6, 0.3, 1) both, gl-air-r 2.4s ease-out 1.3s infinite; }
-    .gl-mo.is-on .wheel { animation: gl-fade-in 0.4s ease-out 1s both, gl-spin 1.4s linear 1s infinite; }
-    .gl-mo.is-on .sign { animation: gl-sign 0.8s cubic-bezier(0.3, 1.4, 0.5, 1) 0.2s both, gl-swing 5s ease-in-out 2.4s infinite; }
-  }
-  @keyframes gl-newin { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: none; } }
-  @keyframes gl-bump { 0%, 30%, 100% { transform: translateY(0); } 10% { transform: translateY(-1.5px); } 20% { transform: translateY(0.5px); } }
-  @keyframes gl-bump-s { 0%, 40%, 100% { transform: translateY(0); } 15% { transform: translateY(-1px); } 28% { transform: translateY(0.4px); } }
-  @keyframes gl-air-l { 0% { opacity: 0; transform: translateX(calc(-4 * var(--u))); } 25% { opacity: 0.5; } 100% { opacity: 0; transform: translateX(calc(16 * var(--u))); } }
-  @keyframes gl-air-r { 0% { opacity: 0; transform: translateX(calc(4 * var(--u))); } 25% { opacity: 0.5; } 100% { opacity: 0; transform: translateX(calc(-14 * var(--u))); } }
-  @keyframes gl-fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
-  @keyframes gl-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-  @keyframes gl-swing { 0%, 70%, 100% { transform: rotate(0deg); } 78% { transform: rotate(2.5deg); } 86% { transform: rotate(-2deg); } 93% { transform: rotate(1deg); } }
-  @keyframes gl-shine { 0% { opacity: 0; transform: translateX(calc(-60 * var(--u))) skewX(-18deg); } 15%, 85% { opacity: 1; } 100% { opacity: 0; transform: translateX(calc(130 * var(--u))) skewX(-18deg); } }
-  @keyframes gl-pop { 0% { opacity: 0; transform: scale(0) rotate(-45deg); } 60% { opacity: 1; transform: scale(1.25) rotate(8deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
-  @keyframes gl-twinkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(0.8); } }
-  @keyframes gl-old { 0%, 100% { transform: rotate(0deg); } 20% { transform: rotate(-6deg); } 40% { transform: rotate(4deg); } 60% { transform: rotate(-2deg); } 80% { transform: rotate(1deg); } }
-  @keyframes gl-swap { 0% { opacity: 0; transform: scale(0) rotate(-180deg); } 70% { opacity: 1; transform: scale(1.15) rotate(10deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
-  @keyframes gl-drive-l { 0% { transform: translateX(calc(290 * var(--u))); } 65% { transform: translateX(calc(-5 * var(--u))); } 82% { transform: translateX(calc(2 * var(--u))) translateY(1px); } 100% { transform: translateX(0); } }
-  @keyframes gl-drive-r { 0% { transform: translateX(calc(-310 * var(--u))) rotate(0); } 62% { transform: translateX(calc(6 * var(--u))) rotate(-1.5deg); } 82% { transform: translateX(calc(-2 * var(--u))) rotate(0.5deg); } 100% { transform: translateX(0) rotate(0); } }
-  @keyframes gl-lines-l { 0% { opacity: 0.9; transform: translateX(calc(290 * var(--u))); } 65% { opacity: 0.9; transform: translateX(calc(-5 * var(--u))); } 100% { opacity: 0; transform: translateX(0); } }
-  @keyframes gl-lines-r { 0% { opacity: 0.9; transform: translateX(calc(-310 * var(--u))); } 62% { opacity: 0.9; transform: translateX(calc(6 * var(--u))); } 100% { opacity: 0; transform: translateX(0); } }
-  @keyframes gl-sign { 0% { opacity: 0; transform: translateY(-12px) rotate(-6deg); } 60% { opacity: 1; transform: translateY(1px) rotate(2deg); } 100% { opacity: 1; transform: none; } }
   @media (min-width: 768px) { .band { padding-top: 40px; padding-bottom: 48px; } }
 </style>
