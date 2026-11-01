@@ -18,3 +18,11 @@ img { max-width: 100%; height: auto; }
 @media (min-width: 768px) { .wrap { max-width: var(--grid-desktop-container); } }
 .skip { position: absolute; left: -9999px; }
 .skip:focus { left: var(--space-2); top: var(--space-2); background: var(--surface); padding: var(--space-2); z-index: 10; }
+
+/* D150: the floating WhatsApp button (Design System component). Teal fill, white label, 19px bold, 56px high pill. */
+.fab { position: fixed; right: 16px; bottom: 16px; bottom: max(16px, env(safe-area-inset-bottom)); z-index: 5; display: inline-flex; align-items: center; gap: 8px; height: 56px; box-sizing: border-box; padding: 0 20px 0 16px; border-radius: 999px; background: var(--whatsapp); color: var(--on-whatsapp); font-size: 19px; line-height: 26px; font-weight: 700; text-decoration: none; box-shadow: 0 6px 18px rgba(15, 26, 58, 0.28); transition: opacity 0.2s ease, transform 0.2s ease; }
+.fab:hover { background: var(--whatsapp-hover); color: var(--on-whatsapp); }
+.fab:active { background: var(--whatsapp-active); }
+.fab:focus-visible { outline: 2px solid var(--water-200); outline-offset: 2px; }
+.fab.is-hidden { opacity: 0; transform: translateY(12px); pointer-events: none; visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .fab { transition: none; } }

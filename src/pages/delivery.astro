@@ -1,11 +1,15 @@
 ---
-// How delivery works (D124), built from DeliveryB.dc.html (canvas version 32). Replaces the coming-soon stub.
-// ONE change from the drawing (D124 d): the bookings bar shows no start time (D34 gives only "until 7pm"); the text line stays.
-// Markers: [HOW YOU PAY — CONFIRM] (placeholder 13) and [SHOP 1/2 — NAME AND ADDRESS] (placeholder 27). Nothing invented.
+// How delivery works (D124, revised D166), built from DeliveryB.dc.html (canvas version 56).
+// 31 Oct (D151 f, g, h, i; D157 a; D163; D165 d): calendar with the same 3-hour window every week (an example, no slot promised), step 3 'We call you',
+// the drawn doorstep swap (7 s cycle, still with reduced motion), deposit + exchange side by side, mobile + WhatsApp fields in the area message, D163 way-tile motion.
+// How you pay (D127) and both shop addresses (D131 DHA, D132 Johar Town) are settled. Nothing invented.
 // Motion: CSS/SVG only, plays once when 35% of the picture is in view; reduced motion or no script shows the finished picture, no layout shift.
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import StepList from '../components/StepList.astro';
+import WayMotion from '../components/WayMotion.astro';
+import '../styles/tiles.css';
+import '../styles/motion.css';
 import { whatsappUrl, phoneDisplay, phoneTel } from '../data/site';
 import truck from '../assets/home/truck.jpg';
 import rider from '../assets/home/rider.jpg';
@@ -14,35 +18,39 @@ import shop from '../assets/home/shop.svg';
 import logo from '../assets/glacial-logo.png';
 const base = import.meta.env.BASE_URL;
 const u = (n: number) => `calc(${n} * var(--u))`;
+const poly = (pts: number[][]) => `polygon(${pts.map(([x, y]) => `${u(x)} ${u(y)}`).join(', ')})`;
+const truckClip = poly([[30,268],[30,170],[40,140],[58,112],[108,108],[110,82],[234,82],[238,96],[246,108],[258,117],[272,122],[287,124],[300,122],[308,120],[308,268]]);
+const scootClip = poly([[58,280],[58,100],[84,100],[86,28],[132,28],[134,60],[166,58],[166,24],[214,24],[222,60],[232,112],[252,118],[268,140],[290,170],[306,200],[306,280]]);
 const waGlyph = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>';
 const waDelivery = 'https://wa.me/923111125124?text=' + encodeURIComponent('Hi Glacial, I have a question about delivery.');
 const steps = [
   'Check your area|Type it in below. The answer shows right away.',
   'Send your order on WhatsApp|Your bottles and your address. About one minute.',
-  'We confirm on WhatsApp|And tell you your delivery day and time.',
+  'We call you|We call you to confirm your delivery day and time.',
 ];
-// Calendar: four weeks, one column marked. Thursday is only an example; the customer's day is confirmed on WhatsApp.
+// Calendar: four weeks, one column marked with the same 3-hour window. Thursday 11am–2pm is only an example; the day and time are set on our call (D151 f, g).
 const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const mark = 3;
 const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay: `${(0.2 + Math.floor(i / 7) * 0.25).toFixed(2)}s` }));
 ---
-<Base title="How delivery works — Glacial" description="How Glacial delivery works in Lahore: weekly subscription, express delivery in 90 minutes or less, delivery hours and our shops.">
+<Base fabHref={waDelivery} title="How delivery works — Glacial" description="How Glacial delivery works in Lahore: weekly subscription, express delivery in 90 minutes or less, delivery hours and our shops.">
   <section class="band navy">
     <div class="col">
       <h1>Same day. Same time.<br />Every week.</h1>
       <p class="lede">Certified, chlorine-free water at your door. You never have to call.</p>
       <div class="cal-card gl-mo" data-mo>
-        <div role="img" aria-label="One month on a calendar. The same day is marked with a bottle in each of the four weeks.">
+        <div role="img" aria-label="One month on a calendar. In each of the four weeks the same day, Thursday, is marked with a bottle and the same three-hour window, 11am to 2pm. This is an example.">
           <div class="cal head" aria-hidden="true">{dayNames.map((n, i) => <span class={`ch${i === mark ? ' on' : ''}`}>{n}</span>)}</div>
           <ul class="cal" aria-hidden="true">
             {cells.map((c) => (
               <li class={`cc${c.on ? ' on' : ''}`}>
-                {c.on && <svg class="pop" width="18" height="24" viewBox="0 0 36 48" style={`--d:${c.delay}`}><rect x="13" y="1" width="10" height="6" rx="2" fill="#ffffff" /><rect x="14.5" y="6" width="7" height="6" fill="#d9ecf6" /><path d="M14 11h8c5 3 11 6 11 13v19q0 4-4 4H7q-4 0-4-4V24c0-7 6-10 11-13z" fill="#d9ecf6" /><rect x="8" y="22" width="3" height="20" rx="1.5" fill="#ffffff" opacity="0.7" /></svg>}
+                {c.on && <svg class="pop" width="16" height="22" viewBox="0 0 36 48" style={`--d:${c.delay}`}><rect x="13" y="1" width="10" height="6" rx="2" fill="#ffffff" /><rect x="14.5" y="6" width="7" height="6" fill="#d9ecf6" /><path d="M14 11h8c5 3 11 6 11 13v19q0 4-4 4H7q-4 0-4-4V24c0-7 6-10 11-13z" fill="#d9ecf6" /><rect x="8" y="22" width="3" height="20" rx="1.5" fill="#ffffff" opacity="0.7" /></svg>}
+                {c.on && <span class="ct pop" style={`--d:${c.delay}`}>11–2</span>}
               </li>
             ))}
           </ul>
         </div>
-        <p class="cal-key"><span class="sw" aria-hidden="true"></span>Your delivery day — the same every week</p>
+        <p class="cal-key"><span class="sw" aria-hidden="true"></span><span>Your day and your 3-hour window. The same every week.<span class="cal-eg">Example: Thursdays, 11am–2pm. We call you to set yours.</span></span></p>
       </div>
     </div>
   </section>
@@ -57,30 +65,34 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
 
   <section class="pale sec">
     <div class="col">
-      <h2>Full bottles in. Empties out.</h2>
-      <p class="p">Every week we take your empty bottles and leave fresh, full ones.</p>
-      <svg class="door" role="img" aria-label="At a front door: an empty bottle goes out, a full Glacial bottle comes in" viewBox="0 0 353 170" width="353" height="170">
+      <h2>One visit, every week.</h2>
+      <p class="p">Empty bottles go out. Full bottles come in.</p>
+      <svg class="door gl-mo" data-mo role="img" aria-label="At a front door: the empty bottle goes out, a full Glacial bottle comes in" viewBox="0 0 353 170" width="353" height="170">
         <rect x="0" y="0" width="353" height="170" rx="14" fill="#ffffff" />
         <rect x="146" y="22" width="62" height="132" rx="4" fill="#d9ecf6" stroke="#1a2a5b" stroke-width="2" />
         <rect x="155" y="32" width="44" height="46" rx="2" fill="none" stroke="#1a2a5b" stroke-width="1.5" opacity="0.5" />
         <rect x="155" y="88" width="44" height="56" rx="2" fill="none" stroke="#1a2a5b" stroke-width="1.5" opacity="0.5" />
         <circle cx="198" cy="94" r="3" fill="#1a2a5b" />
         <rect x="132" y="154" width="90" height="6" rx="2" fill="#1a2a5b" />
-        <g transform="translate(42 56) scale(1.8)">
-          <rect x="13" y="1" width="10" height="6" rx="2" fill="#9aa3b3" />
-          <rect x="14.5" y="6" width="7" height="6" fill="#ffffff" stroke="#9cc0e2" stroke-width="1" />
-          <path d="M14 11h8c5 3 11 6 11 13v19q0 4-4 4H7q-4 0-4-4V24c0-7 6-10 11-13z" fill="#ffffff" stroke="#9cc0e2" stroke-width="1.2" />
+        <g class="swap-out">
+          <g transform="translate(42 56) scale(1.8)">
+            <rect x="13" y="1" width="10" height="6" rx="2" fill="#9aa3b3" />
+            <rect x="14.5" y="6" width="7" height="6" fill="#ffffff" stroke="#9cc0e2" stroke-width="1" />
+            <path d="M14 11h8c5 3 11 6 11 13v19q0 4-4 4H7q-4 0-4-4V24c0-7 6-10 11-13z" fill="#ffffff" stroke="#9cc0e2" stroke-width="1.2" />
+          </g>
         </g>
         <path d="M136 40H22" fill="none" stroke="#5b6478" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="2 6" />
         <path d="M30 33l-9 7 9 7" fill="none" stroke="#5b6478" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
         <text x="74" y="160" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#5b6478">Empty out</text>
-        <g transform="translate(252 56) scale(1.8)">
-          <rect x="13" y="1" width="10" height="6" rx="2" fill="#1a2a5b" />
-          <rect x="14.5" y="6" width="7" height="6" fill="#9ccbe6" />
-          <path d="M14 11h8c5 3 11 6 11 13v19q0 4-4 4H7q-4 0-4-4V24c0-7 6-10 11-13z" fill="#6fb6dc" />
-          <rect x="3" y="27" width="30" height="3" fill="#ffffff" opacity="0.35" />
-          <rect x="3" y="37" width="30" height="3" fill="#ffffff" opacity="0.35" />
-          <rect x="8" y="22" width="3" height="20" rx="1.5" fill="#ffffff" opacity="0.4" />
+        <g class="swap-in">
+          <g transform="translate(252 56) scale(1.8)">
+            <rect x="13" y="1" width="10" height="6" rx="2" fill="#1a2a5b" />
+            <rect x="14.5" y="6" width="7" height="6" fill="#9ccbe6" />
+            <path d="M14 11h8c5 3 11 6 11 13v19q0 4-4 4H7q-4 0-4-4V24c0-7 6-10 11-13z" fill="#6fb6dc" />
+            <rect x="3" y="27" width="30" height="3" fill="#ffffff" opacity="0.35" />
+            <rect x="3" y="37" width="30" height="3" fill="#ffffff" opacity="0.35" />
+            <rect x="8" y="22" width="3" height="20" rx="1.5" fill="#ffffff" opacity="0.4" />
+          </g>
         </g>
         <path d="M340 40h-96" fill="none" stroke="#0a6f8f" stroke-width="2.4" stroke-linecap="round" />
         <path d="M252 33l-9 7 9 7" fill="none" stroke="#0a6f8f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
@@ -88,9 +100,12 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
       </svg>
 
       <article class="card" id="d-weekly">
-        <span class="crop u351 walk-crop">
+        <span class="crop u351 walk-crop gl-mo" data-mo>
           <Image src={truck} alt="A Glacial delivery truck loaded with water bottles" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" loading="lazy" />
-          <span class="slot" aria-hidden="true" style={`left:82%;top:${u(67)}`}><span class="u">Rs</span><span class="v">260</span></span>
+          <span class="ov patch" aria-hidden="true" style={`--t:1.2s;clip-path:${truckClip};`}></span>
+          <span class="ov mover truck" aria-hidden="true" style={`clip-path:${truckClip};`}><Image src={truck} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
+          <WayMotion kind="truck" />
+          <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">260</span></span>
         </span>
         <div class="card-body">
           <div class="name-row"><h3>Weekly subscription</h3><p class="price">Rs 260<span> /bottle</span></p></div>
@@ -123,9 +138,12 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
       </div>
 
       <article class="card" id="d-express">
-        <span class="crop u351 rider-crop">
+        <span class="crop u351 rider-crop gl-mo" data-mo>
           <Image src={rider} alt="A Glacial rider on a scooter with a bottle in the carrier box" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" loading="lazy" />
-          <span class="slot" aria-hidden="true" style={`left:80.5%;top:${u(64)}`}><span class="u">Rs</span><span class="v">280</span></span>
+          <span class="ov patch" aria-hidden="true" style={`--t:0.95s;clip-path:${scootClip};`}></span>
+          <span class="ov mover scoot" aria-hidden="true" style={`clip-path:${scootClip};`}><Image src={rider} alt="" widths={[351, 702]} sizes="(min-width: 430px) 430px, 100vw" /></span>
+          <WayMotion kind="scooter" id="delivery" />
+          <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">280</span></span>
         </span>
         <div class="card-body">
           <div class="name-row"><h3>Express delivery</h3><p class="price">Rs 280<span> /bottle</span></p></div>
@@ -149,7 +167,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
           <div class="ticks"><span class="t7">7pm</span><span class="t9">9pm</span></div>
         </div>
       </div>
-      <p class="foot big">Delivery bookings until 7pm. Shops open 9am–9pm.</p>
+      <p class="foot big">Delivery bookings until 7pm. Shops open 9am–9pm, every day.</p>
     </div>
   </section>
 
@@ -159,7 +177,8 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
       <p class="p">We deliver across most of Lahore. Type your area to check.</p>
       <div class="fields">
         <div class="field"><label for="d-name">Name</label><input id="d-name" type="text" autocomplete="name" /></div>
-        <div class="field"><label for="d-phone">Phone</label><input id="d-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
+        <div class="field"><label for="d-phone">Mobile number <span>(we call you on this)</span></label><input id="d-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
+        <div class="field"><label for="d-wa">WhatsApp number <span>(if different)</span></label><input id="d-wa" type="tel" inputmode="tel" placeholder="03XX-XXXXXXX" /></div>
         <div class="field"><label for="d-area-in">Area</label><input id="d-area-in" type="text" autocomplete="address-level3" placeholder="For example, Johar Town" aria-describedby="d-area-answer" /></div>
         <div class="area-live" id="d-area-answer" role="status" aria-live="polite" aria-atomic="true"></div>
       </div>
@@ -174,9 +193,10 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
       <div class="list">
         <dl>
           <div class="row first"><dt>Weekly subscription</dt><dd>Two bottles or more</dd></div>
-          <div class="row"><dt>Your first bottle</dt><dd>Rs 1,300 deposit,<br />you get it back</dd></div>
+          <div class="row"><dt>New bottle<span>Refundable deposit</span></dt><dd>Rs 1,300,<br />you get it back</dd></div>
+          <div class="row"><dt>Exchange your bottle<span>Old for new, by its condition</span></dt><dd>Rs 650</dd></div>
           <div class="row"><dt>Have Glacial bottles?</dt><dd>No deposit</dd></div>
-          <div class="row"><dt>How you pay</dt><dd>[HOW YOU PAY — CONFIRM]</dd></div>
+          <div class="row"><dt>How you pay</dt><dd>Cash when it arrives.<br />Or bank transfer, or monthly.</dd></div>
         </dl>
       </div>
       <a class="go" href={`${base}prices/`}>All prices →</a>
@@ -188,21 +208,23 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
     <div class="col">
       <h2>Rather collect? Walk in and save.</h2>
       <article class="card" id="d-walk">
-        <span class="crop u351 walk-crop">
+        <span class="crop u351 walk-crop gl-mo" data-mo>
           <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" loading="lazy" />
+          <WayMotion kind="shop" />
           <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
-          <span class="slot" aria-hidden="true" style={`left:82%;top:${u(67)}`}><span class="u">Rs</span><span class="v">200</span></span>
-          <Image src={rosette} alt="Free refill: buy 10, get 1 free" width={84} class="rosette" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} loading="lazy" />
+          <Image src={rosette} alt="Free refill offer: every 11th refill is free" width={84} class="rosette gl-pulse" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} loading="lazy" />
+          <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">200</span></span>
         </span>
         <div class="card-body">
           <div class="name-row"><h3>Walk-in refill</h3><p class="price">Rs 200<span> /refill</span></p></div>
-          <p class="lead">Buy 10 refills, get 1 free.</p>
-          <p class="sub">Bring your bottle to a Glacial shop. Open 9am–9pm, every day.</p>
-          <a class="go" href="#d-shop-list">Our shops ↓</a>
+          <p class="big-free">Every 11th refill is free.</p>
+          <p class="lead">Refill 10 times. The 11th is on us.</p>
+          <p class="sub">Bring your bottle to any Glacial shop. Open 9am–9pm, every day.</p>
+          <a class="go" href="#d-shop-list">Shop Locations ↓</a>
         </div>
       </article>
       <ul class="shops" id="d-shop-list">
-        {['[SHOP 1 — NAME AND ADDRESS]', '[SHOP 2 — NAME AND ADDRESS]'].map((s) => (
+        {['32/5 Block A, DHA Phase 1, Lahore', '358-E, Johar Town, Near Allah Hu Chowk, Lahore'].map((s) => (
           <li>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
             <span class="shop-text"><span class="shop-name">{s}</span><span class="dir">Directions →</span></span>
@@ -215,7 +237,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
   <section class="band navy contact">
     <div class="col">
       <h2>Start your subscription today!</h2>
-      <p class="lede">Send your order in one minute. We confirm on WhatsApp.</p>
+      <p class="lede">Send your order in one minute. We call you to confirm your delivery day and time.</p>
       <a class="order-now" href={`${base}order/`}>Order now</a>
       <a class="wa" href={waDelivery}><Fragment set:html={waGlyph} />Ask about delivery</a>
       <a class="call" href={`tel:${phoneTel}`}>Or call {phoneDisplay}</a>
@@ -225,13 +247,14 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
 
 <script>
   import { lookupArea } from '../lib/areaMatch';
+  import { armMotion } from '../lib/motion';
   const WA = 'https://wa.me/923111125124';
   const $ = (id: string) => document.getElementById(id) as HTMLElement;
   const val = (id: string) => ((document.getElementById(id) as HTMLInputElement | null)?.value || '').trim();
   // D106: the area check opens WhatsApp with "Area check: [area] — [name]" and the phone on the next line.
   function link() {
-    const phone = val('d-phone');
-    const msg = 'Area check: ' + (val('d-area-in') || '[area]') + ' — ' + (val('d-name') || '[name]') + (phone ? '\nPhone: ' + phone : '');
+    const phone = val('d-phone'), wa = val('d-wa');
+    const msg = 'Area check: ' + (val('d-area-in') || '[area]') + ' — ' + (val('d-name') || '[name]') + (phone ? '\nMobile: ' + phone : '') + (wa ? '\nWhatsApp: ' + wa : '');
     ($('d-area-href') as HTMLAnchorElement).href = WA + '?text=' + encodeURIComponent(msg);
   }
   // D118: the answer shows as the visitor types; the list is read in the browser, nothing is sent anywhere (D22).
@@ -257,15 +280,8 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
     if (hit) show(); else timer = window.setTimeout(show, 600);
   }
   $('d-area-in').addEventListener('input', check);
-  ['d-name', 'd-phone', 'd-area-in'].forEach((id) => $(id).addEventListener('input', link));
-  // Motion plays once, when 35% of the picture is in view. Reduced motion or no IntersectionObserver: never armed, finished picture shows.
-  const mo = Array.from(document.querySelectorAll<HTMLElement>('[data-mo]'));
-  if (mo.length && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
-      if (en.isIntersecting) { en.target.classList.add('is-on'); io.unobserve(en.target); }
-    }), { threshold: 0.35 });
-    mo.forEach((el) => { el.classList.add('is-armed'); io.observe(el); });
-  }
+  ['d-name', 'd-phone', 'd-wa', 'd-area-in'].forEach((id) => $(id).addEventListener('input', link));
+  armMotion(); // D110 / D147 / D163: each picture plays once when 35% of it is in view (src/lib/motion.ts)
 </script>
 
 <style>
@@ -284,14 +300,16 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
   .foot.big { margin-top: 12px; font-size: var(--body-small-size); line-height: var(--body-small-line); color: var(--navy); }
   /* hero calendar */
   .cal-card { margin-top: 20px; padding: 14px 14px 16px; box-sizing: border-box; background: #fff; border-radius: var(--radius-md); color: var(--navy); }
-  .cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; align-items: center; margin: 0; padding: 0; list-style: none; }
   .cal.head { margin-bottom: 8px; }
   .ch { font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink-muted); text-align: center; }
   .ch.on { color: var(--glacier); font-weight: 700; }
-  .cc { height: 38px; border-radius: 8px; background: var(--water-50); display: flex; align-items: center; justify-content: center; }
-  .cc.on { background: var(--glacier); }
-  .cal-key { margin: 12px 0 0; display: flex; align-items: center; gap: 8px; font-size: var(--body-small-size); line-height: 21px; font-weight: 700; color: var(--navy); }
-  .sw { flex: 0 0 auto; width: 14px; height: 14px; border-radius: 4px; background: var(--glacier); }
+  .cc { height: 34px; border-radius: 8px; background: var(--water-50); display: flex; align-items: center; justify-content: center; }
+  .cc.on { background: var(--glacier); height: 58px; flex-direction: column; gap: 2px; }
+  .ct { font-size: 11px; line-height: 13px; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
+  .cal-eg { display: block; font-size: 14px; line-height: 20px; font-weight: 400; color: var(--ink-muted); }
+  .cal-key { margin: 12px 0 0; display: flex; align-items: flex-start; gap: 8px; font-size: var(--body-small-size); line-height: 21px; font-weight: 700; color: var(--navy); }
+  .sw { flex: 0 0 auto; width: 14px; height: 14px; margin-top: 3px; border-radius: 4px; background: var(--glacier); }
   /* steps */
   .stepwrap { margin-top: 16px; }
   .navy-btn { margin-top: 22px; display: flex; align-items: center; justify-content: center; min-height: 56px; box-sizing: border-box; border-radius: var(--radius-md); background: var(--navy); color: #fff; font-size: 19px; line-height: 26px; font-weight: 700; text-decoration: none; }
@@ -302,6 +320,9 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
   /* tiles (Products and prices' way cards, unchanged) */
   .crop { position: relative; display: block; overflow: hidden; line-height: 0; container-type: inline-size; background: transparent; }
   .crop :global(img) { display: block; width: 100%; height: auto; }
+  .crop :global(.rosette) { position: absolute; margin: 0; max-width: none; }
+  .big-free { margin: 10px 0 0; font-size: 26px; line-height: 32px; font-weight: 700; color: var(--glacier); }
+  .big-free + .lead { margin-top: 2px; }
   .u351 { --u: calc(100cqw / 351); }
   .slot { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; line-height: normal; }
   .slot .u { font-size: 11px; line-height: 13px; font-weight: 600; letter-spacing: 0.04em; }
@@ -339,7 +360,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
   .hl { margin: 0 0 6px; font-size: var(--caption-size); line-height: var(--caption-line); font-weight: 700; color: var(--navy); }
   .hl.second { margin-top: 12px; }
   .bar { position: relative; height: 22px; border-radius: 6px; background: var(--water-50); }
-  .barfill { position: absolute; left: 0; top: 0; bottom: 0; width: 83.3%; border-radius: 6px; background: var(--glacier); }
+  .barfill { position: absolute; left: 0; top: 0; bottom: 0; width: 83.3%; border-radius: 6px; background: linear-gradient(90deg, rgba(10, 111, 143, 0) 0%, var(--glacier) 30%); }
   .shopbar { background: var(--navy); }
   .ticks { position: relative; height: 20px; margin-top: 6px; font-size: var(--caption-size); line-height: var(--caption-line); }
   .t7 { position: absolute; left: 83.3%; transform: translateX(-50%); font-weight: 700; color: var(--glacier); }
@@ -361,6 +382,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
   .know h2 { margin-bottom: 12px; }
   .list { padding: 4px 16px; background: #fff; border-radius: var(--radius-md); }
   dl { margin: 0; }
+  dt span { display: block; font-size: 14px; line-height: 20px; font-weight: 400; color: var(--ink-muted); }
   .row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--water-200); }
   .row.first { border-top: 0; }
   dt { font-size: 16px; line-height: 22px; font-weight: 600; color: var(--navy); }
@@ -380,15 +402,20 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
   .contact .wa { margin-top: 12px; }
   .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
   /* motion: CSS/SVG only, once in view, transform and opacity only, no layout shift. Without script or with reduced motion every picture shows finished. */
-  @keyframes gl-pop { 0% { opacity: 0; transform: scale(0); } 70% { opacity: 1; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
-  @keyframes gl-ride { 0% { transform: translateX(0); } 100% { transform: translateX(calc(100cqw - 54px)); } }
-  @keyframes gl-fill { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+  @keyframes dl-pop { 0% { opacity: 0; transform: scale(0); } 70% { opacity: 1; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+  @keyframes dl-ride { 0% { transform: translateX(0); } 100% { transform: translateX(calc(100cqw - 54px)); } }
+  @keyframes dl-fill { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+  /* D151 h: the doorstep swap, very simple: the empty goes out, the full comes in, then a rest. 7 s cycle, nothing flashes; still picture (both bottles at the door) with reduced motion or no script. */
+  @keyframes dl-out { 0%, 12% { opacity: 1; transform: translateX(0); } 38%, 82% { opacity: 0; transform: translateX(-34px); } 83% { opacity: 0; transform: translateX(0); } 100% { opacity: 1; transform: translateX(0); } }
+  @keyframes dl-in { 0%, 34% { opacity: 0; transform: translateX(34px); } 58%, 100% { opacity: 1; transform: translateX(0); } }
   @media (prefers-reduced-motion: no-preference) {
+    .gl-mo.is-on .swap-out { animation: dl-out 7s ease-in-out 0.3s infinite; }
+    .gl-mo.is-on .swap-in { animation: dl-in 7s ease-in-out 0.3s infinite; }
     .gl-mo.is-armed:not(.is-on) .pop { opacity: 0; transform: scale(0); }
     .gl-mo.is-armed:not(.is-on) .ride { transform: translateX(0); }
     .gl-mo.is-armed:not(.is-on) .fill { transform: scaleX(0); }
-    .gl-mo.is-on .pop { animation: gl-pop 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) var(--d, 0.2s) both; }
-    .gl-mo.is-on .ride { animation: gl-ride 1.4s cubic-bezier(0.3, 0, 0.2, 1) 0.2s both; }
-    .gl-mo.is-on .fill { animation: gl-fill 1.4s cubic-bezier(0.3, 0, 0.2, 1) 0.2s both; }
+    .gl-mo.is-on .pop { animation: dl-pop 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) var(--d, 0.2s) both; }
+    .gl-mo.is-on .ride { animation: dl-ride 1.4s cubic-bezier(0.3, 0, 0.2, 1) 0.2s both; }
+    .gl-mo.is-on .fill { animation: dl-fill 1.4s cubic-bezier(0.3, 0, 0.2, 1) 0.2s both; }
   }
 </style>

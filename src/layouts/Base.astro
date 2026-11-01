@@ -9,8 +9,10 @@ import '@fontsource/inter/latin-500.css';
 import '@fontsource/inter/latin-600.css';
 import '@fontsource/inter/latin-700.css';
 import '@fontsource/quicksand/latin-500.css';
-interface Props { title: string; description?: string; noindex?: boolean }
-const { title, description = 'Glacial — pure water, delivered across Lahore.', noindex = false } = Astro.props;
+import { whatsappUrl } from '../data/site';
+// fabHref: the page's main pre-filled WhatsApp message (D150); the plain chat when a page has none.
+interface Props { title: string; description?: string; noindex?: boolean; fabHref?: string }
+const { title, description = 'Glacial — pure water, delivered across Lahore.', noindex = false, fabHref = whatsappUrl } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -26,5 +28,22 @@ const { title, description = 'Glacial — pure water, delivered across Lahore.',
     <SiteHeader />
     <main id="main"><slot /></main>
     <SiteFooter />
+    <!-- D150: floating WhatsApp button on every page. Fixed bottom-right; hidden while the page's own WhatsApp button, primary button or order summary is on screen. -->
+    <a class="fab" id="fab" href={fabHref} aria-label="Order on WhatsApp">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>
+      <span>Order</span>
+    </a>
+    <script>
+      // Watches every WhatsApp button (.wa), every [data-fab-hide] element (a page's primary button or order summary) and hides the floating button while any is on screen.
+      const fab = document.getElementById('fab');
+      if (fab && 'IntersectionObserver' in window) {
+        const seen = new Set<Element>();
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)));
+          fab.classList.toggle('is-hidden', seen.size > 0);
+        });
+        document.querySelectorAll('.wa, [data-fab-hide]').forEach((el) => io.observe(el));
+      }
+    </script>
   </body>
 </html>
