@@ -1,16 +1,17 @@
 ---
-// For businesses (D142), built from ForBusinesses.dc.html (canvas version 35). Replaces the noindex coming-soon stub; indexable.
+// For businesses (D142, revised D174), built from ForBusinesses.dc.html (canvas version 58). Indexable.
+// D174: hero line, 'Your price. Your schedule.' band, account manager card, four steps, best-day chips, custom price row (no business rate, marker 28 off), exchange row, Mobile + WhatsApp fields, marker 29 (preview only).
 // Reuses Home B's pieces unchanged: seal band, badge row, fields, area-check answer line (shared rules in src/lib/areaMatch.ts, D125 b), the numbered StepList (D56).
 // The quote button opens a pre-filled WhatsApp message only (one token, D71); nothing is stored or sent anywhere else, nothing writes to the CRM.
-// Marker 28 [BUSINESS RATE — CONFIRM] is shown on the preview and must be filled or removed before cutover (D141 a).
+// Marker 29 [CUSTOMER APP — CONFIRM] is shown on the preview only and must be filled or removed before cutover (D141 a, D153).
 // No monthly total (D91), no bank details (D127), no WEB100 on the quote (D69/D115), no client names (D139). Motion: CSS/SVG, once in view, reduce-motion shows the full rack.
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import StepList from '../components/StepList.astro';
 import { phoneDisplay, phoneTel } from '../data/site';
 import seal from '../assets/home/seal.png';
-import badgeChlorine from '../assets/home/badge-chlorine-free-2.webp';
-import badge10 from '../assets/home/badge-10-step-2.webp';
+import badgeChlorine from '../assets/home/badge-chlorine-free.svg';
+import badge10 from '../assets/home/badge-10-step.svg';
 import markPsqca from '../assets/home/mark-psqca.webp';
 import sealPfa from '../assets/home/seal-pfa.webp';
 const base = import.meta.env.BASE_URL;
@@ -26,14 +27,16 @@ const places = [
   ['Schools', '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/>'],
   ['Restaurants', '<path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10"/><path d="M17 21V3c-2.2 0-4 2.5-4 6v4h4"/>'],
 ];
+const days = [['Mon', 'Monday'], ['Tue', 'Tuesday'], ['Wed', 'Wednesday'], ['Thu', 'Thursday'], ['Fri', 'Friday'], ['Sat', 'Saturday'], ['Sun', 'Sunday']];
 const pays = [
   ['Cash on delivery', 'Pay when your water arrives.', '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 10v4M18 10v4"/>'],
   ['Bank transfer', 'Pay from your business account.', '<path d="M3 9l9-5 9 5"/><path d="M5 10v7M10 10v7M14 10v7M19 10v7"/><path d="M3 20h18"/>'],
   ['Pay monthly', 'One payment for the whole month.', '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 15l2.5 2.5L16 13"/>'],
 ];
 const steps = [
-  'Tell us how many bottles a week|Send your details below. About one minute.',
-  'We fix your delivery day|We call you to confirm your delivery day and time.',
+  'Tell us what your team needs|Bottles a week and your best days. About one minute.',
+  'Your account manager calls you|We plan it with you and send your proposal.',
+  'We fix your delivery days|We call you to confirm your delivery day and time.',
   'Full bottles in, empties out|Every week, like clockwork. You never have to call.',
 ];
 ---
@@ -41,7 +44,7 @@ const steps = [
   <section class="band navy">
     <div class="col">
       <h1>Your team never runs out.</h1>
-      <p class="lede">Certified, chlorine-free water for your office, shop or school. Full bottles every week, on time.</p>
+      <p class="lede">Certified, chlorine-free water for your office, shop or school. Priced for your volume. Delivered on your days.</p>
       <div class="rackbox gl-mo" id="rackbox">
         <svg class="gl-rack" role="img" aria-label="A water rack at work, two shelves of full Glacial bottles" viewBox="0 0 325 196" width="325" height="196">
           <rect x="4" y="4" width="6" height="190" rx="2" fill="#1a2a5b" />
@@ -61,7 +64,7 @@ const steps = [
             </g>
           ))}
         </svg>
-        <p class="rack-cap"><span class="sq" aria-hidden="true"></span>Filled again on your day, every week</p>
+        <p class="rack-cap"><span class="sq" aria-hidden="true"></span>Filled again on your days, every week</p>
       </div>
       <a class="wa" href="#b-quote"><Fragment set:html={waGlyph} />Get my business quote</a>
     </div>
@@ -74,6 +77,39 @@ const steps = [
         {places.map(([name, path]) => (
           <li class="place"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={path} />{name}</li>
         ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="band white fit">
+    <div class="col">
+      <h2>Your price. Your schedule.</h2>
+      <ul class="fits">
+        <li class="fit-card">
+          <span class="fit-pic">
+            <svg role="img" aria-label="Three stacks of bottles, small to large, each with its own price tag" width="132" height="72" viewBox="0 0 132 72">
+              <g fill="#6fb6dc"><rect x="8" y="50" width="16" height="18" rx="3" /><rect x="44" y="34" width="16" height="34" rx="3" /><rect x="62" y="50" width="16" height="18" rx="3" /><rect x="98" y="16" width="16" height="52" rx="3" /><rect x="116" y="34" width="16" height="34" rx="3" /></g>
+              <g fill="#ffffff" opacity="0.5"><rect x="8" y="57" width="16" height="2" /><rect x="44" y="49" width="16" height="2" /><rect x="62" y="57" width="16" height="2" /><rect x="98" y="40" width="16" height="2" /><rect x="116" y="49" width="16" height="2" /></g>
+              <path d="M2 69h130" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" />
+              <g fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linejoin="round"><path d="M10 30h14l5 6-5 6H10z" /><path d="M52 14h14l5 6-5 6H52z" /><path d="M100 2h14l5 6-5 6h-14z" /></g>
+              <g fill="#0a6f8f"><circle cx="14" cy="36" r="2" /><circle cx="56" cy="20" r="2" /><circle cx="104" cy="8" r="2" /></g>
+            </svg>
+          </span>
+          <span><span class="fit-t">Custom pricing</span><span class="fit-s">Priced for how much your team drinks.</span></span>
+        </li>
+        <li class="fit-card">
+          <span class="fit-pic">
+            <svg role="img" aria-label="A week calendar with three delivery days marked" width="132" height="72" viewBox="0 0 132 72">
+              <rect x="2" y="6" width="128" height="62" rx="8" fill="#ffffff" stroke="#1a2a5b" stroke-width="2.4" />
+              <path d="M2 22h128" stroke="#1a2a5b" stroke-width="2.4" />
+              <path d="M30 2v9M102 2v9" stroke="#1a2a5b" stroke-width="2.4" stroke-linecap="round" />
+              <g fill="#d9ecf6"><rect x="8" y="30" width="14" height="30" rx="3" /><rect x="42" y="30" width="14" height="30" rx="3" /><rect x="76" y="30" width="14" height="30" rx="3" /><rect x="110" y="30" width="14" height="30" rx="3" /></g>
+              <g fill="#1a2a5b"><rect x="25" y="30" width="14" height="30" rx="3" /><rect x="59" y="30" width="14" height="30" rx="3" /><rect x="93" y="30" width="14" height="30" rx="3" /></g>
+              <g fill="#6fb6dc"><rect x="28" y="40" width="8" height="14" rx="2" /><rect x="62" y="40" width="8" height="14" rx="2" /><rect x="96" y="40" width="8" height="14" rx="2" /></g>
+            </svg>
+          </span>
+          <span><span class="fit-t">Custom schedule</span><span class="fit-s">Your days. Your times. Every week.</span></span>
+        </li>
       </ul>
     </div>
   </section>
@@ -102,6 +138,28 @@ const steps = [
   <section class="band pale">
     <div class="col">
       <h2>Set it once. We do the rest.</h2>
+      <div class="amgr gl-mo" id="trackbox">
+        <div class="amgr-top">
+          <span class="amgr-ic" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#1a2a5b" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" /><path d="M17.5 5.5a3 3 0 0 1 1.5 2.5v1.5a1.5 1.5 0 0 1-1.5 1.5H17" /></svg>
+          </span>
+          <span><span class="amgr-t">Your own account manager</span><span class="amgr-s">One person, from the first call to the first delivery.</span></span>
+        </div>
+        <svg role="img" aria-label="Your account manager is with you at the call, the proposal and the first delivery" viewBox="0 0 329 70" width="329" height="70" class="amgr-track">
+          <rect x="30" y="18" width="270" height="4" rx="2" fill="#2f4583" />
+          <rect class="gl-track-fill" x="30" y="18" width="270" height="4" rx="2" fill="#b9dcee" />
+          <g fill="#ffffff"><circle cx="30" cy="20" r="18" /><circle cx="165" cy="20" r="18" /><circle cx="300" cy="20" r="18" /></g>
+          <g fill="none" stroke="#1a2a5b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 13.5c0 6.5 4.5 12 12.5 13l2-3-3.5-2-1.5 1.5c-2.3-1-3.9-2.8-4.8-5l1.6-1.4-1.8-3.6z" />
+            <path d="M158 11h10l4 4v14h-14z" /><path d="M161 19h8M161 23h8" />
+            <path d="M290 26V16h12l4 5v5" /><circle cx="294" cy="27" r="2.2" /><circle cx="304" cy="27" r="2.2" />
+          </g>
+          <g font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">
+            <text x="2" y="58" text-anchor="start">We call you</text><text x="165" y="58">Your proposal</text><text x="327" y="58" text-anchor="end">First delivery</text>
+          </g>
+        </svg>
+        <p class="amgr-note">Until your deliveries start, they are your only contact.</p>
+      </div>
       <div class="steps-wrap"><StepList items={steps} /></div>
       <div class="express">
         <svg width="40" height="28" viewBox="0 0 40 28" aria-hidden="true">
@@ -124,13 +182,14 @@ const steps = [
           <li class="pay"><span class="pay-ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={path} /></span><span><span class="pay-t">{t}</span><span class="pay-s">{s}</span></span></li>
         ))}
       </ul>
+      <p class="marker">[CUSTOMER APP — CONFIRM] One line on what a business can do in the Glacial app, once confirmed. Preview only; off before launch if not confirmed (D153).</p>
     </div>
   </section>
 
   <section class="band pale quote" id="b-quote">
     <div class="col">
       <h2>Get your business quote</h2>
-      <p class="ask">How many bottles a week does your team need?</p>
+      <p class="ask">Tell us your bottles and your best days. Your account manager calls you with your price.</p>
       <div class="qbox">
         <div class="stepper-row">
           <span id="b-count-label" class="lbl">Bottles a week</span>
@@ -146,17 +205,27 @@ const steps = [
           ))}
         </ul>
         <p class="more" id="b-more-note" hidden></p>
+        <div class="daybox" role="group" aria-labelledby="b-days-label">
+          <span id="b-days-label" class="lbl dl">Best delivery days</span>
+          <ul class="days">
+            {days.map(([short, full]) => (
+              <li><button type="button" class="day" aria-pressed="false" aria-label={full} data-day={short}>{short}</button></li>
+            ))}
+          </ul>
+          <p class="hint">Pick as many as you like. We confirm them on the call.</p>
+        </div>
         <dl class="rows">
-          <div class="row"><dt>Standard price</dt><dd>Rs 260 a bottle<br /><span id="b-weekly">Rs 2,600</span> a week</dd></div>
-          <div class="row"><dt>Business rate</dt><dd>[BUSINESS RATE — CONFIRM]</dd></div>
+          <div class="row"><dt>Your price</dt><dd>Custom, for your volume</dd></div>
           <div class="row"><dt>Your first bottles</dt><dd>Rs 1,300 deposit each,<br />you get it back</dd></div>
+          <div class="row"><dt>Or exchange your bottle</dt><dd>Rs 650, old for new,<br />by its condition</dd></div>
           <div class="row"><dt>Have Glacial bottles?</dt><dd>No deposit</dd></div>
         </dl>
       </div>
       <div class="fields">
         <div class="field"><label for="b-biz">Business name</label><input id="b-biz" type="text" autocomplete="organization" /></div>
         <div class="field"><label for="b-name">Your name</label><input id="b-name" type="text" autocomplete="name" /></div>
-        <div class="field"><label for="b-phone">WhatsApp number</label><input id="b-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
+        <div class="field"><label for="b-phone">Mobile number (we call you on this)</label><input id="b-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
+        <div class="field"><label for="b-wa">WhatsApp number (if different)</label><input id="b-wa" type="tel" inputmode="tel" placeholder="03XX-XXXXXXX" /></div>
         <div class="field">
           <label for="b-area">Area</label>
           <input id="b-area" type="text" autocomplete="address-level3" placeholder="For example, Johar Town" aria-describedby="b-area-answer" />
@@ -171,7 +240,7 @@ const steps = [
 
   <section class="band navy contact">
     <div class="col">
-      <h2>Start your business subscription today!</h2>
+      <h2>Start your business subscription.</h2>
       <p class="sub">Fresh, certified water at work. Every week.</p>
       <a class="wa" href={waAsk}><Fragment set:html={waGlyph} />Ask about business delivery</a>
       <a class="call" href={`tel:${phoneTel}`}>Or call {phoneDisplay}</a>
@@ -189,11 +258,11 @@ const steps = [
   let count = 10;
   const caps = Array.from(document.querySelectorAll<SVGElement>('#b-grid .cap'));
   const bodies = Array.from(document.querySelectorAll<SVGElement>('#b-grid .body'));
-  const rs = (n: number) => 'Rs ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  function links() {
-    const phone = val('b-phone');
-    const msg = 'Business quote: ' + (val('b-biz') || '[business]') + '\nName: ' + (val('b-name') || '[name]') + (phone ? '\nWhatsApp: ' + phone : '') +
-      '\nArea: ' + (val('b-area') || '[area]') + '\nBottles a week: ' + count;
+    function links() {
+    const wa = val('b-wa');
+    const picked = Array.from(document.querySelectorAll<HTMLElement>('.day[aria-pressed="true"]')).map((d) => d.dataset.day);
+    const msg = 'Business quote: ' + (val('b-biz') || '[business]') + '\nName: ' + (val('b-name') || '[name]') + '\nMobile: ' + (val('b-phone') || '[mobile]') + (wa ? '\nWhatsApp: ' + wa : '') +
+      '\nArea: ' + (val('b-area') || '[area]') + '\nBottles a week: ' + count + '\nBest days: ' + (picked.length ? picked.join(', ') : 'to discuss');
     ($('b-send') as HTMLAnchorElement).href = WA + '?text=' + encodeURIComponent(msg);
   }
   function render() {
@@ -204,12 +273,11 @@ const steps = [
     const more = $('b-more-note');
     more.hidden = count <= SHOW;
     more.textContent = '+ ' + (count - SHOW) + ' more bottles';
-    $('b-weekly').textContent = rs(count * 260);
     links();
   }
   $('b-less').addEventListener('click', () => { count = Math.max(MIN, count - 1); render(); });
   $('b-more').addEventListener('click', () => { count = Math.min(MAX, count + 1); render(); });
-  ['b-biz', 'b-name', 'b-phone', 'b-area'].forEach((id) => $(id).addEventListener('input', links));
+  ['b-biz', 'b-name', 'b-phone', 'b-wa', 'b-area'].forEach((id) => $(id).addEventListener('input', links));
   // Area answer: the same words and look as Home (D96 a, D118, D120), the one shared rule set (D125 b).
   const answer = $('b-area-answer');
   let timer: number | undefined;
@@ -232,17 +300,21 @@ const steps = [
     };
     if (hit) show(); else timer = window.setTimeout(show, 600);
   });
+  document.querySelectorAll<HTMLElement>('.day').forEach((d) => d.addEventListener('click', () => {
+    d.setAttribute('aria-pressed', d.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+    links();
+  }));
   render();
   // Motion (D110): the rack plays once when 35% is in view. Reduced motion or no IntersectionObserver: never armed, the full rack just shows.
-  const rack = $('rackbox');
+  // The account manager track fills once in the same way (D165 d 2).
+  const movers = [$('rackbox'), $('trackbox')];
   if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const io = new IntersectionObserver((entries) => entries.forEach((en) => {
       if (!en.isIntersecting) return;
-      rack.classList.add('is-on');
-      io.unobserve(rack);
+      en.target.classList.add('is-on');
+      io.unobserve(en.target);
     }), { threshold: 0.35 });
-    rack.classList.add('is-armed');
-    io.observe(rack);
+    movers.forEach((m) => { m.classList.add('is-armed'); io.observe(m); });
   }
 </script>
 
@@ -319,14 +391,38 @@ const steps = [
   .foot { margin: 10px 0 0; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
   #b-express-note { margin-top: 14px; }
   .quote .wa { margin-top: 14px; }
+  .fit { padding-top: 0; padding-bottom: 30px; }
+  .fits { margin: 16px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+  .fit-card { display: flex; flex-direction: column; gap: 10px; padding: 14px 12px 16px; box-sizing: border-box; background: #fff; border: 2px solid var(--water-200); border-radius: 14px; }
+  .fit-pic { height: 88px; border-radius: 10px; background: var(--water-50); display: flex; align-items: center; justify-content: center; }
+  .fit-t { display: block; font-size: 17px; line-height: 24px; font-weight: 700; color: var(--navy); }
+  .fit-s { display: block; font-size: 15px; line-height: 21px; color: var(--ink-muted); }
+  .amgr { margin-top: 16px; margin-bottom: 22px; padding: 16px; box-sizing: border-box; background: var(--navy); border-radius: 14px; }
+  .amgr-top { display: flex; align-items: center; gap: 14px; }
+  .amgr-ic { flex: 0 0 auto; width: 56px; height: 56px; border-radius: 999px; background: #fff; display: flex; align-items: center; justify-content: center; }
+  .amgr-t { display: block; font-size: 19px; line-height: 25px; font-weight: 700; color: #fff; }
+  .amgr-s { display: block; font-size: 15px; line-height: 21px; color: var(--water-200); }
+  .amgr-track { display: block; width: 100%; height: auto; margin-top: 16px; }
+  .amgr-note { margin: 12px 0 0; font-size: 15px; line-height: 21px; color: var(--water-200); }
+  .marker { margin: 16px 0 0; padding: 12px 14px; box-sizing: border-box; border: 2px dashed #8a5300; border-radius: 12px; background: #fdf1dc; font-size: 15px; line-height: 21px; font-weight: 700; color: #8a5300; }
+  .daybox { margin-top: 18px; }
+  .dl { display: block; }
+  .days { margin: 8px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+  .day { width: 100%; min-height: 44px; box-sizing: border-box; padding: 0; border: 1px solid var(--navy); border-radius: 10px; background: #fff; color: var(--navy); font-family: inherit; font-size: 14px; line-height: 20px; font-weight: 700; cursor: pointer; }
+  .day[aria-pressed="true"] { background: var(--navy); color: #fff; }
+  .hint { margin: 8px 0 0; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
   .contact { padding: 32px 0; }
   .contact .sub { margin: 10px 0 16px; }
   .contact .wa { margin-top: 0; }
   .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
   /* Motion: CSS only, once in view. Only transform and opacity move: no layout shift. Reduce-motion or no script: the full rack just shows. */
+  @keyframes gl-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .amgr :global(.gl-track-fill) { transform-origin: 0 50%; }
   @keyframes gl-pop { 0% { opacity: 0; transform: scale(0); } 70% { opacity: 1; transform: scale(1.12); } 100% { opacity: 1; transform: scale(1); } }
   @media (prefers-reduced-motion: no-preference) {
     .gl-mo.is-armed:not(.is-on) :global(.gl-pop) { opacity: 0; transform: scale(0); }
+    .gl-mo.is-armed:not(.is-on) :global(.gl-track-fill) { transform: scaleX(0); }
+    .gl-mo.is-on :global(.gl-track-fill) { animation: gl-fill 1.6s ease-out 0.3s both; }
     .gl-mo.is-on :global(.gl-pop) { animation: gl-pop 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) var(--d, 0.2s) both; }
   }
   @media (min-width: 768px) { .band { padding-top: 40px; padding-bottom: 48px; } }
