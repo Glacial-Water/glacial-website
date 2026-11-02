@@ -1,6 +1,7 @@
 ---
 // Shared order sheet (replaceable). Opens from any element with [data-open-order].
 // Uses the browser's own <dialog>: Escape closes it, focus returns to the button that opened it.
+import CallIcon from './CallIcon.astro';
 import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
 ---
 <dialog id="order-sheet" class="order-sheet" aria-labelledby="order-title">
@@ -12,7 +13,7 @@ import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
     <span><b>WhatsApp</b><small>Message us — fastest reply</small></span>
   </a>
   <a class="call" href={`tel:${phoneTel}`}>
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16.9v2.6a1.7 1.7 0 0 1-1.9 1.7 17 17 0 0 1-7.4-2.6 16.6 16.6 0 0 1-5.1-5.1A17 17 0 0 1 4 6.1 1.7 1.7 0 0 1 5.7 4.2h2.6a1.7 1.7 0 0 1 1.7 1.5c.1.8.3 1.6.6 2.4a1.7 1.7 0 0 1-.4 1.8l-1.1 1.1a13.6 13.6 0 0 0 5.1 5.1l1.1-1.1a1.7 1.7 0 0 1 1.8-.4c.8.3 1.6.5 2.4.6a1.7 1.7 0 0 1 1.5 1.7z"/></svg>
+    <CallIcon />
     <span><b>Call {phoneDisplay}</b><small>Bookings until 7pm</small></span>
   </a>
   <button type="button" class="cancel" data-close-order>Cancel</button>
@@ -43,7 +44,7 @@ import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
   .wa:hover { background: var(--whatsapp-hover); color: var(--on-whatsapp); }
   .wa:active { background: var(--whatsapp-active); }
   .wa:focus-visible { outline-color: var(--water-200); }
-  .call { margin-top: var(--space-3); min-height: 52px; border: 1px solid var(--line-strong); color: var(--navy); }
+  .call { margin-top: var(--space-3); min-height: 52px; gap: 10px; border: 1px solid var(--line-strong); color: var(--navy); }
   .call:hover { background: var(--water-50); color: var(--navy); }
   span { display: flex; flex-direction: column; }
   b { font-size: 19px; line-height: 26px; font-weight: 700; }

@@ -7,6 +7,7 @@
 // Round 5 (29 Oct, canvas v39; D144-D150): one-bottle New tile and one-old-one-new Exchange tile, one price-circle component, 'Shop Locations →', required Email, 'Every 11th refill is free.'
 // How you pay (D127, placeholder 13 closed): cash on delivery first, bank transfer, pay monthly. No bank details, no monthly total (D91).
 import { Image } from 'astro:assets';
+import CallIcon from '../components/CallIcon.astro';
 import Base from '../layouts/Base.astro';
 import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
 import bottleNew from '../assets/home/bottle-new.webp';
@@ -185,7 +186,8 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
       <h2>3. Where do we deliver?</h2>
       <div class="fields">
         <div class="field"><label for="o-name">Name</label><input id="o-name" type="text" autocomplete="name" /></div>
-        <div class="field"><label for="o-wa">WhatsApp number</label><input id="o-wa" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
+        <div class="field"><label for="o-phone">Mobile number <span>(we call you on this)</span></label><input id="o-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" required /></div>
+      <div class="field"><label for="o-wa">WhatsApp number <span>(if different)</span></label><input id="o-wa" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
         <div class="field"><label for="o-addr">Delivery address</label><input id="o-addr" type="text" autocomplete="street-address" placeholder="House, street, area" /></div>
         <div class="field"><label for="o-mail">Email</label><input id="o-mail" type="email" autocomplete="email" required /></div>
       </div>
@@ -224,7 +226,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
         <p class="foot">You pay nothing on this page. Pay cash when your water arrives. You can also pay by bank transfer, or pay monthly.</p>
       </div>
       <a class="wa" id="sendHref" href={whatsappUrl}><Fragment set:html={waGlyph} /><span id="sendLabel">Send my order on WhatsApp</span></a>
-      <a class="call" href={`tel:${phoneTel}`}>Or call {phoneDisplay}</a>
+      <a class="call" href={`tel:${phoneTel}`}><CallIcon />Or call {phoneDisplay}</a>
       <p class="foot center">Delivery bookings until 7pm.</p>
     </div>
   </section>
@@ -318,7 +320,9 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
       if (isFirst && nEx > 0) m.push('Exchange my bottle × ' + nEx + ' — ' + rs(P.exchange * nEx) + ' (by condition)');
       m.push(wayLine[0] + ' — ' + wayLine[1]);
       if (hasOffer) m.push('Website offer code: WEB100 (Rs 100 off the deposit)');
-      m.push('Name: ' + val('o-name'), 'WhatsApp number: ' + val('o-wa'), 'Delivery address: ' + val('o-addr'));
+      m.push('Name: ' + val('o-name'), 'Mobile: ' + val('o-phone'));
+    if (val('o-wa')) m.push('WhatsApp: ' + val('o-wa')); // D165 (d 4): the WhatsApp number is only sent when it differs from the mobile
+    m.push('Delivery address: ' + val('o-addr'));
       m.push('Email: ' + val('o-mail')); // D148 (8): the email is required and travels in the message
       href.href = WA + '?text=' + encodeURIComponent(m.join('\n'));
     } else {
@@ -328,7 +332,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
 
     // tracker
     const done1 = count > 0 && !weeklyShort;
-    const done3 = isDelivery ? (val('o-name') !== '' && val('o-wa') !== '' && val('o-addr') !== '') : true;
+    const done3 = isDelivery ? (val('o-name') !== '' && val('o-phone') !== '' && val('o-addr') !== '') : true;
     const labels = ['Bottles', 'Delivery', isDelivery ? 'Send' : 'Shop'];
     [done1, done1, done3].forEach((done, i) => {
       const li = document.querySelector(`[data-track="${i}"]`) as HTMLElement;
@@ -342,7 +346,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
 
   document.querySelectorAll<HTMLInputElement>('input[name="o-who"]').forEach((r) => r.addEventListener('change', () => { who = r.value as typeof who; render(); }));
   document.querySelectorAll<HTMLInputElement>('input[name="o-way"]').forEach((r) => r.addEventListener('change', () => { way = r.value as typeof way; render(); }));
-  ['o-name', 'o-wa', 'o-addr', 'o-mail'].forEach((id) => $(id).addEventListener('input', render));
+  ['o-name', 'o-phone', 'o-wa', 'o-addr', 'o-mail'].forEach((id) => $(id).addEventListener('input', render));
   $('incNew').addEventListener('click', () => { nNew = Math.min(10, nNew + 1); render(); });
   $('decNew').addEventListener('click', () => { nNew = Math.max(0, nNew - 1); render(); });
   $('incEx').addEventListener('click', () => { nEx = Math.min(10, nEx + 1); render(); });
@@ -353,8 +357,10 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
   // D148 (8): Email is required for a delivery order. The send button is a link, so check the field before it opens WhatsApp.
   $('sendHref').addEventListener('click', (e) => {
     if (way === 'walk') return;
-    const mail = $('o-mail') as HTMLInputElement;
-    if (!mail.checkValidity() || !mail.value.trim()) { e.preventDefault(); mail.reportValidity(); mail.focus(); }
+    for (const id of ['o-phone', 'o-mail']) { // mobile and email are required (D148 8, D165 d 4)
+      const el = $(id) as HTMLInputElement;
+      if (!el.checkValidity() || !el.value.trim()) { e.preventDefault(); el.reportValidity(); el.focus(); return; }
+    }
   });
   render();
   armMotion(); // D147: the way-tile pictures play once in view (src/lib/motion.ts)
@@ -452,7 +458,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
   .wa { box-sizing: border-box; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; margin-top: 16px; padding: 0 18px; border-radius: var(--radius-md); background: var(--whatsapp); color: var(--on-whatsapp); font-size: var(--button-whatsapp-size); line-height: var(--button-whatsapp-line); font-weight: var(--button-whatsapp-weight); text-decoration: none; }
   .wa:hover { background: var(--whatsapp-hover); color: var(--on-whatsapp); }
   .wa:active { background: var(--whatsapp-active); }
-  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: 52px; border: 1px solid var(--line-strong); border-radius: var(--radius-md); background: #fff; color: var(--navy); font-weight: 700; text-decoration: none; }
+  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; border: 1px solid var(--line-strong); border-radius: var(--radius-md); background: #fff; color: var(--navy); font-weight: 700; text-decoration: none; }
   .next { padding: 28px 0; margin-top: 8px; }
   .next h2 { color: var(--navy); margin-bottom: 16px; }
   .next .foot { margin-top: 20px; }
