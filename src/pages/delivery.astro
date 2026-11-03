@@ -228,7 +228,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
         {['32/5 Block A, DHA Phase 1, Lahore', '358-E, Johar Town, Near Allah Hu Chowk, Lahore'].map((s) => (
           <li>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
-            <span class="shop-text"><span class="shop-name">{s}</span><span class="dir">Directions →</span></span>
+            <span class="shop-text"><span class="shop-name">{s}</span><a class="dir" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s)}`} target="_blank" rel="noopener">Directions →</a></span>
           </li>
         ))}
       </ul>
@@ -395,7 +395,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
   .shops svg { flex: 0 0 auto; }
   .shop-text { flex: 1 1 auto; min-width: 0; }
   .shop-name { display: block; font-size: 17px; line-height: 24px; font-weight: 700; color: var(--navy); }
-  .dir { display: block; font-size: var(--body-small-size); line-height: var(--body-small-line); font-weight: 600; color: var(--glacier); }
+  .dir { display: block; min-height: 44px; text-decoration: none; font-size: var(--body-small-size); line-height: var(--body-small-line); font-weight: 600; color: var(--glacier); }
   /* contact band */
   .contact { padding: 32px 0; }
   .contact .lede { margin: 10px 0 16px; }
