@@ -10,6 +10,8 @@
 // mixed security tiles with their own steppers, no monthly total, new express headline, area wording, original shopfront.
 import { Image } from 'astro:assets';
 import '@fontsource/noto-naskh-arabic/arabic-600.css'; // Urdu font, self-hosted (D81 c); loaded on Home only
+import BadgeRow from '../components/BadgeRow.astro';
+import CallIcon from '../components/CallIcon.astro';
 import Base from '../layouts/Base.astro';
 import '../styles/tiles.css';
 import '../styles/motion.css';
@@ -22,10 +24,6 @@ import truck from '../assets/home/truck.jpg';
 import rider from '../assets/home/rider.jpg';
 import rosette from '../assets/home/rosette.png';
 import splash from '../assets/home/splash.jpg';
-import badgeChlorine from '../assets/home/badge-chlorine-free.svg';
-import badge10 from '../assets/home/badge-10-step.svg';
-import markPsqca from '../assets/home/mark-psqca.webp';
-import sealPfa from '../assets/home/seal-pfa.webp';
 import shop from '../assets/home/shop.svg';
 import logo from '../assets/glacial-logo.png';
 // D141 (a): the reviews block renders ONLY when src/data/reviews.json exists on main. Until then it is hidden, so no marker goes live.
@@ -230,12 +228,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
 
   <section class="band white badges">
     <div class="col">
-      <ul>
-        <li class="badge"><Image src={badgeChlorine} alt="" width={120} /><span class="t">Chlorine-free</span><span class="s">No chlorine taste, ever.</span></li>
-        <li class="badge"><Image src={badge10} alt="" width={120} /><span class="t">10-step purification</span><span class="s">Every bottle, all ten steps.</span></li>
-        <li class="badge"><Image src={markPsqca} alt="Pakistan Standards mark of PSQCA" width={120} /><span class="t">PSQCA licensed</span><span class="s">Pakistan Standards mark</span></li>
-        <li class="badge"><Image src={sealPfa} alt="Seal of the Punjab Food Authority" width={240} /><span class="t">PFA licensed</span><span class="s">Punjab Food Authority</span></li>
-      </ul>
+      <BadgeRow />
       <p class="licensed-line">Licensed by PSQCA and the Punjab Food Authority</p>
     </div>
   </section>
@@ -265,7 +258,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
       <h2>Order your first bottle on WhatsApp</h2>
       <p class="sub">Send your address on WhatsApp. We call you to confirm your delivery day and time.</p>
       <a class="wa" href={whatsappUrl}><Fragment set:html={waGlyph} />Message on WhatsApp</a>
-      <a class="call" href={`tel:${phoneTel}`}>{phoneDisplay}</a>
+      <a class="call" href={`tel:${phoneTel}`}><CallIcon />Or call {phoneDisplay}</a>
     </div>
   </section>
 
@@ -283,7 +276,8 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
     <p class="foot">Your code WEB100 is added to the message. <span id="oFoot"></span></p>
     <div class="fields sheet-fields">
       <div class="field"><label for="o-name">Name</label><input id="o-name" type="text" autocomplete="name" /></div>
-      <div class="field"><label for="o-wa">WhatsApp number</label><input id="o-wa" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
+      <div class="field"><label for="o-phone">Mobile number <span>(we call you on this)</span></label><input id="o-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" required /></div>
+      <div class="field"><label for="o-wa">WhatsApp number <span>(if different)</span></label><input id="o-wa" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
       <div class="field"><label for="o-addr">Delivery address</label><input id="o-addr" type="text" autocomplete="street-address" /></div>
       <div class="field"><label for="o-mail">Email</label><input id="o-mail" type="email" autocomplete="email" required /></div>
     </div>
@@ -342,7 +336,9 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   const val = (id: string) => ((document.getElementById(id) as HTMLInputElement | null)?.value || '').trim();
   function links() {
     const m = lines.slice();
-    m.push('Name: ' + val('o-name'), 'WhatsApp number: ' + val('o-wa'), 'Delivery address: ' + val('o-addr'));
+    m.push('Name: ' + val('o-name'), 'Mobile: ' + val('o-phone'));
+    if (val('o-wa')) m.push('WhatsApp: ' + val('o-wa')); // D165 (d 4): the WhatsApp number is only sent when it differs from the mobile
+    m.push('Delivery address: ' + val('o-addr'));
     m.push('Email: ' + val('o-mail')); // D148 (8): the email is required and travels in the message
     ($('oHref') as HTMLAnchorElement).href = WA + '?text=' + encodeURIComponent(m.join('\n'));
     const phone = val('a-phone');
@@ -376,10 +372,12 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   $('a-area').addEventListener('input', areaAnswer);
   // D148 (8): Email is required. The button is a link, so check the field ourselves before it opens WhatsApp.
   $('oHref').addEventListener('click', (e) => {
-    const mail = $('o-mail') as HTMLInputElement;
-    if (!mail.checkValidity() || !mail.value.trim()) { e.preventDefault(); mail.reportValidity(); mail.focus(); }
+    for (const id of ['o-phone', 'o-mail']) { // mobile and email are required (D148 8, D165 d 4)
+      const el = $(id) as HTMLInputElement;
+      if (!el.checkValidity() || !el.value.trim()) { e.preventDefault(); el.reportValidity(); el.focus(); return; }
+    }
   });
-  ['o-name', 'o-wa', 'o-addr', 'o-mail', 'a-name', 'a-phone', 'a-area'].forEach((id) => $(id).addEventListener('input', links));
+  ['o-name', 'o-phone', 'o-wa', 'o-addr', 'o-mail', 'a-name', 'a-phone', 'a-area'].forEach((id) => $(id).addEventListener('input', links));
   $('incNew').addEventListener('click', () => { nNew = Math.min(10, nNew + 1); render(); });
   $('decNew').addEventListener('click', () => { nNew = Math.max(0, nNew - 1); render(); });
   $('incEx').addEventListener('click', () => { nEx = Math.min(10, nEx + 1); render(); });
@@ -507,11 +505,6 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   .label { padding-top: 5px; font-size: 16px; line-height: 24px; font-weight: 600; }
   .note { display: block; margin-top: 2px; font-size: var(--caption-size); line-height: var(--caption-line); font-weight: 400; color: var(--ink-muted); }
   .badges { padding: 28px 0 32px; }
-  .badges ul { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); align-items: stretch; }
-  .badge { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 10px 16px; box-sizing: border-box; background: #fff; border: 1px solid var(--water-200); border-radius: 14px; text-align: center; }
-  .badge :global(img) { display: block; width: 120px; height: 88px; object-fit: contain; }
-  .badge .t { font-size: 15px; line-height: 21px; font-weight: 700; color: var(--navy); }
-  .badge .s { font-size: 14px; line-height: 20px; color: var(--ink-muted); }
   .licensed-line { margin: 16px 0 0; font-size: 17px; line-height: 24px; font-weight: 700; text-align: center; }
   .reviews { padding: 32px 0; }
   .rating { margin-top: 14px; padding: var(--space-4); background: #fff; border: 1px solid var(--water-200); border-radius: var(--radius-md); display: flex; align-items: center; gap: var(--space-3-5); }
@@ -528,7 +521,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   .contact { padding: 32px 0; }
   .contact .sub { margin: 10px 0 16px; }
   .contact .wa { margin-top: 0; }
-  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
+  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
   /* labelled fields (D106, D109) */
   .fields { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; }
   /* area answer look (D120): same box, radius and icon slot for both states; words fixed by D96 a */

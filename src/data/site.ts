@@ -10,7 +10,7 @@ export const navLinks: { label: string; href: string; soon?: boolean }[] = [
   { label: 'How delivery works', href: `${base}delivery/` },
   { label: 'Quality Certs', href: `${base}quality-certs/` },
   { label: 'For businesses', href: `${base}for-businesses/` },
-  { label: 'About Glacial', href: `${base}about/`, soon: true },
-  { label: 'Contact and support', href: `${base}contact/`, soon: true },
+  { label: 'About Glacial', href: `${base}about/` },
+  { label: 'Contact and support', href: `${base}contact/` },
   { label: 'FAQ', href: `${base}faq/`, soon: true },
 ];

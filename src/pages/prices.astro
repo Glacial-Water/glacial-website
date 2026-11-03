@@ -5,6 +5,8 @@
 // The two bottle tiles use the same counter, pictures and price circle as Home and Order (tiles.css); 'Order these bottles →' opens /order/?new=N&ex=N.
 // The three way tiles and the bottle tiles use Home's once-in-view motion (motion.css, src/lib/motion.ts); finished pose with reduced motion or no script.
 import { Image } from 'astro:assets';
+import BadgeRow from '../components/BadgeRow.astro';
+import CallIcon from '../components/CallIcon.astro';
 import Base from '../layouts/Base.astro';
 import '../styles/tiles.css';
 import '../styles/motion.css';
@@ -15,10 +17,6 @@ import bottleNew from '../assets/home/bottle-new.webp';
 import truck from '../assets/home/truck.jpg';
 import rider from '../assets/home/rider.jpg';
 import rosette from '../assets/home/rosette.png';
-import badgeChlorine from '../assets/home/badge-chlorine-free.svg';
-import badge10 from '../assets/home/badge-10-step.svg';
-import markPsqca from '../assets/home/mark-psqca.webp';
-import sealPfa from '../assets/home/seal-pfa.webp';
 import shop from '../assets/home/shop.svg';
 import logo from '../assets/glacial-logo.png';
 const base = import.meta.env.BASE_URL;
@@ -205,12 +203,7 @@ const glance = [
       <h2>In every price: water certified every month</h2>
       <p class="p">Rs 200 or Rs 280, it is the same pure, tested water.</p>
       <a class="link" href={`${base}quality-certs/`}>See the reports →</a>
-      <ul class="badges">
-        <li class="badge"><Image src={badgeChlorine} alt="" width={120} /><span class="t">Chlorine-free</span><span class="s">No chlorine taste, ever.</span></li>
-        <li class="badge"><Image src={badge10} alt="" width={120} /><span class="t">10-step purification</span><span class="s">Every bottle, all ten steps.</span></li>
-        <li class="badge"><Image src={markPsqca} alt="Pakistan Standards mark of PSQCA" width={120} /><span class="t">PSQCA licensed</span><span class="s">Pakistan Standards mark</span></li>
-        <li class="badge"><Image src={sealPfa} alt="Seal of the Punjab Food Authority" width={240} /><span class="t">PFA licensed</span><span class="s">Punjab Food Authority</span></li>
-      </ul>
+      <BadgeRow />
       <p class="licensed-line">Licensed by PSQCA and the Punjab Food Authority</p>
     </div>
   </section>
@@ -249,7 +242,7 @@ const glance = [
       <p class="lede">Pick your bottles and send your order in one minute.</p>
       <a class="order-now" href={`${base}order/`}>Order now</a>
       <a class="wa" href={waPrice}><Fragment set:html={waGlyph} />Ask a price on WhatsApp</a>
-      <a class="call" href={`tel:${phoneTel}`}>Or call {phoneDisplay}</a>
+      <a class="call" href={`tel:${phoneTel}`}><CallIcon />Or call {phoneDisplay}</a>
     </div>
   </section>
 </Base>
@@ -370,11 +363,6 @@ const glance = [
   .every :global(.seal) { width: 196px; height: auto; display: block; }
   .every h2 { margin-top: 10px; font-size: 26px; line-height: 32px; }
   .every .p { max-width: 320px; }
-  .badges { margin: 14px 0 0; padding: 0; width: 100%; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); align-items: stretch; }
-  .badge { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 10px 16px; box-sizing: border-box; background: #fff; border: 1px solid var(--water-200); border-radius: 14px; text-align: center; }
-  .badge :global(img) { display: block; width: 120px; height: 88px; object-fit: contain; }
-  .badge .t { font-size: 15px; line-height: 21px; font-weight: 700; color: var(--navy); }
-  .badge .s { font-size: 14px; line-height: 20px; color: var(--ink-muted); }
   .licensed-line { margin: 16px 0 0; font-size: 17px; line-height: 24px; font-weight: 700; text-align: center; }
   /* all prices at a glance */
   .glance { padding: 28px 0 24px; }
@@ -403,5 +391,5 @@ const glance = [
   .wa { box-sizing: border-box; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 0 18px; border-radius: var(--radius-md); background: var(--whatsapp); color: var(--on-whatsapp); font-size: var(--button-whatsapp-size); line-height: var(--button-whatsapp-line); font-weight: 700; text-decoration: none; }
   .wa:hover { background: var(--whatsapp-hover); color: var(--on-whatsapp); }
   .wa:active { background: var(--whatsapp-active); }
-  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
+  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
 </style>

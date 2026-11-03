@@ -5,6 +5,7 @@
 // How you pay (D127) and both shop addresses (D131 DHA, D132 Johar Town) are settled. Nothing invented.
 // Motion: CSS/SVG only, plays once when 35% of the picture is in view; reduced motion or no script shows the finished picture, no layout shift.
 import { Image } from 'astro:assets';
+import CallIcon from '../components/CallIcon.astro';
 import Base from '../layouts/Base.astro';
 import StepList from '../components/StepList.astro';
 import WayMotion from '../components/WayMotion.astro';
@@ -227,7 +228,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
         {['32/5 Block A, DHA Phase 1, Lahore', '358-E, Johar Town, Near Allah Hu Chowk, Lahore'].map((s) => (
           <li>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
-            <span class="shop-text"><span class="shop-name">{s}</span><span class="dir">Directions →</span></span>
+            <span class="shop-text"><span class="shop-name">{s}</span><a class="dir" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s)}`} target="_blank" rel="noopener">Directions →</a></span>
           </li>
         ))}
       </ul>
@@ -240,7 +241,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
       <p class="lede">Send your order in one minute. We call you to confirm your delivery day and time.</p>
       <a class="order-now" href={`${base}order/`}>Order now</a>
       <a class="wa" href={waDelivery}><Fragment set:html={waGlyph} />Ask about delivery</a>
-      <a class="call" href={`tel:${phoneTel}`}>Or call {phoneDisplay}</a>
+      <a class="call" href={`tel:${phoneTel}`}><CallIcon />Or call {phoneDisplay}</a>
     </div>
   </section>
 </Base>
@@ -394,13 +395,13 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
   .shops svg { flex: 0 0 auto; }
   .shop-text { flex: 1 1 auto; min-width: 0; }
   .shop-name { display: block; font-size: 17px; line-height: 24px; font-weight: 700; color: var(--navy); }
-  .dir { display: block; font-size: var(--body-small-size); line-height: var(--body-small-line); font-weight: 600; color: var(--glacier); }
+  .dir { display: block; min-height: 44px; text-decoration: none; font-size: var(--body-small-size); line-height: var(--body-small-line); font-weight: 600; color: var(--glacier); }
   /* contact band */
   .contact { padding: 32px 0; }
   .contact .lede { margin: 10px 0 16px; }
   .order-now { display: flex; align-items: center; justify-content: center; min-height: 56px; border-radius: var(--radius-md); background: #fff; color: var(--navy); font-size: 19px; line-height: 26px; font-weight: 700; text-decoration: none; }
   .contact .wa { margin-top: 12px; }
-  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
+  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
   /* motion: CSS/SVG only, once in view, transform and opacity only, no layout shift. Without script or with reduced motion every picture shows finished. */
   @keyframes dl-pop { 0% { opacity: 0; transform: scale(0); } 70% { opacity: 1; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
   @keyframes dl-ride { 0% { transform: translateX(0); } 100% { transform: translateX(calc(100cqw - 54px)); } }

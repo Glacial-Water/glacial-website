@@ -1,0 +1,277 @@
+---
+// About Glacial (D139, D180), built from About.dc.html (canvas version 59). Indexable.
+// Hero picture = the Design System's generated doorstep handover (not captioned as real, D35). Two promises, founder's note (Umer's own words, first
+// paragraph shown, the rest opens with a real button), the story as a connected flow, proof (seal, reports link, badge row option 1), two shops, contact band.
+// Markers 31 [MILESTONES 2018–2025 — CONFIRM] and 32 [FOUNDER'S PHOTO] are shown on the PREVIEW only, like marker 29 on For businesses (D180 c):
+// they must be filled or removed before any glacial.pk build.
+// Claims (D179): no countdown and no punctuality promise. "Certified every month" stays as drawn (D60). No testing-body names (D24).
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import BadgeRow from '../components/BadgeRow.astro';
+import CallIcon from '../components/CallIcon.astro';
+import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
+import hero from '../assets/about-handover.jpg';
+import seal from '../assets/home/seal.png';
+import shop from '../assets/home/shop.svg';
+import '../styles/tiles.css';
+import rosette from '../assets/home/rosette.png';
+const base = import.meta.env.BASE_URL;
+const waGlyph = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>';
+const tick = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+---
+<Base title="About Glacial — Pure water. Delivered with care." description="Who is behind Glacial water, and why you can trust it: ten steps, published monthly reports, PSQCA and Punjab Food Authority licences, and two real shops in Lahore.">
+  <figure class="hero-photo">
+    <Image src={hero} alt="A delivery man hands a full 19-litre water bottle to a woman at her front door" widths={[393, 786]} sizes="100vw" loading="eager" />
+  </figure>
+
+  <section class="band navy">
+    <div class="col">
+      <p class="eyebrow">ABOUT GLACIAL</p>
+      <h1>Pure water. Delivered with care.</h1>
+      <p class="lede">Certified every month. Chlorine-free. At your door every week, across Lahore.</p>
+      <a class="wa" href={whatsappUrl}><Fragment set:html={waGlyph} />Order on WhatsApp</a>
+    </div>
+  </section>
+
+  <section class="band pale gl-mo" id="promises">
+    <div class="col">
+      <h2>Two promises in every bottle.</h2>
+      <ul class="promises">
+        <li class="promise">
+          <svg viewBox="0 0 120 96" aria-hidden="true">
+            <circle cx="60" cy="52" r="38" fill="#e6f3f7"/>
+            <g stroke="#0a6f8f" stroke-width="3" stroke-linecap="round">
+              <path d="M60 10v6"/><path d="M84.7 18l-3.5 4.9"/><path d="M99.9 39l-5.7 1.9"/><path d="M99.9 65l-5.7-1.9"/><path d="M84.7 86l-3.5-4.9"/>
+              <path d="M60 94v-6"/><path d="M35.3 86l3.5-4.9"/><path d="M20.1 65l5.7-1.9"/><path d="M20.1 39l5.7 1.9"/><path d="M35.3 18l3.5 4.9"/>
+            </g>
+            <g class="drip"><path d="M60 28c-9 12-14 19-14 26a14 14 0 0 0 28 0c0-7-5-14-14-26z" fill="#0a6f8f"/><path d="M54 56a6 6 0 0 0 5 6" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/></g>
+          </svg>
+          <span class="t">Purity</span>
+          <span class="s">Ten steps. Tested every month.</span>
+        </li>
+        <li class="promise">
+          <svg viewBox="0 0 120 96" aria-hidden="true">
+            <circle cx="60" cy="52" r="38" fill="#e6f3f7"/>
+            <rect x="28" y="24" width="64" height="56" rx="8" fill="#ffffff" stroke="#1a2a5b" stroke-width="3"/>
+            <path d="M28 38h64" stroke="#1a2a5b" stroke-width="3"/>
+            <path d="M44 18v12M76 18v12" stroke="#1a2a5b" stroke-width="3" stroke-linecap="round"/>
+            <g fill="#b9dcee"><rect x="36" y="46" width="8" height="8" rx="2"/><rect x="56" y="46" width="8" height="8" rx="2"/><rect x="76" y="46" width="8" height="8" rx="2"/><rect x="36" y="62" width="8" height="8" rx="2"/><rect x="56" y="62" width="8" height="8" rx="2"/><rect x="76" y="62" width="8" height="8" rx="2"/></g>
+            <circle cx="50" cy="50" r="7" fill="#0a6f8f"/><path d="M46.5 50.2l2.4 2.4 4.6-4.6" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="50" cy="66" r="7" fill="#0a6f8f"/><path d="M46.5 66.2l2.4 2.4 4.6-4.6" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="t">Peace of mind</span>
+          <span class="s">Full bottles every week. No need to call.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band white">
+    <div class="col">
+      <h2>A note from our founder</h2>
+      <div class="note-card">
+        <div class="who">
+          <!-- Marker 32: preview only (D180 c). Replace with the real photo, or remove, before any glacial.pk build. -->
+          <span class="photo" role="img" aria-label="Placeholder for the founder's photo">[FOUNDER'S PHOTO]</span>
+          <span class="name"><span class="n">Umer Aziz</span><span class="r">Founder, Glacial</span></span>
+        </div>
+        <svg class="quote" width="34" height="26" viewBox="0 0 34 26" aria-hidden="true"><path d="M0 26V15C0 6 5 1 13 0l1 4c-5 1-7 4-7 9h6v13zm20 0V15c0-9 5-14 13-15l1 4c-5 1-7 4-7 9h6v13z" fill="#b9dcee"/></svg>
+        <div id="founder-note" class="note-body">
+          <p>Born in Pakistan and built for its people, Glacial puts two values at its core: Purity and Peace of Mind. We understand the everyday worries that come with raising a family, especially when it comes to health.</p>
+          <div class="more" id="founder-more" hidden>
+            <p>That’s why every 19L bottle we deliver undergoes a rigorous purification process, making sure that every drop is cared for with the same concern you show your loved ones.</p>
+            <p>In a country where clean water isn’t always guaranteed, we’ve made it our purpose to become a trusted part of your home. Whether it’s your child’s first glass of water in the morning or your parents staying hydrated through the day, we’re here for every moment, every generation.</p>
+            <p>This is Glacial.</p>
+            <p><strong>Pure water. Delivered with care. Made for Pakistan.</strong></p>
+            <p class="sign">Umer Aziz, Founder</p>
+          </div>
+        </div>
+        <button type="button" class="more-btn" id="founder-btn" aria-expanded="false" aria-controls="founder-more"><span id="founder-btn-text">Read the full note</span>
+          <svg id="founder-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="band pale gl-mo" id="story">
+    <div class="col">
+      <h2>From one plant to your front door.</h2>
+      <ol class="tl">
+        <li>
+          <span class="yr">2017</span>
+          <div>
+            <h3>Glacial begins in Lahore</h3>
+            <ul>
+              <li><Fragment set:html={tick} />Our first filtration plant</li>
+              <li><Fragment set:html={tick} />Our first 100 customers</li>
+              <li><Fragment set:html={tick} />Our first quality report, October 2017</li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <span class="yr">20XX</span>
+          <div>
+            <!-- Marker 31: preview only (D180 c). Fill with Umer's milestones, or remove this step, before any glacial.pk build. -->
+            <h3><span class="ph">[MILESTONES 2018–2025 — CONFIRM]</span></h3>
+            <p>One line per year you want to tell: a new shop, a new area, a new service.</p>
+          </div>
+        </li>
+        <li>
+          <span class="yr yr-now">Today</span>
+          <div>
+            <h3>Across Lahore, every week</h3>
+            <ul>
+              <li><Fragment set:html={tick} />Two Glacial Water Shops</li>
+              <li><Fragment set:html={tick} />Weekly subscription delivery</li>
+              <li><Fragment set:html={tick} /><span>Express delivery in 90 minutes or less<a class="star" href="#about-express-note" aria-label="See the note on delivery times">*</a></span></li>
+              <li><Fragment set:html={tick} />Quality certified every month</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+      <p class="fine" id="about-express-note">* Delivery times vary by location. We confirm your time when you place the order.</p>
+    </div>
+  </section>
+
+  <section class="band white proof">
+    <div class="col proof-col">
+      <Image class="stamp" src={seal} alt="Stamp reading Quality Certified Every Month" width={176} loading="lazy" />
+      <h2>Check it yourself.</h2>
+      <p class="proof-lede">Every month we test the water and publish the reports. Read them yourself.</p>
+      <a class="link" href={`${base}quality-certs/`}>See the reports →</a>
+      <div class="badge-wrap"><BadgeRow /></div>
+      <p class="licensed-line">Licensed by PSQCA and the Punjab Food Authority</p>
+    </div>
+  </section>
+
+  <section class="band pale">
+    <div class="col">
+      <h2>Come and see us.</h2>
+      <p class="sub-ink">Two Glacial Water Shops. Open 9am–9pm, every day.</p>
+      <div class="crop">
+        <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" loading="lazy" />
+        <Image class="rosette" src={rosette} alt="Free refill offer: every 11th refill is free" width={84} loading="lazy" />
+      </div>
+      <p class="big-teal">Every 11th refill is free.</p>
+      <p class="sub-ink tight">Refill your bottle for Rs 200. Refill 10 times. The 11th is on us.</p>
+      <ul class="shops">
+        <li>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          <span><span class="addr">32/5 Block A, DHA Phase 1, Lahore</span></span>
+        </li>
+        <li>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          <span><span class="addr">358-E, Johar Town, Near Allah Hu Chowk, Lahore</span></span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band navy contact">
+    <div class="col">
+      <h2>Choose the best for your family. Choose Glacial.</h2>
+      <p class="sub">Send your order in one minute. We call you to confirm your delivery day and time.</p>
+      <a class="order-now" href={`${base}order/`}>Order now</a>
+      <a class="wa" href={whatsappUrl}><Fragment set:html={waGlyph} />Order on WhatsApp</a>
+      <a class="call" href={`tel:${phoneTel}`}><CallIcon />Or call {phoneDisplay}</a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Founder's note: a real button, aria-expanded, the rest of the note opens in place.
+  const btn = document.getElementById('founder-btn') as HTMLButtonElement | null;
+  const more = document.getElementById('founder-more');
+  if (btn && more) {
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      more.hidden = !open;
+      document.getElementById('founder-btn-text')!.textContent = open ? 'Show less' : 'Read the full note';
+      document.getElementById('founder-arrow')!.style.transform = open ? 'rotate(180deg)' : 'none';
+    });
+  }
+  // Light motion, once, when 35% is in view; reduce-motion shows the finished picture (D110).
+  import { armMotion } from '../lib/motion';
+  armMotion();
+</script>
+
+<style>
+  .col { width: 100%; max-width: var(--grid-phone-max); margin: 0 auto; padding: 0 var(--space-5); }
+  .band { padding: 32px 0; }
+  .navy { background: var(--navy); color: var(--on-navy); }
+  .pale { background: var(--water-50); }
+  .white { background: var(--surface); }
+  .hero-photo { margin: 0; line-height: 0; background: var(--water-50); }
+  .hero-photo :global(img) { display: block; width: 100%; height: clamp(262px, 52vw, 420px); object-fit: cover; object-position: 50% 30%; }
+  .navy { padding: 26px 0 30px; }
+  .eyebrow { margin: 0; font-size: 14px; line-height: 20px; font-weight: 700; letter-spacing: 0.08em; color: var(--water-200); }
+  .navy h1 { margin: 6px 0 0; color: #fff; }
+  .lede { margin: 12px 0 0; color: var(--water-200); }
+  .wa { box-sizing: border-box; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; margin-top: 20px; padding: 0 18px; border-radius: var(--radius-md); background: var(--whatsapp); color: var(--on-whatsapp); font-size: var(--button-whatsapp-size); line-height: var(--button-whatsapp-line); font-weight: var(--button-whatsapp-weight); text-decoration: none; }
+  .wa:hover { background: var(--whatsapp-hover); color: var(--on-whatsapp); }
+  h2 { color: var(--navy); }
+  .promises { margin: 16px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+  .promise { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px 10px 18px; box-sizing: border-box; background: #fff; border: 1px solid var(--water-200); border-radius: 14px; text-align: center; }
+  .promise svg { display: block; width: 120px; height: 96px; }
+  .promise .t { font-size: 19px; line-height: 25px; font-weight: 700; color: var(--navy); }
+  .promise .s { font-size: 15px; line-height: 21px; color: var(--navy); }
+  .note-card { margin-top: 16px; padding: 18px 16px 16px; box-sizing: border-box; border: 1px solid var(--water-200); border-radius: 14px; background: #fff; }
+  .who { display: flex; align-items: center; gap: 14px; }
+  .photo { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; width: 88px; height: 88px; box-sizing: border-box; border: 2px dashed #8a5300; border-radius: 999px; background: #fdf1dc; color: #8a5300; font-size: 11px; line-height: 14px; font-weight: 700; text-align: center; }
+  .name { display: flex; flex-direction: column; }
+  .name .n { font-size: 19px; line-height: 25px; font-weight: 700; color: var(--navy); }
+  .name .r { font-size: 15px; line-height: 21px; color: var(--ink-muted); }
+  .quote { display: block; margin-top: 16px; }
+  .note-body { margin-top: 8px; display: flex; flex-direction: column; gap: 12px; color: var(--navy); }
+  .note-body p { margin: 0; }
+  .more { display: flex; flex-direction: column; gap: 12px; }
+  .more[hidden] { display: none; }
+  .sign { font-weight: 600; }
+  .more-btn { margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0; background: transparent; border: 0; font-family: inherit; font-size: 17px; line-height: 24px; font-weight: 600; color: var(--glacier); cursor: pointer; }
+  .more-btn svg { transition: transform 0.2s ease; }
+  .tl { list-style: none; margin: 20px 0 0; padding: 0; }
+  .tl > li { position: relative; display: flex; gap: 14px; padding-bottom: 22px; }
+  .tl > li:last-child { padding-bottom: 0; }
+  .tl > li::before { content: ""; position: absolute; left: 31px; top: 40px; bottom: 0; width: 2px; background: var(--water-200); }
+  .tl > li:last-child::before { display: none; }
+  .yr { flex: 0 0 auto; box-sizing: border-box; width: 64px; height: 40px; border-radius: 999px; background: var(--water-50); border: 2px solid var(--glacier); color: var(--glacier); font-size: 16px; line-height: 36px; font-weight: 700; text-align: center; }
+  .yr-now { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .tl h3 { margin: 8px 0 0; font-size: 18px; line-height: 24px; font-weight: 700; color: var(--navy); }
+  .tl p { margin: 4px 0 0; font-size: 15px; line-height: 21px; color: var(--navy); }
+  .tl ul { margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .tl ul li { display: flex; gap: 8px; font-size: 15px; line-height: 21px; color: var(--navy); }
+  .tl ul li :global(svg) { flex: 0 0 auto; margin-top: 2px; }
+  .star { text-decoration: none; font-weight: 700; }
+  .ph { display: inline-block; padding: 2px 6px; border: 1px dashed #8a5300; border-radius: 6px; background: #fdf1dc; color: #8a5300; font-size: 14px; line-height: 20px; font-weight: 700; }
+  .fine { margin: 16px 0 0; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+  .proof { padding: 30px 0 32px; }
+  .proof-col { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .proof :global(.stamp) { width: 176px; height: auto; display: block; }
+  .proof h2 { margin-top: 10px; }
+  .proof-lede { margin: 6px 0 0; max-width: 320px; color: var(--navy); }
+  .link { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; font-size: 17px; line-height: 24px; font-weight: 600; color: var(--glacier); text-decoration: none; }
+  .badge-wrap { margin-top: 12px; width: 100%; }
+  .licensed-line { margin: 16px 0 0; font-size: 17px; line-height: 24px; font-weight: 700; color: var(--navy); }
+  .sub-ink { margin: 6px 0 0; color: var(--navy); }
+  .sub-ink.tight { margin-top: 2px; }
+  .crop { container-type: inline-size; --u: calc(100cqw / 351); position: relative; overflow: hidden; margin-top: 16px; width: 100%; aspect-ratio: 351 / 268; background: var(--water-50); line-height: 0; border-radius: 14px; }
+  .crop img { display: block; width: 100%; height: auto; margin-top: calc(-125 * var(--u)); }
+  .crop img.rosette { position: absolute; margin: 0; max-width: none; left: calc(12 * var(--u)); top: calc(12 * var(--u)); width: calc(84 * var(--u)); height: auto; }
+  .big-teal { margin: 14px 0 0; font-size: 23px; line-height: 29px; font-weight: 700; color: var(--glacier); }
+  .shops { margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .shops li { display: flex; align-items: center; gap: 12px; padding: 14px 16px; box-sizing: border-box; background: #fff; border: 1px solid var(--water-200); border-radius: 14px; }
+  .shops svg { flex: 0 0 auto; }
+  .addr { display: block; font-size: 17px; line-height: 24px; font-weight: 700; color: var(--navy); }
+  .contact h2 { color: #fff; }
+  .contact .sub { margin: 10px 0 16px; color: var(--water-200); }
+  .order-now { display: flex; align-items: center; justify-content: center; min-height: 56px; box-sizing: border-box; border-radius: var(--radius-md); background: #fff; color: var(--navy); font-size: 19px; line-height: 26px; font-weight: 700; text-decoration: none; }
+  .contact .wa { margin-top: 12px; }
+  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
+  /* Light motion: the Purity drop falls in once; the "Today" node breathes twice. Still with reduce-motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    #promises:global(.is-on) :global(.drip) { animation: drip 2.8s ease-in 0.4s 1 both; }
+    #story:global(.is-on) .yr-now { animation: now 2.4s ease-in-out 0.3s 2; }
+  }
+  @keyframes drip { 0% { transform: translateY(-14px); opacity: 0; } 40% { opacity: 1; } 100% { transform: none; opacity: 1; } }
+  @keyframes now { 0%, 100% { box-shadow: 0 0 0 0 rgba(10, 111, 143, 0); } 50% { box-shadow: 0 0 0 8px rgba(10, 111, 143, 0.18); } }
+</style>

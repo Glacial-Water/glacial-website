@@ -6,14 +6,12 @@
 // Marker 29 [CUSTOMER APP — CONFIRM] is shown on the preview only and must be filled or removed before cutover (D141 a, D153).
 // No monthly total (D91), no bank details (D127), no WEB100 on the quote (D69/D115), no client names (D139). Motion: CSS/SVG, once in view, reduce-motion shows the full rack.
 import { Image } from 'astro:assets';
+import BadgeRow from '../components/BadgeRow.astro';
+import CallIcon from '../components/CallIcon.astro';
 import Base from '../layouts/Base.astro';
 import StepList from '../components/StepList.astro';
 import { phoneDisplay, phoneTel } from '../data/site';
 import seal from '../assets/home/seal.png';
-import badgeChlorine from '../assets/home/badge-chlorine-free.svg';
-import badge10 from '../assets/home/badge-10-step.svg';
-import markPsqca from '../assets/home/mark-psqca.webp';
-import sealPfa from '../assets/home/seal-pfa.webp';
 const base = import.meta.env.BASE_URL;
 const waGlyph = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>';
 const WA = 'https://wa.me/923111125124';
@@ -40,7 +38,7 @@ const steps = [
   'Full bottles in, empties out|Every week, like clockwork. You never have to call.',
 ];
 ---
-<Base title="For businesses — Glacial" description="Certified, chlorine-free water for your office, shop, school or restaurant in Lahore. Full bottles every week, on time. Ask for a business quote on WhatsApp; we call you back with your price.">
+<Base title="For businesses — Glacial" description="Certified, chlorine-free water for your office, shop, school or restaurant in Lahore. Full bottles every week. Ask for a business quote on WhatsApp; we call you back with your price.">
   <section class="band navy">
     <div class="col">
       <h1>Your team never runs out.</h1>
@@ -125,12 +123,7 @@ const steps = [
 
   <section class="band white badges">
     <div class="col">
-      <ul>
-        <li class="badge"><Image src={badgeChlorine} alt="" width={120} /><span class="t">Chlorine-free</span><span class="s">No chlorine taste, ever.</span></li>
-        <li class="badge"><Image src={badge10} alt="" width={120} /><span class="t">10-step purification</span><span class="s">Every bottle, all ten steps.</span></li>
-        <li class="badge"><Image src={markPsqca} alt="Pakistan Standards mark of PSQCA" width={120} /><span class="t">PSQCA licensed</span><span class="s">Pakistan Standards mark</span></li>
-        <li class="badge"><Image src={sealPfa} alt="Seal of the Punjab Food Authority" width={240} /><span class="t">PFA licensed</span><span class="s">Punjab Food Authority</span></li>
-      </ul>
+      <BadgeRow />
       <p class="licensed-line">Licensed by PSQCA and the Punjab Food Authority</p>
     </div>
   </section>
@@ -243,7 +236,7 @@ const steps = [
       <h2>Start your business subscription.</h2>
       <p class="sub">Fresh, certified water at work. Every week.</p>
       <a class="wa" href={waAsk}><Fragment set:html={waGlyph} />Ask about business delivery</a>
-      <a class="call" href={`tel:${phoneTel}`}>Or call {phoneDisplay}</a>
+      <a class="call" href={`tel:${phoneTel}`}><CallIcon />Or call {phoneDisplay}</a>
     </div>
   </section>
 </Base>
@@ -345,11 +338,6 @@ const steps = [
   .usp p { margin: 6px 0 0; max-width: 320px; }
   .link { display: inline-flex; align-items: center; min-height: var(--touch-min); font-weight: 600; text-decoration: none; }
   .badges { padding: 28px 0 32px; }
-  .badges ul { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); align-items: stretch; }
-  .badge { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 10px 16px; box-sizing: border-box; background: #fff; border: 1px solid var(--water-200); border-radius: 14px; text-align: center; }
-  .badge :global(img) { display: block; width: 120px; height: 88px; object-fit: contain; }
-  .badge .t { font-size: 15px; line-height: 21px; font-weight: 700; color: var(--navy); }
-  .badge .s { font-size: 14px; line-height: 20px; color: var(--ink-muted); }
   .licensed-line { margin: 16px 0 0; font-size: 17px; line-height: 24px; font-weight: 700; text-align: center; }
   .steps-wrap { margin-top: 16px; }
   .express { margin-top: 20px; display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: #fff; border-radius: var(--radius-md); }
@@ -414,7 +402,7 @@ const steps = [
   .contact { padding: 32px 0; }
   .contact .sub { margin: 10px 0 16px; }
   .contact .wa { margin-top: 0; }
-  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
+  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: var(--control-height); border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-weight: 700; text-decoration: none; }
   /* Motion: CSS only, once in view. Only transform and opacity move: no layout shift. Reduce-motion or no script: the full rack just shows. */
   @keyframes gl-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
   .amgr :global(.gl-track-fill) { transform-origin: 0 50%; }

@@ -1,0 +1,23 @@
+---
+// Badge row, option 1 (D174): one pale glacier-blue tile behind all four badges, navy labels.
+// Chlorine-free and 10-step are drawn in Glacial blue; the PSQCA and PFA files are the regulators' own marks, unaltered.
+// Shared by Home, Products and prices, For businesses and About so the four match (D107 b).
+import { Image } from 'astro:assets';
+import badgeChlorine from '../assets/home/badge-chlorine-free.webp';
+import badge10 from '../assets/home/badge-10-step.webp';
+import markPsqca from '../assets/home/mark-psqca.webp';
+import sealPfa from '../assets/home/seal-pfa.webp';
+---
+<ul class="badge-tile">
+  <li class="badge"><Image src={badgeChlorine} alt="" width={120} /><span class="t">Chlorine-free</span><span class="s">No chlorine taste, ever.</span></li>
+  <li class="badge"><Image src={badge10} alt="" width={120} /><span class="t">10-step purification</span><span class="s">Every bottle, all ten steps.</span></li>
+  <li class="badge"><Image src={markPsqca} alt="Pakistan Standards mark of PSQCA" width={120} /><span class="t">PSQCA licensed</span><span class="s">Pakistan Standards mark</span></li>
+  <li class="badge"><Image src={sealPfa} alt="Seal of the Punjab Food Authority" width={240} /><span class="t">PFA licensed</span><span class="s">Punjab Food Authority</span></li>
+</ul>
+<style>
+  .badge-tile { margin: 0; padding: 16px 12px 18px; box-sizing: border-box; width: 100%; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 8px; align-items: stretch; background: #e6f3f7; border: 1px solid var(--water-200); border-radius: 16px; }
+  .badge { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 6px 4px; box-sizing: border-box; text-align: center; }
+  .badge :global(img) { display: block; width: 120px; height: 88px; object-fit: contain; }
+  .badge .t { font-size: 15px; line-height: 21px; font-weight: 700; color: var(--navy); }
+  .badge .s { font-size: 14px; line-height: 20px; color: var(--navy); }
+</style>
