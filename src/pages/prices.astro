@@ -42,8 +42,20 @@ const glance = [
   ['Weekly subscription', 'Per bottle, two bottles or more', 'Rs 260'],
   ['Express delivery', 'Per bottle, 90 minutes or less*', 'Rs 280'],
 ];
+// Product/Offer structured data (D172 a): one Offer per published price, figures read from the same `glance` rows the page shows. No rating (D10).
+const offerSchema = {
+  '@context': 'https://schema.org',
+  '@graph': glance.map(([name, desc, price]) => ({
+    '@type': 'Product',
+    name,
+    description: desc.replace(/\*$/, ''),
+    brand: { '@type': 'Brand', name: 'Glacial' },
+    offers: { '@type': 'Offer', price: price.replace(/[^0-9]/g, ''), priceCurrency: 'PKR', availability: 'https://schema.org/InStock' },
+  })),
+};
 ---
 <Base fabHref={waPrice} title="Products and prices — Glacial" description="Glacial prices: new bottle, exchange, walk-in refill, weekly subscription and express delivery across Lahore.">
+  <script type="application/ld+json" set:html={JSON.stringify(offerSchema)} />
   <section class="band navy">
     <div class="col">
       <h1><a class="cert" href={`${base}quality-certs/`}>Certified</a> water.<br />From Rs 200 a refill.</h1>
@@ -142,7 +154,7 @@ const glance = [
         <div class="card-body">
           <div class="name-row"><h3>Walk-in refill</h3><p class="price">Rs 200<span> /refill</span></p></div>
           <p class="offer-big">Every 11th refill is free.</p>
-          <p class="lead lead-tight">Refill 10 times. The 11th is on us.</p>
+          <p class="lead lead-tight">At any Glacial shop.</p>
           <ol class="bottles" role="img" aria-label="Ten refills, then the eleventh refill free">
             {tenPlusOne.map((b) => (
               <li>
