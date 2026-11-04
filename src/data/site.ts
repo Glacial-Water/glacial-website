@@ -12,5 +12,5 @@ export const navLinks: { label: string; href: string; soon?: boolean }[] = [
   { label: 'For businesses', href: `${base}for-businesses/` },
   { label: 'About Glacial', href: `${base}about/` },
   { label: 'Contact and support', href: `${base}contact/` },
-  { label: 'FAQ', href: `${base}faq/`, soon: true },
+  { label: 'FAQ', href: `${base}faq/` },
 ];
