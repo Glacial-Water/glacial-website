@@ -9,9 +9,12 @@ import '@fontsource/inter/latin-500.css';
 import '@fontsource/inter/latin-600.css';
 import '@fontsource/inter/latin-700.css';
 import '@fontsource/quicksand/latin-500.css';
-import { whatsappUrl } from '../data/site';
+import { whatsappUrl, isProduction, localBusinessSchema } from '../data/site';
 // fabHref: the page's main pre-filled WhatsApp message (D150); the plain chat when a page has none.
 interface Props { title: string; description?: string; noindex?: boolean; fabHref?: string; fabLabel?: string }
+const origin = (Astro.site?.origin ?? '');
+const ld = JSON.stringify({ '@context': 'https://schema.org', '@graph': localBusinessSchema(origin) });
+const canonical = isProduction && Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 const { title, description = 'Glacial — pure water, delivered across Lahore.', noindex = false, fabHref = whatsappUrl, fabLabel = 'Order' } = Astro.props;
 ---
 <!doctype html>
@@ -20,7 +23,9 @@ const { title, description = 'Glacial — pure water, delivered across Lahore.',
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex" />}
+    {(noindex || !isProduction) && <meta name="robots" content="noindex" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <script type="application/ld+json" set:html={ld} />
     <title>{title}</title>
   </head>
   <body>
