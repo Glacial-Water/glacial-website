@@ -43,7 +43,9 @@ export function localBusinessSchema(origin: string) {
 }
 
 // The ten frozen pages (D139). The sitemap lists the ones that exist as real pages; FAQ and Privacy & terms join when their pages land.
-export const framePages = ['', 'quality-certs', 'order', 'prices', 'delivery', 'for-businesses', 'about', 'contact', 'faq', 'privacy', 'terms'];
+// /terms/ serves the same page as /privacy/ and its canonical points there (D197 a), so it is not in the sitemap or llms.txt.
+export const listedPages = ['', 'quality-certs', 'order', 'prices', 'delivery', 'for-businesses', 'about', 'contact', 'faq', 'privacy'];
+export const framePages = listedPages;
 
 // Privacy and Terms (D196): one design served at two addresses; the footer carries both links on every page (D105P). Not part of the seven-link nav (D49) or the header menu.
 export const legalLinks = [
