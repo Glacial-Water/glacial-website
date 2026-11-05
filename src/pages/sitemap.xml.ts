@@ -1,8 +1,7 @@
 import type { APIRoute } from 'astro';
 import { framePages, isProduction } from '../data/site';
 
-// /sitemap.xml: the frozen pages (D139) that exist as real pages. FAQ shows as a coming-soon stub and Privacy & terms is not built yet,
-// so neither is listed until its own file exists. The preview lists nothing (it is not indexed).
+// /sitemap.xml: the frozen pages (D139) that exist as real pages. a page is listed only once its own file exists (Privacy and Terms, D196). The preview lists nothing (it is not indexed).
 const built = import.meta.glob('./*.astro');
 const exists = (slug: string) => (slug === '' ? './index.astro' : `./${slug}.astro`) in built;
 

@@ -7,7 +7,7 @@ const exists = (slug: string) => (slug === '' ? './index.astro' : `./${slug}.ast
 const names: Record<string, string> = {
   '': 'Home', 'quality-certs': 'Quality Certs (published monthly reports)', order: 'Order', prices: 'Products and prices',
   delivery: 'How delivery works', 'for-businesses': 'For businesses', about: 'About Glacial', contact: 'Contact and support',
-  faq: 'FAQ', privacy: 'Privacy and terms',
+  faq: 'FAQ', privacy: 'Privacy', terms: 'Terms',
 };
 
 export const GET: APIRoute = ({ site }) => {
