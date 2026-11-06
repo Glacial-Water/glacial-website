@@ -44,3 +44,12 @@ export function localBusinessSchema(origin: string) {
 
 // The ten frozen pages (D139). The sitemap lists the ones that exist as real pages; FAQ and Privacy & terms join when their pages land.
 export const framePages = ['', 'quality-certs', 'order', 'prices', 'delivery', 'for-businesses', 'about', 'contact', 'faq', 'privacy'];
+
+// Bank transfer details (D202 d, Umer 6 Nov): real details, no marker, on preview AND production builds. Shown on Contact (anchor #how-you-pay), For businesses and Order step 3.
+export const bank = {
+  title: 'Glacial',
+  bank: 'Soneri Bank',
+  account: '20002734118',
+  iban: 'PK89SONE0007120002734118',
+  line: 'We will only ever ask you to pay into this account.',
+};
