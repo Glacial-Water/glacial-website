@@ -52,3 +52,12 @@ export const legalLinks = [
   { label: 'Privacy', href: `${base}privacy/#privacy` },
   { label: 'Terms', href: `${base}terms/#terms` },
 ];
+
+// Bank transfer details (D202 d, Umer 6 Nov): real details, no marker, on preview AND production builds. Shown on Contact (anchor #how-you-pay), For businesses and Order step 3.
+export const bank = {
+  title: 'Glacial',
+  bank: 'Soneri Bank',
+  account: '20002734118',
+  iban: 'PK89SONE0007120002734118',
+  line: 'We will only ever ask you to pay into this account.',
+};

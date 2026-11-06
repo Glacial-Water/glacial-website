@@ -1,7 +1,7 @@
 ---
 // Products and prices (D120, rebuilt 30 Oct from PricesB.dc.html canvas version 41 per D148 e/f, D151 a-e, D157).
 // Prices are D42/D63 and appear only as the design draws them. No monthly figure (D91), no Rs 20 membership (D115 e), no portal line.
-// How you pay (D127): cash on delivery first, bank transfer, pay monthly. No bank details. Hours (D34): the one line, no marker (D157 a, placeholder 30 void).
+// How you pay (D202): per delivery, cash or bank transfer; walk-in cash at the counter. Bank details live on Contact. Hours (D34): the one line, no marker (D157 a, placeholder 30 void).
 // The two bottle tiles use the same counter, pictures and price circle as Home and Order (tiles.css); 'Order these bottles →' opens /order/?new=N&ex=N.
 // The three way tiles and the bottle tiles use Home's once-in-view motion (motion.css, src/lib/motion.ts); finished pose with reduced motion or no script.
 import { Image } from 'astro:assets';
@@ -229,7 +229,7 @@ const offerSchema = {
           <div class="row"><dt>Order from the website<span>New bottle, delivery orders. Code WEB100.</span></dt><dd>Rs 100 off<br />your deposit</dd></div>
         </dl>
       </div>
-      <p class="foot">You pay nothing until your water arrives. Pay cash when it comes. You can also pay cash at the shop counter, or by bank transfer.</p>
+      <p class="foot">You pay nothing until your water arrives. Pay cash when your water arrives, or by bank transfer after each delivery. Buying at the shop? Pay cash at the counter. <a href={`${base}contact/#how-you-pay`}>See our bank details</a>.</p>
       <p class="foot">Shops open 9am–9pm, every day. Delivery bookings until 7pm.</p>
       <p class="foot" id="p-express-note">* Delivery times vary by location. We confirm your time when you place the order.</p>
     </div>
