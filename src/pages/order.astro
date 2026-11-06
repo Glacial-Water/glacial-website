@@ -5,11 +5,12 @@
 // Step 1 per D151 g (amends D115 f): 'We call you' / 'We call you to confirm your delivery day and time.'
 // 30 Oct (canvas v41, D148 d, D157): Walk-in first, Weekly preselected; way-tile motion; ?new=&ex= presets from Products and prices.
 // Round 5 (29 Oct, canvas v39; D144-D150): one-bottle New tile and one-old-one-new Exchange tile, one price-circle component, 'Shop Locations →', required Email, 'Every 11th refill is free.'
-// How you pay (D127, placeholder 13 closed): cash on delivery first, bank transfer, pay monthly. No bank details, no monthly total (D91).
+// How you pay (D202): homes pay per delivery, cash or bank transfer; no monthly billing or cheque on home copy. Bank details block in step 3 (D202 d). No monthly total (D91).
 import { Image } from 'astro:assets';
 import CallIcon from '../components/CallIcon.astro';
 import Base from '../layouts/Base.astro';
 import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
+import BankDetails from '../components/BankDetails.astro';
 import bottleNew from '../assets/home/bottle-new.webp';
 import '../styles/tiles.css';
 import '../styles/motion.css';
@@ -138,7 +139,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
           <span class="card-body">
             <span class="name-row"><input class="radio" type="radio" name="o-way" value="walk" /><span class="nm">Walk-in refill</span><span class="pr">Rs 200<small> /refill</small></span></span>
             <span class="strong">Every 11th refill is free.</span>
-            <span class="small muted">Refill 10 times. The 11th is on us. Bring your bottle to any Glacial shop.</span>
+            <span class="small muted">At any Glacial shop. Bring your bottle.</span>
           </span>
         </label>
 
@@ -223,7 +224,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
           <p class="foot">Your code WEB100 is added to the message.</p>
         </div>
         <p class="foot" id="foot"></p>
-        <p class="foot">You pay nothing on this page. Pay cash when your water arrives. You can also pay by bank transfer, or pay monthly.</p>
+        <p class="foot">You pay nothing on this page. Pay cash when your water arrives, or by bank transfer after each delivery. Buying at the shop? Pay cash at the counter.</p>
       </div>
       <a class="wa" id="sendHref" href={whatsappUrl}><Fragment set:html={waGlyph} /><span id="sendLabel">Send my order on WhatsApp</span></a>
       <a class="call" href={`tel:${phoneTel}`}><CallIcon />Or call {phoneDisplay}</a>
@@ -238,8 +239,9 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
         <ol class="steps">
           <li><span class="node" aria-hidden="true">1</span><span class="label">We call you<span class="note">We call you to confirm your delivery day and time.</span></span></li>
           <li><span class="node" aria-hidden="true">2</span><span class="label">Fresh, certified water at your door<span class="note" id="nextNote">Same day, same time, every week.</span></span></li>
-          <li><span class="node" aria-hidden="true">3</span><span class="label">You pay cash when it arrives<span class="note">Or pay by bank transfer, or pay monthly.</span></span></li>
+          <li><span class="node" aria-hidden="true">3</span><span class="label">You pay when it arrives<span class="note">Pay cash when your water arrives, or by bank transfer after each delivery. Buying at the shop? Pay cash at the counter.</span></span></li>
         </ol>
+        <BankDetails />
       </div>
       <p class="foot" id="o-express-note">* Delivery times vary by location. We confirm your time when you place the order.</p>
     </div>
