@@ -9,9 +9,12 @@ import '@fontsource/inter/latin-500.css';
 import '@fontsource/inter/latin-600.css';
 import '@fontsource/inter/latin-700.css';
 import '@fontsource/quicksand/latin-500.css';
-import { whatsappUrl } from '../data/site';
+import { whatsappUrl, phoneTel, isProduction, localBusinessSchema } from '../data/site';
 // fabHref: the page's main pre-filled WhatsApp message (D150); the plain chat when a page has none.
-interface Props { title: string; description?: string; noindex?: boolean; fabHref?: string; fabLabel?: string }
+interface Props { title: string; description?: string; noindex?: boolean; fabHref?: string; fabLabel?: string }  // fabLabel is kept so older pages still compile; the pair is icon-only (option 3)
+const origin = (Astro.site?.origin ?? '');
+const ld = JSON.stringify({ '@context': 'https://schema.org', '@graph': localBusinessSchema(origin) });
+const canonical = isProduction && Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 const { title, description = 'Glacial — pure water, delivered across Lahore.', noindex = false, fabHref = whatsappUrl, fabLabel = 'Order' } = Astro.props;
 ---
 <!doctype html>
@@ -20,7 +23,9 @@ const { title, description = 'Glacial — pure water, delivered across Lahore.',
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex" />}
+    {(noindex || !isProduction) && <meta name="robots" content="noindex" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <script type="application/ld+json" set:html={ld} />
     <title>{title}</title>
   </head>
   <body>
@@ -28,21 +33,26 @@ const { title, description = 'Glacial — pure water, delivered across Lahore.',
     <SiteHeader />
     <main id="main"><slot /></main>
     <SiteFooter />
-    <!-- D150: floating WhatsApp button on every page. Fixed bottom-right; hidden while the page's own WhatsApp button, primary button or order summary is on screen. -->
-    <a class="fab" id="fab" href={fabHref} aria-label={fabLabel === 'Order' ? 'Order on WhatsApp' : 'Message us on WhatsApp'}>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>
-      <span>{fabLabel}</span>
-    </a>
+    <!-- D184 b / D189: floating buttons, option 3. Two round icon-only buttons side by side, bottom-right: call (navy, white handset), then WhatsApp outermost in its own green.
+         Hidden while any page WhatsApp or call button, or a [data-fab-hide] element (primary button, Order's summary), is on screen (D150 b). -->
+    <div class="fabs" id="fabs">
+      <a class="fab-btn fab-call" href={`tel:${phoneTel}`} aria-label="Call Glacial">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16.9v2.6a1.7 1.7 0 0 1-1.9 1.7 17 17 0 0 1-7.4-2.6 16.6 16.6 0 0 1-5.1-5.1A17 17 0 0 1 4 6.1 1.7 1.7 0 0 1 5.7 4.2h2.6a1.7 1.7 0 0 1 1.7 1.5c.1.8.3 1.6.6 2.4a1.7 1.7 0 0 1-.4 1.8l-1.1 1.1a13.6 13.6 0 0 0 5.1 5.1l1.1-1.1a1.7 1.7 0 0 1 1.8-.4c.8.3 1.6.5 2.4.6a1.7 1.7 0 0 1 1.5 1.7z"/></svg>
+      </a>
+      <a class="fab-btn fab-wa" id="fab" href={fabHref} aria-label="Order on WhatsApp">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>
+      </a>
+    </div>
     <script>
-      // Watches every WhatsApp button (.wa), every [data-fab-hide] element (a page's primary button or order summary) and hides the floating button while any is on screen.
-      const fab = document.getElementById('fab');
-      if (fab && 'IntersectionObserver' in window) {
+      // Watches every WhatsApp button (.wa), every call link, and every [data-fab-hide] element, and hides the pair while any is on screen.
+      const fabs = document.getElementById('fabs');
+      if (fabs && 'IntersectionObserver' in window) {
         const seen = new Set<Element>();
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)));
-          fab.classList.toggle('is-hidden', seen.size > 0);
+          fabs.classList.toggle('is-hidden', seen.size > 0);
         });
-        document.querySelectorAll('.wa, [data-fab-hide]').forEach((el) => io.observe(el));
+        document.querySelectorAll('.wa, [data-fab-hide], a[href^="tel:"]:not(.fab-btn)').forEach((el) => io.observe(el));
       }
     </script>
   </body>

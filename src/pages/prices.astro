@@ -1,7 +1,7 @@
 ---
 // Products and prices (D120, rebuilt 30 Oct from PricesB.dc.html canvas version 41 per D148 e/f, D151 a-e, D157).
 // Prices are D42/D63 and appear only as the design draws them. No monthly figure (D91), no Rs 20 membership (D115 e), no portal line.
-// How you pay (D127): cash on delivery first, bank transfer, pay monthly. No bank details. Hours (D34): the one line, no marker (D157 a, placeholder 30 void).
+// How you pay (D202): per delivery, cash or bank transfer; walk-in cash at the counter. Bank details live on Contact. Hours (D34): the one line, no marker (D157 a, placeholder 30 void).
 // The two bottle tiles use the same counter, pictures and price circle as Home and Order (tiles.css); 'Order these bottles →' opens /order/?new=N&ex=N.
 // The three way tiles and the bottle tiles use Home's once-in-view motion (motion.css, src/lib/motion.ts); finished pose with reduced motion or no script.
 import { Image } from 'astro:assets';
@@ -42,8 +42,20 @@ const glance = [
   ['Weekly subscription', 'Per bottle, two bottles or more', 'Rs 260'],
   ['Express delivery', 'Per bottle, 90 minutes or less*', 'Rs 280'],
 ];
+// Product/Offer structured data (D172 a): one Offer per published price, figures read from the same `glance` rows the page shows. No rating (D10).
+const offerSchema = {
+  '@context': 'https://schema.org',
+  '@graph': glance.map(([name, desc, price]) => ({
+    '@type': 'Product',
+    name,
+    description: desc.replace(/\*$/, ''),
+    brand: { '@type': 'Brand', name: 'Glacial' },
+    offers: { '@type': 'Offer', price: price.replace(/[^0-9]/g, ''), priceCurrency: 'PKR', availability: 'https://schema.org/InStock' },
+  })),
+};
 ---
 <Base fabHref={waPrice} title="Products and prices — Glacial" description="Glacial prices: new bottle, exchange, walk-in refill, weekly subscription and express delivery across Lahore.">
+  <script type="application/ld+json" set:html={JSON.stringify(offerSchema)} />
   <section class="band navy">
     <div class="col">
       <h1><a class="cert" href={`${base}quality-certs/`}>Certified</a> water.<br />From Rs 200 a refill.</h1>
@@ -142,7 +154,7 @@ const glance = [
         <div class="card-body">
           <div class="name-row"><h3>Walk-in refill</h3><p class="price">Rs 200<span> /refill</span></p></div>
           <p class="offer-big">Every 11th refill is free.</p>
-          <p class="lead lead-tight">Refill 10 times. The 11th is on us.</p>
+          <p class="lead lead-tight">At any Glacial shop.</p>
           <ol class="bottles" role="img" aria-label="Ten refills, then the eleventh refill free">
             {tenPlusOne.map((b) => (
               <li>
@@ -217,7 +229,7 @@ const glance = [
           <div class="row"><dt>Order from the website<span>New bottle, delivery orders. Code WEB100.</span></dt><dd>Rs 100 off<br />your deposit</dd></div>
         </dl>
       </div>
-      <p class="foot">You pay nothing until your water arrives. Pay cash when it comes. You can also pay by bank transfer, or pay monthly.</p>
+      <p class="foot">You pay nothing until your water arrives. Pay cash when your water arrives, or by bank transfer after each delivery. Buying at the shop? Pay cash at the counter. <a href={`${base}contact/#how-you-pay`}>See our bank details</a>.</p>
       <p class="foot">Shops open 9am–9pm, every day. Delivery bookings until 7pm.</p>
       <p class="foot" id="p-express-note">* Delivery times vary by location. We confirm your time when you place the order.</p>
     </div>

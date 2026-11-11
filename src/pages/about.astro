@@ -2,8 +2,7 @@
 // About Glacial (D139, D180), built from About.dc.html (canvas version 59). Indexable.
 // Hero picture = the Design System's generated doorstep handover (not captioned as real, D35). Two promises, founder's note (Umer's own words, first
 // paragraph shown, the rest opens with a real button), the story as a connected flow, proof (seal, reports link, badge row option 1), two shops, contact band.
-// Markers 31 [MILESTONES 2018–2025 — CONFIRM] and 32 [FOUNDER'S PHOTO] are shown on the PREVIEW only, like marker 29 on For businesses (D180 c):
-// they must be filled or removed before any glacial.pk build.
+// D184 d / D189 c: the 2018–2025 milestones step and the founder's photo placeholder (markers 31, 32) are gone; the story runs 2017 → Today.
 // Claims (D179): no countdown and no punctuality promise. "Certified every month" stays as drawn (D60). No testing-body names (D24).
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
@@ -71,8 +70,6 @@ const tick = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke
       <h2>A note from our founder</h2>
       <div class="note-card">
         <div class="who">
-          <!-- Marker 32: preview only (D180 c). Replace with the real photo, or remove, before any glacial.pk build. -->
-          <span class="photo" role="img" aria-label="Placeholder for the founder's photo">[FOUNDER'S PHOTO]</span>
           <span class="name"><span class="n">Umer Aziz</span><span class="r">Founder, Glacial</span></span>
         </div>
         <svg class="quote" width="34" height="26" viewBox="0 0 34 26" aria-hidden="true"><path d="M0 26V15C0 6 5 1 13 0l1 4c-5 1-7 4-7 9h6v13zm20 0V15c0-9 5-14 13-15l1 4c-5 1-7 4-7 9h6v13z" fill="#b9dcee"/></svg>
@@ -96,25 +93,6 @@ const tick = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke
     <div class="col">
       <h2>From one plant to your front door.</h2>
       <ol class="tl">
-        <li>
-          <span class="yr">2017</span>
-          <div>
-            <h3>Glacial begins in Lahore</h3>
-            <ul>
-              <li><Fragment set:html={tick} />Our first filtration plant</li>
-              <li><Fragment set:html={tick} />Our first 100 customers</li>
-              <li><Fragment set:html={tick} />Our first quality report, October 2017</li>
-            </ul>
-          </div>
-        </li>
-        <li>
-          <span class="yr">20XX</span>
-          <div>
-            <!-- Marker 31: preview only (D180 c). Fill with Umer's milestones, or remove this step, before any glacial.pk build. -->
-            <h3><span class="ph">[MILESTONES 2018–2025 — CONFIRM]</span></h3>
-            <p>One line per year you want to tell: a new shop, a new area, a new service.</p>
-          </div>
-        </li>
         <li>
           <span class="yr yr-now">Today</span>
           <div>
@@ -152,7 +130,7 @@ const tick = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke
         <Image class="rosette" src={rosette} alt="Free refill offer: every 11th refill is free" width={84} loading="lazy" />
       </div>
       <p class="big-teal">Every 11th refill is free.</p>
-      <p class="sub-ink tight">Refill your bottle for Rs 200. Refill 10 times. The 11th is on us.</p>
+      <p class="sub-ink tight">Refill your bottle for Rs 200. At any Glacial shop.</p>
       <ul class="shops">
         <li>
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
@@ -217,7 +195,6 @@ const tick = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke
   .promise .s { font-size: 15px; line-height: 21px; color: var(--navy); }
   .note-card { margin-top: 16px; padding: 18px 16px 16px; box-sizing: border-box; border: 1px solid var(--water-200); border-radius: 14px; background: #fff; }
   .who { display: flex; align-items: center; gap: 14px; }
-  .photo { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; width: 88px; height: 88px; box-sizing: border-box; border: 2px dashed #8a5300; border-radius: 999px; background: #fdf1dc; color: #8a5300; font-size: 11px; line-height: 14px; font-weight: 700; text-align: center; }
   .name { display: flex; flex-direction: column; }
   .name .n { font-size: 19px; line-height: 25px; font-weight: 700; color: var(--navy); }
   .name .r { font-size: 15px; line-height: 21px; color: var(--ink-muted); }
@@ -242,7 +219,6 @@ const tick = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke
   .tl ul li { display: flex; gap: 8px; font-size: 15px; line-height: 21px; color: var(--navy); }
   .tl ul li :global(svg) { flex: 0 0 auto; margin-top: 2px; }
   .star { text-decoration: none; font-weight: 700; }
-  .ph { display: inline-block; padding: 2px 6px; border: 1px dashed #8a5300; border-radius: 6px; background: #fdf1dc; color: #8a5300; font-size: 14px; line-height: 20px; font-weight: 700; }
   .fine { margin: 16px 0 0; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
   .proof { padding: 30px 0 32px; }
   .proof-col { display: flex; flex-direction: column; align-items: center; text-align: center; }

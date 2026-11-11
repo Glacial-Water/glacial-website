@@ -4,13 +4,14 @@
 // Reuses Home B's pieces unchanged: seal band, badge row, fields, area-check answer line (shared rules in src/lib/areaMatch.ts, D125 b), the numbered StepList (D56).
 // The quote button opens a pre-filled WhatsApp message only (one token, D71); nothing is stored or sent anywhere else, nothing writes to the CRM.
 // Marker 29 [CUSTOMER APP — CONFIRM] is shown on the preview only and must be filled or removed before cutover (D141 a, D153).
-// No monthly total (D91), no bank details (D127), no WEB100 on the quote (D69/D115), no client names (D139). Motion: CSS/SVG, once in view, reduce-motion shows the full rack.
+// No monthly total (D91), bank details block (D202 d), no WEB100 on the quote (D69/D115), no client names (D139). Motion: CSS/SVG, once in view, reduce-motion shows the full rack.
 import { Image } from 'astro:assets';
 import BadgeRow from '../components/BadgeRow.astro';
 import CallIcon from '../components/CallIcon.astro';
 import Base from '../layouts/Base.astro';
 import StepList from '../components/StepList.astro';
 import { phoneDisplay, phoneTel } from '../data/site';
+import BankDetails from '../components/BankDetails.astro';
 import seal from '../assets/home/seal.png';
 const base = import.meta.env.BASE_URL;
 const waGlyph = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>';
@@ -27,9 +28,10 @@ const places = [
 ];
 const days = [['Mon', 'Monday'], ['Tue', 'Tuesday'], ['Wed', 'Wednesday'], ['Thu', 'Thursday'], ['Fri', 'Friday'], ['Sat', 'Saturday'], ['Sun', 'Sunday']];
 const pays = [
-  ['Cash on delivery', 'Pay when your water arrives.', '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 10v4M18 10v4"/>'],
   ['Bank transfer', 'Pay from your business account.', '<path d="M3 9l9-5 9 5"/><path d="M5 10v7M10 10v7M14 10v7M19 10v7"/><path d="M3 20h18"/>'],
-  ['Pay monthly', 'One payment for the whole month.', '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 15l2.5 2.5L16 13"/>'],
+  ['Cheque', 'Businesses can pay by cheque.', '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 15l2.5 2.5L16 13"/>'],
+  ['Cash on delivery', 'Pay when your water arrives.', '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 10v4M18 10v4"/>'],
+  ['Cash at the shop counter', 'Pay at either Glacial shop.', '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 10v4M18 10v4"/>'],
 ];
 const steps = [
   'Tell us what your team needs|Bottles a week and your best days. About one minute.',
@@ -170,11 +172,13 @@ const steps = [
   <section class="band white">
     <div class="col">
       <h2>Pay the way your business works</h2>
+      <p class="ask">Most businesses are billed monthly.</p>
       <ul class="pays">
         {pays.map(([t, s, path]) => (
           <li class="pay"><span class="pay-ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={path} /></span><span><span class="pay-t">{t}</span><span class="pay-s">{s}</span></span></li>
         ))}
       </ul>
+      <BankDetails />
       <p class="marker">[CUSTOMER APP — CONFIRM] One line on what a business can do in the Glacial app, once confirmed. Preview only; off before launch if not confirmed (D153).</p>
     </div>
   </section>

@@ -1,0 +1,24 @@
+---
+// The one Bank transfer details block (D202 d). Same words everywhere it appears. Data lives in src/data/site.ts.
+import { bank } from '../data/site';
+const { id, heading = 'Bank transfer details' } = Astro.props as { id?: string; heading?: string };
+---
+<div class="bankbox" id={id}>
+  <p class="bk-h">{heading}</p>
+  <dl class="bk">
+    <div><dt>Account title</dt><dd>{bank.title}</dd></div>
+    <div><dt>Bank</dt><dd>{bank.bank}</dd></div>
+    <div><dt>Account number</dt><dd>{bank.account}</dd></div>
+    <div><dt>IBAN</dt><dd>{bank.iban}</dd></div>
+  </dl>
+  <p class="bk-f">{bank.line}</p>
+</div>
+<style>
+  .bankbox { margin: 16px 0 0; padding: 16px; background: #fff; border: 1px solid var(--water-200); border-radius: var(--radius-md); text-align: left; }
+  .bk-h { margin: 0 0 8px; font-size: 17px; line-height: 24px; font-weight: 700; color: var(--navy); }
+  .bk { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .bk div { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; }
+  .bk dt { font-size: 15px; line-height: 21px; color: var(--ink-muted); }
+  .bk dd { margin: 0; font-size: 16px; line-height: 22px; font-weight: 600; color: var(--navy); overflow-wrap: anywhere; }
+  .bk-f { margin: 10px 0 0; font-size: 15px; line-height: 21px; color: var(--ink-muted); }
+</style>
