@@ -1,0 +1,174 @@
+---
+// Privacy and Terms (D196), built from Privacy.dc.html (canvas version 66). ONE design with two sections, served at /privacy/ and /terms/ (D105P).
+// Hero line is alternative 2 (D196 b). Tags line exact (D188 b); no tag loads (D169 c). Last updated = the build date (D196 c); set to the publish date at cutover.
+// Markers 34, 35, 36 show on the PREVIEW only; the production build leaves those three items out entirely (D153, D141 a). Nothing invented.
+// Claims (D179): no timer, no "on time", no testing-body names (D24), no monthly total (D91), no bank details (D127), no customer data.
+import Base from '../layouts/Base.astro';
+import CallIcon from './CallIcon.astro';
+import { phoneDisplay, phoneTel, whatsappUrl, isProduction } from '../data/site';
+interface Props { current: 'privacy' | 'terms' }
+const { current } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const preview = !isProduction;
+const updated = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Toronto' });
+const ask = `${whatsappUrl}?text=${encodeURIComponent('Hi Glacial, I have a question about my details.')}`;
+const askGeneral = `${whatsappUrl}?text=${encodeURIComponent('Hi Glacial, I have a question.')}`;
+const waGlyph = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1a4 4 0 0 1-2.5-2.5l1-1-1-2z"/></svg>';
+const icons = {
+  person: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  chat: '<path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.3-5.2A8.4 8.4 0 1 1 21 11.5z"/>',
+  pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+  bars: '<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  cash: '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/>',
+  bottle: '<path d="M10 3h4v3l2 2v11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V8l2-2z"/><path d="M8 13h8"/>',
+  swap: '<path d="M7 7h12l-3-3M17 17H5l3 3"/>',
+  bolt: '<path d="M13 3L5 14h6l-1 7 8-11h-6l1-7z"/>',
+  gift: '<rect x="3" y="9" width="18" height="11" rx="2"/><path d="M12 9v11M3 13h18M12 9c-3 0-5-1-5-3s3-2 5 3c2-5 5-5 5-3s-2 3-5 3z"/>',
+};
+type Tile = { icon: keyof typeof icons; title: string; text?: string; html?: string; marker?: string; previewOnly?: boolean };
+const asks: Tile[] = [
+  { icon: 'person', title: 'Your name', text: 'So we know who we are greeting.' },
+  { icon: 'chat', title: 'Your WhatsApp number', text: 'To confirm your delivery day and time.' },
+  { icon: 'pin', title: 'Your delivery address', text: 'So our rider finds your door.' },
+  { icon: 'mail', title: 'Your email', text: 'Optional. Leave it blank if you like.' },
+];
+const more: Tile[] = [
+  { icon: 'bars', title: 'Tags on this site', text: 'This site uses measurement and advertising tags from Google and Meta. They count visits and help us show our ads.' },
+  { icon: 'clock', title: 'How long we keep your details', marker: '[HOW LONG WE KEEP YOUR DETAILS]', previewOnly: true },
+  { icon: 'person', title: 'Your details stay with Glacial', marker: '[CONFIRM — WE DO NOT SELL YOUR DETAILS]', previewOnly: true },
+  { icon: 'mail', title: 'Want to see or remove your details?', html: 'Write to <a href="mailto:info@glacial.pk">info@glacial.pk</a> or message us on WhatsApp. We will help.' },
+].filter((t) => preview || !t.previewOnly);
+const terms: Tile[] = [
+  { icon: 'chat', title: 'You order on WhatsApp', text: 'We confirm your delivery day and time with you.' },
+  { icon: 'cash', title: 'You pay when it arrives', text: 'Pay cash when your water arrives, or by bank transfer after each delivery. Buying at the shop? Pay cash at the counter. You pay nothing on this website.' },
+  { icon: 'bottle', title: 'New bottle: Rs 1,300 deposit', text: 'The deposit is refundable.' },
+  { icon: 'swap', title: 'Or swap your old bottle: Rs 650', text: 'Old bottle for new, judged by its condition.' },
+  { icon: 'bolt', title: 'Express: 90 minutes or less*', text: 'Delivery times vary by location. We confirm your time when you place the order.' },
+  { icon: 'gift', title: 'Every 11th refill is free', text: 'At any Glacial shop.' },
+  { icon: 'clock', title: 'Shops open 9am–9pm, every day', text: 'Delivery bookings until 7pm.' },
+];
+const title = current === 'privacy' ? 'Privacy — Glacial' : 'Terms — Glacial';
+const description = current === 'privacy'
+  ? 'What Glacial asks for when you order, why, and how to ask us about your details. Short and plain.'
+  : 'How ordering, paying and bottles work at Glacial: WhatsApp orders, pay on arrival, the refundable deposit, swaps and shop hours.';
+---
+<Base title={title} description={description} fabHref={askGeneral} canonicalPath={`${base}privacy/`}>
+  <section class="band navy hero">
+    <div class="col">
+      <div class="herofig">
+        <svg width="300" height="170" viewBox="0 0 300 170" role="img" aria-label="A Glacial water bottle with a padlock, showing your details are handled with care">
+          <circle cx="150" cy="88" r="80" fill="#14224b"/>
+          <g transform="translate(106 18)">
+            <rect x="30" y="0" width="28" height="14" rx="4" fill="#0a6f8f"/>
+            <path d="M32 20h24c14 8 30 16 30 36v78q0 10-10 10H12q-10 0-10-10V56c0-20 16-28 30-36z" fill="#d9ecf6" stroke="#b9dcee" stroke-width="3"/>
+            <rect x="12" y="62" width="64" height="40" rx="6" fill="#ffffff"/>
+            <rect x="22" y="74" width="44" height="6" rx="3" fill="#1a2a5b" opacity="0.7"/>
+            <rect x="28" y="86" width="32" height="5" rx="2.5" fill="#0a6f8f" opacity="0.7"/>
+          </g>
+          <g transform="translate(176 84)">
+            <circle cx="30" cy="30" r="30" fill="#ffffff"/>
+            <path d="M19 30v-5a11 11 0 0 1 22 0v5" fill="none" stroke="#1a2a5b" stroke-width="4" stroke-linecap="round"/>
+            <rect x="15" y="30" width="30" height="22" rx="5" fill="#1a2a5b"/>
+            <circle cx="30" cy="40" r="3.5" fill="#b9dcee"/>
+          </g>
+        </svg>
+      </div>
+      <p class="eyebrow">PRIVACY AND TERMS</p>
+      <h1>What we ask. Why we ask. How it works.</h1>
+      <p class="lede">What we ask for, why, and how ordering works. Short and plain.</p>
+      <div class="jump" role="group" aria-label="Jump to">
+        <a href="#privacy" aria-current={current === 'privacy' ? 'page' : undefined} class={current === 'privacy' ? 'on' : undefined}>Privacy</a>
+        <a href="#terms" aria-current={current === 'terms' ? 'page' : undefined} class={current === 'terms' ? 'on' : undefined}>Terms</a>
+      </div>
+      <p class="updated">Last updated: {updated}</p>
+    </div>
+  </section>
+
+  <section class="band alt" id="privacy">
+    <div class="col">
+      <h2 class="h2">Privacy</h2>
+      <p class="sub">When you order, we ask for four things. That is all.</p>
+      <ul class="pts" aria-label="What we ask for">
+        {asks.map((t) => (
+          <li class="pt"><span class="pi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[t.icon]} /></span><div><p class="ptt">{t.title}</p><p class="ptl">{t.text}</p></div></li>
+        ))}
+      </ul>
+      <p class="para">We use your details only to confirm and deliver your order, and to help you afterwards. You agree to this with the tick box on the order form.</p>
+      <ul class="pts more" aria-label="More about your details">
+        {more.map((t) => (
+          <li class="pt"><span class="pi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[t.icon]} /></span><div><p class="ptt">{t.title}</p><p class="ptl">{t.marker ? <span class="ph">{t.marker}</span> : t.html ? <Fragment set:html={t.html} /> : t.text}</p></div></li>
+        ))}
+      </ul>
+      {preview && <p class="fine">Glacial, Lahore · <span class="ph">[LEGAL BUSINESS NAME]</span></p>}
+    </div>
+  </section>
+
+  <section class="band" id="terms">
+    <div class="col">
+      <h2 class="h2">Terms</h2>
+      <p class="sub">How ordering, paying and bottles work.</p>
+      <ul class="pts" aria-label="How ordering works">
+        {terms.map((t) => (
+          <li class="pt"><span class="pi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[t.icon]} /></span><div><p class="ptt">{t.title}</p><p class="ptl">{t.text}</p></div></li>
+        ))}
+      </ul>
+      <p class="fine">* Delivery times vary by location. We confirm your time when you place the order.</p>
+      <p class="para">We may update these pages. The date at the top shows the latest version.</p>
+      <p class="links"><a href={`${base}prices/`} class="link">Products and prices →</a><a href={`${base}delivery/`} class="link">How delivery works →</a></p>
+      <a class="wa" href={ask}><Fragment set:html={waGlyph} /> Message on WhatsApp</a>
+    </div>
+  </section>
+
+  <section class="band navy closing">
+    <div class="col">
+      <h2>Ready? Order in one minute.</h2>
+      <p class="csub">Questions about these pages? Message us, or call. We call you to confirm your delivery day and time.</p>
+      <a class="order-now" href={`${base}order/`}>Order now</a>
+      <a class="wa" href={askGeneral}><Fragment set:html={waGlyph} /> Message on WhatsApp</a>
+      <a class="call" href={`tel:${phoneTel}`}><CallIcon />Or call {phoneDisplay}</a>
+      <a class="contact-link" href={`${base}contact/`}>Contact and support →</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .col { width: 100%; max-width: var(--grid-phone-max); margin: 0 auto; padding: 0 var(--space-5); }
+  .band { padding: 32px 0; scroll-margin-top: 70px; }
+  .alt { background: var(--water-50); }
+  .navy { background: var(--navy); color: var(--on-navy); }
+  .navy a:focus-visible { outline-color: var(--water-200); }
+  .hero { padding: 24px 0 28px; }
+  .herofig { display: flex; justify-content: center; }
+  .eyebrow { margin: 16px 0 0; font-size: 14px; line-height: 20px; font-weight: 700; letter-spacing: 0.08em; color: var(--water-200); }
+  .hero h1 { margin: 6px 0 0; color: #fff; }
+  .lede { margin: 12px 0 0; color: var(--water-200); }
+  .jump { display: flex; gap: 8px; margin-top: 18px; }
+  .jump a { flex: 1 1 0; display: flex; align-items: center; justify-content: center; min-height: 48px; box-sizing: border-box; border: 1px solid #fff; border-radius: 999px; font-size: 16px; line-height: 22px; font-weight: 700; text-decoration: none; color: #fff; }
+  .jump a.on { background: #fff; color: var(--navy); }
+  .updated { margin: 14px 0 0; font-size: 14px; line-height: 20px; color: var(--water-200); }
+  .h2 { margin: 0; font-size: 26px; line-height: 32px; font-weight: 700; color: var(--navy); }
+  .sub { margin: 6px 0 16px; font-size: 17px; line-height: 26px; color: var(--navy); }
+  .pts { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .pts.more { margin-top: 14px; }
+  .pt { display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; box-sizing: border-box; background: #fff; border: 1px solid var(--water-200); border-radius: 14px; }
+  .pi { flex: 0 0 auto; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: var(--water-50); border: 1px solid var(--water-200); }
+  .ptt { margin: 0; font-size: 17px; line-height: 23px; font-weight: 700; color: var(--navy); }
+  .ptl { margin: 3px 0 0; font-size: 16px; line-height: 24px; color: var(--navy); }
+  .ptl :global(a) { font-weight: 600; }
+  .para { margin: 18px 0 0; font-size: 16px; line-height: 24px; color: var(--navy); }
+  .pts + .para { margin-top: 18px; }
+  .fine { margin: 14px 0 0; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+  .ph { background: #fff4d6; color: #5c4400; border: 1px dashed #b88700; border-radius: 6px; padding: 0 6px; font-size: 14px; font-weight: 700; }
+  .links { margin: 14px 0 0; display: flex; gap: 16px; flex-wrap: wrap; }
+  .link { display: inline-flex; align-items: center; min-height: 44px; font-size: 16px; line-height: 22px; font-weight: 600; color: var(--glacier); text-decoration: none; }
+  .wa { box-sizing: border-box; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; margin-top: 14px; padding: 0 18px; border-radius: var(--radius-md); background: var(--whatsapp); color: var(--on-whatsapp); font-family: inherit; font-size: 19px; line-height: 26px; font-weight: 700; text-decoration: none; }
+  .wa:hover { background: var(--whatsapp-hover); color: var(--on-whatsapp); }
+  .closing h2 { margin: 0; color: #fff; }
+  .csub { margin: 10px 0 16px; color: var(--water-200); }
+  .order-now { display: flex; align-items: center; justify-content: center; min-height: 56px; box-sizing: border-box; border-radius: var(--radius-md); background: #fff; color: var(--navy); font-size: 19px; line-height: 26px; font-weight: 700; text-decoration: none; }
+  .closing .wa { margin-top: 12px; }
+  .call { margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; box-sizing: border-box; border: 1px solid #fff; border-radius: var(--radius-md); color: #fff; font-size: 17px; line-height: 24px; font-weight: 700; text-decoration: none; }
+  .contact-link { margin-top: 8px; display: flex; align-items: center; justify-content: center; min-height: 44px; font-size: 16px; line-height: 22px; font-weight: 600; color: #fff; text-decoration: none; }
+</style>

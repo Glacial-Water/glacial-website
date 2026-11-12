@@ -2,13 +2,13 @@
 // Shared footer lockup: logo 44px, seven-link nav (D49), tagline, hours (D34), contact. Replaceable component.
 import { Image } from 'astro:assets';
 import logo from '../assets/glacial-logo.png';
-import { navLinks, hoursLine, phoneDisplay } from '../data/site';
+import { navLinks, legalLinks, hoursLine, phoneDisplay } from '../data/site';
 ---
 <footer class="site-footer">
   <div class="wrap inner">
     <nav aria-label="Footer">
       <ul>
-        {navLinks.map((l) => <li><a href={l.href} aria-current={Astro.url.pathname.replace(/\/$/, '') === l.href.replace(/\/$/, '') ? 'page' : undefined}>{l.label}</a></li>)}
+        {[...navLinks, ...legalLinks].map((l) => <li><a href={l.href} aria-current={Astro.url.pathname.replace(/\/$/, '') === l.href.replace(/#.*$/, '').replace(/\/$/, '') ? 'page' : undefined}>{l.label}</a></li>)}
       </ul>
     </nav>
     <Image class="logo" src={logo} alt="Glacial Water" height={44} width={146} />

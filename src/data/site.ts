@@ -43,7 +43,15 @@ export function localBusinessSchema(origin: string) {
 }
 
 // The ten frozen pages (D139). The sitemap lists the ones that exist as real pages; FAQ and Privacy & terms join when their pages land.
-export const framePages = ['', 'quality-certs', 'order', 'prices', 'delivery', 'for-businesses', 'about', 'contact', 'faq', 'privacy'];
+// /terms/ serves the same page as /privacy/ and its canonical points there (D197 a), so it is not in the sitemap or llms.txt.
+export const listedPages = ['', 'quality-certs', 'order', 'prices', 'delivery', 'for-businesses', 'about', 'contact', 'faq', 'privacy'];
+export const framePages = listedPages;
+
+// Privacy and Terms (D196): one design served at two addresses; the footer carries both links on every page (D105P). Not part of the seven-link nav (D49) or the header menu.
+export const legalLinks = [
+  { label: 'Privacy', href: `${base}privacy/#privacy` },
+  { label: 'Terms', href: `${base}terms/#terms` },
+];
 
 // Bank transfer details (D202 d, Umer 6 Nov): real details, no marker, on preview AND production builds. Shown on Contact (anchor #how-you-pay), For businesses and Order step 3.
 export const bank = {
