@@ -1,7 +1,7 @@
 ---
 // Privacy and Terms (D196), built from Privacy.dc.html (canvas version 66). ONE design with two sections, served at /privacy/ and /terms/ (D105P).
 // Hero line is alternative 2 (D196 b). Tags line exact (D188 b); no tag loads (D169 c). Last updated = the build date (D196 c); set to the publish date at cutover.
-// Markers 34, 35, 36 show on the PREVIEW only; the production build leaves those three items out entirely (D153, D141 a). Nothing invented.
+// Markers 34, 35, 36 closed by Umer's answers (D215, 12 Nov): retention, never-sell and footer line now show in production too. Nothing invented.
 // Claims (D179): no timer, no "on time", no testing-body names (D24), no monthly total (D91), no bank details (D127), no customer data.
 import Base from '../layouts/Base.astro';
 import CallIcon from './CallIcon.astro';
@@ -36,8 +36,8 @@ const asks: Tile[] = [
 ];
 const more: Tile[] = [
   { icon: 'bars', title: 'Tags on this site', text: 'This site uses measurement and advertising tags from Google and Meta. They count visits and help us show our ads.' },
-  { icon: 'clock', title: 'How long we keep your details', marker: '[HOW LONG WE KEEP YOUR DETAILS]', previewOnly: true },
-  { icon: 'person', title: 'Your details stay with Glacial', marker: '[CONFIRM — WE DO NOT SELL YOUR DETAILS]', previewOnly: true },
+  { icon: 'clock', title: 'How long we keep your details', text: 'While you are a customer. Deleted when you ask.' },
+  { icon: 'person', title: 'Your details stay with Glacial', text: 'We never sell your details.' },
   { icon: 'mail', title: 'Want to see or remove your details?', html: 'Write to <a href="mailto:info@glacial.pk">info@glacial.pk</a> or message us on WhatsApp. We will help.' },
 ].filter((t) => preview || !t.previewOnly);
 const terms: Tile[] = [
@@ -101,7 +101,7 @@ const description = current === 'privacy'
           <li class="pt"><span class="pi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0a6f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[t.icon]} /></span><div><p class="ptt">{t.title}</p><p class="ptl">{t.marker ? <span class="ph">{t.marker}</span> : t.html ? <Fragment set:html={t.html} /> : t.text}</p></div></li>
         ))}
       </ul>
-      {preview && <p class="fine">Glacial, Lahore · <span class="ph">[LEGAL BUSINESS NAME]</span></p>}
+      <p class="fine">Glacial Water, Lahore</p>
     </div>
   </section>
 
