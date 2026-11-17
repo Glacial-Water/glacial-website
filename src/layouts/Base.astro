@@ -16,6 +16,11 @@ const origin = (Astro.site?.origin ?? '');
 const ld = JSON.stringify({ '@context': 'https://schema.org', '@graph': localBusinessSchema(origin) });
 const canonical0 = Astro.props.canonicalPath;
 const canonical = isProduction && Astro.site ? new URL(canonical0 ?? Astro.url.pathname, Astro.site).href : undefined;
+// Social preview image: the Glacial logo on white (D238), 1200x630, made from src/assets/glacial-logo.png. Absolute address, as the share crawlers need.
+const socialImage = Astro.site ? new URL(`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}social-preview.png`, Astro.site).href : undefined;
+const socialUrl = Astro.site ? new URL(canonical0 ?? Astro.url.pathname, Astro.site).href : undefined;
+// Google Tag Manager (D238): production build only; the preview loads no tag. One container, loaded async. No GA4 or pixel code in the site.
+const gtmId = 'GTM-T5G4VPZK';
 const { title, description = 'Glacial — pure water, delivered across Lahore.', noindex = false, fabHref = whatsappUrl, fabLabel = 'Order' } = Astro.props;
 ---
 <!doctype html>
@@ -27,9 +32,24 @@ const { title, description = 'Glacial — pure water, delivered across Lahore.',
     {(noindex || !isProduction) && <meta name="robots" content="noindex" />}
     {canonical && <link rel="canonical" href={canonical} />}
     <script type="application/ld+json" set:html={ld} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Glacial Water" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {socialUrl && <meta property="og:url" content={socialUrl} />}
+    {socialImage && <meta property="og:image" content={socialImage} />}
+    {socialImage && <meta property="og:image:width" content="1200" />}
+    {socialImage && <meta property="og:image:height" content="630" />}
+    <meta property="og:image:alt" content="Glacial Water logo" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {socialImage && <meta name="twitter:image" content={socialImage} />}
+    {isProduction && <script is:inline set:html={`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`} />}
     <title>{title}</title>
   </head>
   <body>
+    {isProduction && <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`} height="0" width="0" style="display:none;visibility:hidden" title="Tag Manager"></iframe></noscript>}
     <a class="skip" href="#main">Skip to content</a>
     <SiteHeader />
     <main id="main"><slot /></main>
