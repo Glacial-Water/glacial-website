@@ -1,0 +1,24 @@
+---
+// Not-found page (D237, D140 b). Existing parts only: header, footer, normal type. Served with a true 404 status by the host
+// (Cloudflare Pages and GitHub Pages both serve /404.html with status 404 for unknown addresses). Never a redirect to Home. Noindex.
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL;
+---
+<Base title="Page not found — Glacial" noindex>
+  <div class="wrap">
+    <h1>Page not found</h1>
+    <p>This page has moved or no longer exists.</p>
+    <ul>
+      <li><a href={base}>Home</a></li>
+      <li><a href={`${base}prices/`}>Products and prices</a></li>
+      <li><a href={`${base}order/`}>Order</a></li>
+      <li><a href={`${base}contact/`}>Contact</a></li>
+    </ul>
+  </div>
+</Base>
+<style>
+  .wrap { padding-top: var(--space-12); padding-bottom: var(--space-12); }
+  p { margin: var(--space-3) 0 0; }
+  ul { margin: var(--space-4) 0 0; padding: 0; list-style: none; display: grid; gap: var(--space-3); }
+  a { font-weight: 600; }
+</style>

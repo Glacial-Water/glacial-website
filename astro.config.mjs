@@ -14,7 +14,9 @@ const writeRedirects = {
   hooks: {
     'astro:build:done': async ({ dir }) => {
       if (!production) return;
-      const lines = redirects.flatMap(([from, to]) => [`${from} ${to} 301`, `${from.replace(/\/$/, '')} ${to} 301`]);
+      // D237: the old site also answered at /index.php/<page>/ - same targets, plus /index.php and /index.php/ to Home.
+      const pairs = [...redirects, ...redirects.map(([from, to]) => ['/index.php' + from, to]), ['/index.php/', '/']];
+      const lines = pairs.flatMap(([from, to]) => [`${from} ${to} 301`, `${from.replace(/\/$/, '')} ${to} 301`]);
       await writeFile(fileURLToPath(new URL('_redirects', dir)), lines.join('\n') + '\n');
     },
   },
