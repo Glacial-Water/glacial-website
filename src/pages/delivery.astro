@@ -149,7 +149,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
         <div class="card-body">
           <div class="name-row"><h3>Express delivery</h3><p class="price">Rs 280<span> /bottle</span></p></div>
           <p class="lead">Run out mid-week? A bottle at your door in 90 minutes or less<a class="star" href="#d-express-note" aria-label="See the note on delivery times">*</a></p>
-          <p class="sub">Order any time. At your door in 90 minutes or less<a class="star" href="#d-express-note" aria-label="See the note on delivery times">*</a></p>
+          <p class="sub">Order any time. Express delivery, straight to your door.</p>
           <a class="go" href={`${base}order/`}>Order express →</a>
         </div>
       </article>
@@ -212,7 +212,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
         <span class="crop u351 walk-crop gl-mo" data-mo>
           <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" loading="lazy" />
           <WayMotion kind="shop" />
-          <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
+          <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" width={160} widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
           <Image src={rosette} alt="Free refill offer: every 11th refill is free" width={84} class="rosette gl-pulse" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} loading="lazy" />
           <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">200</span></span>
         </span>
