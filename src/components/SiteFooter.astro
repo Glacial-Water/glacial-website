@@ -12,6 +12,7 @@ import { navLinks, legalLinks, hoursLine, phoneDisplay } from '../data/site';
     </nav>
     <img class="logo" src={logo.src} alt="Glacial Water" height="44" width="146" loading="lazy" decoding="async" />
     <p class="tag">water as nature intended</p>
+    <p class="slogan">On Time, Every Time</p>
     <p class="small">{hoursLine}</p>
     <p class="small">Lahore · info@glacial.pk · {phoneDisplay}</p>
   </div>
@@ -25,6 +26,7 @@ import { navLinks, legalLinks, hoursLine, phoneDisplay } from '../data/site';
   li a[aria-current='page'] { font-weight: 700; color: var(--navy); }
   .logo { height: var(--logo-footer); width: auto; display: block; margin-top: var(--space-5); }
   .tag { margin: var(--space-3) 0 0; font-family: var(--font-brand); font-size: 15px; line-height: 22px; font-weight: 500; color: var(--navy); }
+  .slogan { margin: var(--space-2) 0 0; font-size: var(--caption-size); line-height: var(--caption-line); font-weight: 600; color: var(--navy); }
   .small { margin: var(--space-2) 0 0; font-size: var(--caption-size); line-height: var(--caption-line); color: var(--ink-muted); }
   @media (min-width: 768px) { ul { grid-template-columns: repeat(4, auto); justify-content: center; gap: 4px var(--space-8); } }
 </style>
