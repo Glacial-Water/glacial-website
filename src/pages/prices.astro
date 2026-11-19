@@ -147,7 +147,7 @@ const offerSchema = {
         <span class="crop u351 truck-crop gl-mo">
           <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" />
           <WayMotion kind="shop" />
-          <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
+          <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" width={160} widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
           <Image src={rosette} alt="Free refill offer: every 11th refill is free" width={96} class="rosette gl-pulse" style={`left:${u(10)};top:${u(10)};width:${u(96)};height:${u(96)}`} />
           <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">200</span></span>
         </span>
@@ -201,8 +201,8 @@ const offerSchema = {
         </span>
         <div class="card-body">
           <div class="name-row"><h3>Express delivery</h3><p class="price">Rs 280<span> /bottle</span></p></div>
-          <p class="lead">Run out mid-week? A bottle at your door in 90 minutes.</p>
-          <p class="sub">Order any time. At your door in 90 minutes or less<a class="star" href="#p-express-note" aria-label="See the note on delivery times">*</a></p>
+          <p class="lead">Run out mid-week? A bottle at your door in 90 minutes or less<a class="star" href="#p-express-note" aria-label="See the note on delivery times">*</a></p>
+          <p class="sub">Order any time. Express delivery, straight to your door.</p>
           <a class="go" href={`${base}order/`}>Order express →</a>
         </div>
       </article>
@@ -213,7 +213,7 @@ const offerSchema = {
     <div class="col every-col">
       <Image src={seal} alt="Stamp reading Quality Certified Every Month" width={196} class="seal" />
       <h2>In every price: water certified every month</h2>
-      <p class="p">Rs 200 or Rs 280, it is the same pure, tested water.</p>
+      <p class="p">Rs 200 or Rs 280, it is the same pure, certified water.</p>
       <a class="link" href={`${base}quality-certs/`}>See the reports →</a>
       <BadgeRow />
       <p class="licensed-line">Licensed by PSQCA and the Punjab Food Authority</p>

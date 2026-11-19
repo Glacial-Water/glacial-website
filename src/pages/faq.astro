@@ -51,7 +51,7 @@ const groups: Group[] = [
       body: `<div class="chips">${chip('7pm', 'last delivery booking')}${chip('9am–9pm', 'shops, every day')}</div><p>Delivery bookings until 7pm, every day. Shops open 9am–9pm.</p>` },
   ] },
   { key: 'quality', title: 'Quality', icon: '<path d="M20 8l9 4v7c0 6-4 10.5-9 12.5C15 29.5 11 25 11 19v-7z"/><path d="M15.5 19.5l3.2 3.2 6-6.2"/>', items: [
-    { id: 'q1', q: 'Is your water tested?', kw: 'is your water tested? tested test certified certificate report quality monthly lab safe', body: '@q1' },
+    { id: 'q1', q: 'Is your water certified?', kw: 'is your water certified? is your water tested? tested test certified certificate report quality monthly lab safe', body: '@q1' },
     { id: 'q2', q: 'Is there chlorine in it?', kw: 'is there chlorine in it? chlorine chlorine-free taste smell', body: '@q2' },
     { id: 'q3', q: 'How is the water purified?', kw: 'how is the water purified? purified purification process 10 ten steps reverse osmosis uv ozone filtration minerals',
       body: `<div class="ten" role="img" aria-label="Ten numbered steps in a row">${[1,2,3,4,5,6,7,8,9,10].map((n) => `<span class="n">${n}</span>`).join('')}</div><p>Ten steps, every bottle. From Deep Underground Water Sourcing to Sterilised Bottles.</p>${L(base, 'See all ten steps →')}` },

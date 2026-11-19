@@ -132,7 +132,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
           <span class="crop u351 truck-crop gl-mo">
             <img src={shop.src} alt="A Glacial Water Shop with the Glacial logo on its sign, a striped awning and bottles in the window" width="900" height="1109" />
             <WayMotion kind="shop" />
-            <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
+            <span class="sign" aria-hidden="true" style={`left:${u(86)};top:${u(72)};width:${u(130)};height:${u(37)};`}><Image src={logo} alt="" width={160} widths={[80, 160]} sizes="60px" /><span>SHOP</span></span>
             <span class="gl-price gl-price-lg" aria-hidden="true"><span class="u">Rs</span><span class="v">200</span></span>
             <Image src={rosette} alt="Free refill offer: every 11th refill is free" width={84} class="rosette gl-pulse" style={`left:${u(12)};top:${u(12)};width:${u(84)};height:${u(84)}`} />
           </span>
@@ -168,8 +168,8 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
           </span>
           <span class="card-body">
             <span class="name-row"><input class="radio" type="radio" name="o-way" value="express" /><span class="nm">Express delivery</span><span class="pr">Rs 280<small> /bottle</small></span></span>
-            <span class="strong">Run out mid-week? A bottle at your door in 90 minutes.</span>
-            <span class="small muted">Order any time. At your door in 90 minutes or less<a href="#o-express-note" class="star" aria-label="See the note on delivery times">*</a></span>
+            <span class="strong">Run out mid-week? A bottle at your door in 90 minutes or less<a class="star" href="#o-express-note" aria-label="See the note on delivery times">*</a></span>
+            <span class="small muted">Order any time. Express delivery, straight to your door.</span>
           </span>
         </label>
       </fieldset>
