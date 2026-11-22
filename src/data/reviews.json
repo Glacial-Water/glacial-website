@@ -1,1 +1,25 @@
-{{JSON.stringify($json, null, 2)}}
+{
+  "name": "Glacial Water",
+  "rating": 4.7,
+  "user_ratings_total": 617,
+  "reviews": [
+    {
+      "author_name": "Effat Shahid",
+      "rating": 5,
+      "relative_time_description": "a week ago",
+      "text": "\"Excellent service and highly recommended! The water is exceptionally pure and clean, and their bottles are always well-maintained. The delivery team is very polite and always arrives right on time. Keep up the good work!\"\n\"Great experience with Glacial Water. Their home delivery service is incredibly reliable and punctual. The water quality is top-notch and the staff is very helpful.\"\"Great experience with Glacial Water. Their home delivery service is incredibly reliable and punctual. The water quality is top-notch and the staff is very helpful.\"\"Great experience with Glacial Water. Their home delivery service is incredibly reliable and punctual. The water quality is top-notch and the staff is very helpful.\""
+    },
+    {
+      "author_name": "Yaseen Asif",
+      "rating": 5,
+      "relative_time_description": "2 months ago",
+      "text": "Very good service. Delivery is always on time and the water quality is excellent. The staff is polite, cooperative and professional. The price is also reasonable. I highly recommend Glacial Water for clean and reliable water supply.*"
+    },
+    {
+      "author_name": "Asif Asif",
+      "rating": 5,
+      "relative_time_description": "2 months ago",
+      "text": "Glacial Water net disappoints. Always delivers on time with excellent water quality. Staff is pollute, cooperative and professional. Price is reasonable as well. Best choice for clean consistent water supply.\nHighly recommended!"
+    }
+  ]
+}
