@@ -2,7 +2,7 @@
 // For businesses (D142, revised D174), built from ForBusinesses.dc.html (canvas version 58). Indexable.
 // D174: hero line, 'Your price. Your schedule.' band, account manager card, four steps, best-day chips, custom price row (no business rate, marker 28 off), exchange row, Mobile + WhatsApp fields, marker 29 (preview only).
 // Reuses Home B's pieces unchanged: seal band, badge row, fields, area-check answer line (shared rules in src/lib/areaMatch.ts, D125 b), the numbered StepList (D56).
-// The quote button opens a pre-filled WhatsApp message only (one token, D71); nothing is stored or sent anywhere else, nothing writes to the CRM.
+// D283: the quote button sends one request to the leads sheet (leadEndpoint in src/data/site.ts); while that is empty it opens a pre-filled WhatsApp message (one token, D71). Nothing writes to the CRM.
 // Marker 29 [CUSTOMER APP — CONFIRM] is shown on the preview only and must be filled or removed before cutover (D141 a, D153).
 // No monthly total (D91), bank details block (D202 d), no WEB100 on the quote (D69/D115), no client names (D139). Motion: CSS/SVG, once in view, reduce-motion shows the full rack.
 import { Image } from 'astro:assets';
@@ -11,6 +11,7 @@ import CallIcon from '../components/CallIcon.astro';
 import Base from '../layouts/Base.astro';
 import StepList from '../components/StepList.astro';
 import { phoneDisplay, phoneTel } from '../data/site';
+import { leadsOn } from '../lib/leads';
 import BankDetails from '../components/BankDetails.astro';
 import seal from '../assets/home/seal.png';
 const base = import.meta.env.BASE_URL;
@@ -223,6 +224,7 @@ const steps = [
         <div class="field"><label for="b-name">Your name</label><input id="b-name" type="text" autocomplete="name" /></div>
         <div class="field"><label for="b-phone">Mobile number (we call you on this)</label><input id="b-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
         <div class="field"><label for="b-wa">WhatsApp number (if different)</label><input id="b-wa" type="tel" inputmode="tel" placeholder="03XX-XXXXXXX" /></div>
+        {leadsOn && <div class="field"><label for="b-mail">Email</label><input id="b-mail" type="email" autocomplete="email" /></div>}
         <div class="field">
           <label for="b-area">Area</label>
           <input id="b-area" type="text" autocomplete="address-level3" placeholder="For example, Johar Town" aria-describedby="b-area-answer" />
@@ -247,6 +249,7 @@ const steps = [
 
 <script>
   import { lookupArea } from '../lib/areaMatch';
+  import { wireLead } from '../lib/leads';
   const WA = 'https://wa.me/923111125124';
   const $ = (id: string) => document.getElementById(id) as HTMLElement;
   const val = (id: string) => (($(id) as HTMLInputElement).value || '').trim();
@@ -296,6 +299,18 @@ const steps = [
       answer.appendChild(p);
     };
     if (hit) show(); else timer = window.setTimeout(show, 600);
+  });
+  // D283 / D285: with the leads address set, the quote button sends a request to the leads sheet instead of opening WhatsApp.
+  const bHost = $('b-send').closest('.col') as HTMLElement;
+  wireLead({
+    kind: 'business', button: $('b-send') as HTMLAnchorElement, host: bHost, before: document.getElementById('b-express-note'),
+    inputs: ['b-biz', 'b-name', 'b-phone', 'b-wa', 'b-mail', 'b-area'], required: ['b-phone', 'b-mail'], mobileId: 'b-phone',
+    collect: () => {
+      const picked = Array.from(document.querySelectorAll<HTMLElement>('.day[aria-pressed="true"]')).map((d) => d.dataset.day);
+      return { name: val('b-name'), mobile: val('b-phone'), whatsapp: val('b-wa'), email: val('b-mail'), area: val('b-area'),
+        details: 'Business: ' + (val('b-biz') || 'not given') + ' | Bottles a week: ' + count + ' | Best days: ' + (picked.length ? picked.join(', ') : 'to discuss') };
+    },
+    hide: () => [$('b-send'), ...Array.from(bHost.querySelectorAll<HTMLElement>('.fields, .foot:not(#b-express-note)'))],
   });
   document.querySelectorAll<HTMLElement>('.day').forEach((d) => d.addEventListener('click', () => {
     d.setAttribute('aria-pressed', d.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');

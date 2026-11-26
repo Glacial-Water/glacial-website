@@ -17,6 +17,7 @@ import '../styles/tiles.css';
 import '../styles/motion.css';
 import WayMotion from '../components/WayMotion.astro';
 import { whatsappUrl, phoneDisplay, phoneTel } from '../data/site';
+import { leadsOn } from '../lib/leads';
 import hero from '../assets/home/hero-family.jpg';
 import seal from '../assets/home/seal.png';
 import bottleNew from '../assets/home/bottle-new.webp';
@@ -226,14 +227,15 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   <section class="band pale lahore">
     <div class="col">
       <h2>We deliver across most of Lahore.</h2>
-      <p>Tell us your area. We'll reply on WhatsApp.</p>
+      <p>{leadsOn ? 'Tell us your area. We\'ll call you back.' : 'Tell us your area. We\'ll reply on WhatsApp.'}</p>
       <div class="fields">
         <div class="field"><label for="a-name">Name</label><input id="a-name" type="text" autocomplete="name" /></div>
-        <div class="field"><label for="a-phone">Phone</label><input id="a-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
+        <div class="field"><label for="a-phone">{leadsOn ? 'Mobile number' : 'Phone'}{leadsOn && <span> (we call you on this)</span>}</label><input id="a-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
+        {leadsOn && <div class="field"><label for="a-mail">Email <span>(optional, for a confirmation)</span></label><input id="a-mail" type="email" autocomplete="email" /></div>}
         <div class="field"><label for="a-area">Area</label><input id="a-area" type="text" autocomplete="address-level3" placeholder="For example, Johar Town" aria-describedby="areaAnswer" /></div>
         <div class="area-live" id="areaAnswer" role="status" aria-live="polite" aria-atomic="true"></div>
       </div>
-      <p class="foot">We'll message you about delivery in your area.</p>
+      <p class="foot">{leadsOn ? 'We\'ll call you about delivery in your area.' : 'We\'ll message you about delivery in your area.'}</p>
       <a class="wa" id="areaHref" href={whatsappUrl}><Fragment set:html={waGlyph} />Check my area</a>
     </div>
   </section>
@@ -309,7 +311,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
       <div class="field"><label for="o-mail">Email</label><input id="o-mail" type="email" autocomplete="email" required /></div>
     </div>
     <p class="foot">We call you to confirm your delivery day and time.</p>
-    <a class="wa" id="oHref" href={whatsappUrl}><Fragment set:html={waGlyph} />Claim my offer on WhatsApp</a>
+    <a class="wa" id="oHref" href={whatsappUrl}><Fragment set:html={waGlyph} />{leadsOn ? 'Claim my offer' : 'Claim my offer on WhatsApp'}</a>
     <button type="button" class="cancel" data-close-offer>Not yet — keep looking</button>
   </dialog>
 </Base>
@@ -317,6 +319,7 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
 <script>
   import { lookupArea } from '../lib/areaMatch';
   import { armMotion } from '../lib/motion';
+  import { wireLead } from '../lib/leads';
   // Prices: 00-INDEX D42/D63 (new bottle Rs 1,300 deposit; exchange Rs 650; weekly Rs 260 a bottle). Offer: D69/D73 (WEB100, Rs 100 off the deposit).
   // Mixed security (D95 e): each tile has its own stepper, both can be active, totals add, weekly count is the sum. No monthly total (D91).
   const WA = 'https://wa.me/923111125124';
@@ -413,6 +416,21 @@ const star = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9
   $('openOffer').addEventListener('click', (e) => { opener = e.currentTarget as HTMLElement; sheet.showModal(); });
   sheet.addEventListener('click', (e) => { const t = e.target as HTMLElement; if (t === sheet || t.closest('[data-close-offer]')) sheet.close(); });
   sheet.addEventListener('close', () => opener?.focus());
+  // D283 / D285: with the leads address set, the two buttons send a request to the leads sheet instead of opening WhatsApp.
+  const kids = (host: Element | null, keep: string) => Array.from(host?.children || []).filter((c) => !c.matches(keep)) as HTMLElement[];
+  const areaHost = $('areaHref').closest('.col') as HTMLElement;
+  wireLead({
+    kind: 'area-check', button: $('areaHref') as HTMLAnchorElement, host: areaHost,
+    inputs: ['a-name', 'a-phone', 'a-mail', 'a-area'], required: ['a-phone'], mobileId: 'a-phone',
+    collect: () => ({ name: val('a-name'), mobile: val('a-phone'), email: val('a-mail'), area: val('a-area') }),
+    hide: () => kids(areaHost, 'h2'),
+  });
+  wireLead({
+    kind: 'subscription', button: $('oHref') as HTMLAnchorElement, host: sheet, before: sheet.querySelector('.cancel'),
+    inputs: ['o-name', 'o-phone', 'o-wa', 'o-addr', 'o-mail'], required: ['o-phone', 'o-mail'], mobileId: 'o-phone',
+    collect: () => ({ name: val('o-name'), mobile: val('o-phone'), whatsapp: val('o-wa'), email: val('o-mail'), address: val('o-addr'), details: lines.slice(1).join(' | ') }),
+    hide: () => kids(sheet, '.handle, .cancel'),
+  });
   render();
   armMotion(); // D110 / D147: each picture plays once when 35% of it is in view (src/lib/motion.ts)
 </script>

@@ -31,3 +31,16 @@ img { max-width: 100%; height: auto; }
 .fab-call:active { background: var(--navy-active); }
 .fab-btn:focus-visible { outline: 2px solid var(--glacier); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .fabs { transition: none; } }
+
+/* D283: the forms send to the leads sheet. Trap field hidden from people, screen readers and autofill; the sent state; the small WhatsApp choice. */
+.lead-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.wa.lead-mode svg { display: none; }
+button.wa, a.wa { cursor: pointer; }
+.lead-alt { display: block; margin-top: 12px; text-align: center; font-size: 14px; color: inherit; text-decoration: underline; }
+.lead-fail { margin: 12px 0 0; font-size: 15px; line-height: 1.4; }
+.lead-fail a { color: inherit; font-weight: 600; }
+.lead-sent { padding: 8px 0 4px; }
+.lead-sent h2 { margin: 0 0 8px; }
+.lead-sent p { margin: 0 0 8px; }
+.lead-sent .lead-hours { font-size: 14px; opacity: 0.85; }
+.lead-sent:focus { outline: none; }
