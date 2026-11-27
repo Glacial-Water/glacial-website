@@ -39,7 +39,7 @@ const asks: Tile[] = [
 ];
 const more: Tile[] = [
   { icon: 'bars', title: 'Tags on this site', text: 'This site uses measurement and advertising tags from Google, Meta and Microsoft Clarity to understand visits, see how pages are used and show Glacial Water adverts to people who have visited. Clarity may record how a visit moves through a page; what you type into forms is masked. You can block these in your browser settings.' },
-  ...(leadsOn ? [{ icon: 'pin' as const, title: 'Where your details go', text: 'Into Glacial\'s own order records and to our team by email. Not sold, not shared.' }] : []), // D283 (7)
+  ...(leadsOn ? [{ icon: 'pin' as const, title: 'Where your details go', text: 'Into Glacial\'s own order records and to our team by email. Not sold. Not shared outside Glacial and the services that run the site.' }] : []), // D283 (7)
   { icon: 'clock', title: 'How long we keep your details', text: 'While you are a customer. Deleted when you ask.' },
   { icon: 'person', title: 'Your details stay with Glacial', text: 'We never sell your details.' },
   { icon: 'mail', title: 'Want to see or remove your details?', html: 'Write to <a href="mailto:info@glacial.pk">info@glacial.pk</a> or message us on WhatsApp. We will help.' },

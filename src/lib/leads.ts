@@ -120,7 +120,7 @@ export function wireLead(w: LeadWiring) {
       return;
     }
     (window as any).dataLayer = (window as any).dataLayer || [];
-    (window as any).dataLayer.push({ event: 'form_submit', form_kind: w.kind }); // the form's kind only: no name, number, email or address
+    (window as any).dataLayer.push({ event: 'site_form_sent', form_kind: w.kind }); // the form's kind only: no name, number, email or address
     w.hide().forEach((n) => { n.hidden = true; });
     trapWrap.hidden = true; alt.hidden = true; fallbackNote.hidden = true;
     const box = document.createElement('div');
