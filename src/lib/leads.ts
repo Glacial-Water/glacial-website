@@ -18,7 +18,7 @@ async function post(kind: LeadKind, f: LeadFields, trap: string): Promise<boolea
   for (const k of ['name', 'mobile', 'whatsapp', 'email', 'address', 'area', 'details'] as const) body.set(k, clip(f[k]));
   body.set('website', trap.slice(0, MAX)); // the hidden trap field; a real visitor leaves it empty
   const ctl = new AbortController();
-  const timer = window.setTimeout(() => ctl.abort(), 8000);
+  const timer = window.setTimeout(() => ctl.abort(), 12000);
   try {
     if (leadReplyReadable) {
       // A plain form-encoded POST, no custom headers: the page can read the reply.
@@ -35,7 +35,7 @@ async function post(kind: LeadKind, f: LeadFields, trap: string): Promise<boolea
     await fetch(leadEndpoint, { method: 'POST', mode: 'no-cors', body, signal: ctl.signal });
     return true;
   } catch {
-    return false; // network error or no answer in 8 seconds
+    return false; // network error or no answer in 12 seconds
   } finally {
     window.clearTimeout(timer);
   }
@@ -99,11 +99,16 @@ export function wireLead(w: LeadWiring) {
     }
     busy = true;
     w.button.setAttribute('aria-busy', 'true');
+    w.button.setAttribute('aria-disabled', 'true'); // cannot be pressed again while the request is away
+    const sentLabel = w.button.innerHTML;
+    w.button.textContent = 'Sending…'; // visible on a phone while the request is away
     fallbackNote.hidden = true;
     const fields = w.collect();
     const ok = await post(w.kind, fields, trap.value);
     busy = false;
     w.button.removeAttribute('aria-busy');
+    w.button.removeAttribute('aria-disabled');
+    w.button.innerHTML = sentLabel; // the label comes back (on success the form is hidden anyway)
     if (!ok) {
       // The request must not be lost: phone and the same pre-filled WhatsApp link the form builds.
       fallbackNote.textContent = '';
