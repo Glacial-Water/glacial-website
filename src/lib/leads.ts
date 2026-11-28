@@ -1,6 +1,6 @@
 // D283 / D285: one shared way for the six forms to send a request to the leads sheet.
 // While leadEndpoint is empty nothing here does anything and every form behaves as before (WhatsApp).
-import { leadEndpoint, leadReplyReadable, hoursLine, phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
+import { leadEndpoint, leadReplyReadable, hoursLine, phoneDisplay, phoneTel } from '../data/site';
 
 export const leadsOn = leadEndpoint !== '';
 const MAX = 1000; // the receiving end drops anything longer than this, so the page never sends it
@@ -72,18 +72,11 @@ export function wireLead(w: LeadWiring) {
   trapWrap.append(trap);
   w.button.before(trapWrap);
 
-  // WhatsApp stays as a choice, not as the form's route.
-  const alt = document.createElement('a');
-  alt.className = 'lead-alt';
-  alt.href = whatsappUrl + '?text=' + encodeURIComponent('Hi Glacial');
-  alt.textContent = 'or chat with us on WhatsApp';
-  w.button.after(alt);
-
   const fallbackNote = document.createElement('p');
   fallbackNote.className = 'lead-fail';
   fallbackNote.setAttribute('role', 'alert');
   fallbackNote.hidden = true;
-  alt.after(fallbackNote);
+  w.button.after(fallbackNote);
 
   w.button.classList.add('lead-mode');
   let active = true;
@@ -122,7 +115,7 @@ export function wireLead(w: LeadWiring) {
     (window as any).dataLayer = (window as any).dataLayer || [];
     (window as any).dataLayer.push({ event: 'site_form_sent', form_kind: w.kind }); // the form's kind only: no name, number, email or address
     w.hide().forEach((n) => { n.hidden = true; });
-    trapWrap.hidden = true; alt.hidden = true; fallbackNote.hidden = true;
+    trapWrap.hidden = true; fallbackNote.hidden = true;
     const box = document.createElement('div');
     box.className = 'lead-sent';
     box.setAttribute('role', 'status');
@@ -140,7 +133,6 @@ export function wireLead(w: LeadWiring) {
     setActive(on: boolean) {
       active = on;
       w.button.classList.toggle('lead-mode', on);
-      alt.hidden = !on;
       trapWrap.hidden = !on;
     },
   };

@@ -36,7 +36,6 @@ img { max-width: 100%; height: auto; }
 .lead-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .wa.lead-mode svg { display: none; }
 button.wa, a.wa { cursor: pointer; }
-.lead-alt { display: block; margin-top: 12px; text-align: center; font-size: 14px; color: inherit; text-decoration: underline; }
 .lead-fail { margin: 12px 0 0; font-size: 15px; line-height: 1.4; }
 .lead-fail a { color: inherit; font-weight: 600; }
 .lead-sent { padding: 8px 0 4px; }
