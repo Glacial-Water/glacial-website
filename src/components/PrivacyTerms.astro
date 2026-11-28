@@ -6,6 +6,7 @@
 import Base from '../layouts/Base.astro';
 import CallIcon from './CallIcon.astro';
 import { phoneDisplay, phoneTel, whatsappUrl, isProduction } from '../data/site';
+import { leadsOn } from '../lib/leads';
 interface Props { current: 'privacy' | 'terms' }
 const { current } = Astro.props;
 const base = import.meta.env.BASE_URL;
@@ -32,16 +33,19 @@ const asks: Tile[] = [
   { icon: 'person', title: 'Your name', text: 'So we know who we are greeting.' },
   { icon: 'chat', title: 'Your WhatsApp number', text: 'To confirm your delivery day and time.' },
   { icon: 'pin', title: 'Your delivery address', text: 'So our rider finds your door.' },
-  { icon: 'mail', title: 'Your email', text: 'Optional. Leave it blank if you like.' },
+  leadsOn
+    ? { icon: 'mail', title: 'Your email', text: 'So we can send you a confirmation.' } // D283 (7): Marketing checks these words
+    : { icon: 'mail', title: 'Your email', text: 'Optional. Leave it blank if you like.' },
 ];
 const more: Tile[] = [
   { icon: 'bars', title: 'Tags on this site', text: 'This site uses measurement and advertising tags from Google, Meta and Microsoft Clarity to understand visits, see how pages are used and show Glacial Water adverts to people who have visited. Clarity may record how a visit moves through a page; what you type into forms is masked. You can block these in your browser settings.' },
+  ...(leadsOn ? [{ icon: 'pin' as const, title: 'Where your details go', text: 'Into Glacial\'s own order records and to our team by email. Not sold. Not shared outside Glacial and the services that run the site.' }] : []), // D283 (7)
   { icon: 'clock', title: 'How long we keep your details', text: 'While you are a customer. Deleted when you ask.' },
   { icon: 'person', title: 'Your details stay with Glacial', text: 'We never sell your details.' },
   { icon: 'mail', title: 'Want to see or remove your details?', html: 'Write to <a href="mailto:info@glacial.pk">info@glacial.pk</a> or message us on WhatsApp. We will help.' },
 ].filter((t) => preview || !t.previewOnly);
 const terms: Tile[] = [
-  { icon: 'chat', title: 'You order on WhatsApp', text: 'We confirm your delivery day and time with you.' },
+  { icon: 'chat', title: leadsOn ? 'You order on this site or on WhatsApp' : 'You order on WhatsApp', text: 'We confirm your delivery day and time with you.' },
   { icon: 'cash', title: 'You pay when it arrives', text: 'Pay cash when your water arrives, or by bank transfer after each delivery. Buying at the shop? Pay cash at the counter. You pay nothing on this website.' },
   { icon: 'bottle', title: 'New bottle: Rs 1,300 deposit', text: 'The deposit is refundable.' },
   { icon: 'swap', title: 'Or swap your old bottle: Rs 650', text: 'Old bottle for new, judged by its condition.' },

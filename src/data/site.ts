@@ -6,6 +6,11 @@ export const isProduction = import.meta.env.PUBLIC_TARGET === 'production';
 export const phoneDisplay = '03.111.125.124'; // D146: shown this way on every page; tel:, wa.me and schema keep +923111125124
 export const phoneTel = '+923111125124';
 export const whatsappUrl = 'https://wa.me/923111125124';
+// D283 / D285: the six forms send one message to the leads sheet's web app (MS01 RETURN, 26 Nov 17:38). Empty = the forms behave as before (WhatsApp).
+export const leadEndpoint = 'https://script.google.com/macros/s/AKfycbx9to966wLOX6V7LNiZwVqyd2RYzMBgMpDwzg9fkaAvDsVHixTnG8gpG7L78YUsasAGsg/exec';
+// D285 (2): true = the page sends a plain form-encoded POST and reads the reply. If a browser will not let the page read it, set false:
+// the page then sends without reading the reply and treats a request that left without a network error as sent.
+export const leadReplyReadable = true;
 export const hoursLine = 'Shops open 9am–9pm, every day · Delivery bookings until 7pm';
 export const navLinks: { label: string; href: string; soon?: boolean }[] = [
   { label: 'Products and prices', href: `${base}prices/` },

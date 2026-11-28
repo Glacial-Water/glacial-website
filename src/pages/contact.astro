@@ -8,6 +8,7 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import CallIcon from '../components/CallIcon.astro';
 import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
+import { leadsOn } from '../lib/leads';
 import BankDetails from '../components/BankDetails.astro';
 import shop from '../assets/home/shop.svg';
 import rosette from '../assets/home/rosette.png';
@@ -106,6 +107,7 @@ const startMsg = 'Hi Glacial, I need help with: [pick a topic]\nName: [name]';
         <div class="field"><label for="c-name">Name</label><input id="c-name" type="text" autocomplete="name" /></div>
         <div class="field"><label for="c-mobile">Mobile number <span>(we call you on this)</span></label><input id="c-mobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
         <div class="field"><label for="c-wa">WhatsApp number <span>(if different)</span></label><input id="c-wa" type="tel" inputmode="tel" placeholder="03XX-XXXXXXX" /></div>
+        {leadsOn && <div class="field"><label for="c-mail">Email <span>(optional, for a confirmation)</span></label><input id="c-mail" type="email" autocomplete="email" /></div>}
         <div class="field"><label for="c-msg">Your question <span>(optional)</span></label><textarea id="c-msg" rows="3"></textarea></div>
       </div>
 
@@ -113,8 +115,8 @@ const startMsg = 'Hi Glacial, I need help with: [pick a topic]\nName: [name]';
       <div class="chatbox" aria-live="polite">
         <div class="bubble"><span id="c-preview"></span><span class="meta">ready to send <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="#0a6f8f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 6.5l3 3L10 3.5M6 9.5l1 .5 7-7"/></svg></span></div>
       </div>
-      <a class="wa" id="c-send" href={whatsappUrl}><Fragment set:html={waGlyph} />Send on WhatsApp</a>
-      <p class="fine">WhatsApp opens with your message written. You check it, then tap send.</p>
+      <a class="wa" id="c-send" href={whatsappUrl}><Fragment set:html={waGlyph} />{leadsOn ? 'Send my message' : 'Send on WhatsApp'}</a>
+      <p class="fine">{leadsOn ? 'Our team calls you back on your mobile number.' : 'WhatsApp opens with your message written. You check it, then tap send.'}</p>
       <a class="link" href={`${base}for-businesses/`}>Business customer? Your account manager helps you →</a>
     </div>
   </section>
@@ -214,6 +216,7 @@ const startMsg = 'Hi Glacial, I need help with: [pick a topic]\nName: [name]';
 
 <script>
   import { armMotion } from '../lib/motion';
+  import { wireLead, leadsOn } from '../lib/leads';
   armMotion();
 
   // One pre-filled WhatsApp message to the one number on record (D5): topic, name, mobile for the call-back, WhatsApp if different, then the question.
@@ -242,6 +245,17 @@ const startMsg = 'Hi Glacial, I need help with: [pick a topic]\nName: [name]';
     render();
   }));
   ['c-name', 'c-mobile', 'c-wa', 'c-msg'].forEach((id) => $(id).addEventListener('input', render));
+  // D283 / D285: with the leads address set, the help form sends a request to the leads sheet instead of opening WhatsApp.
+  const cSend = $('c-send') as HTMLAnchorElement;
+  const cHost = cSend.closest('.col') as HTMLElement;
+  wireLead({
+    kind: 'help', button: cSend, host: cHost, before: cHost.querySelector('.link'),
+    inputs: ['c-name', 'c-mobile', 'c-wa', 'c-mail', 'c-msg'], required: ['c-mobile'], mobileId: 'c-mobile',
+    collect: () => ({ name: val('c-name'), mobile: val('c-mobile'), whatsapp: val('c-wa'), email: val('c-mail'),
+      details: 'Help with: ' + (topic || 'not picked') + (val('c-msg') ? ' | ' + val('c-msg').replace(/\s+/g, ' ') : '') }),
+    hide: () => Array.from(cHost.querySelectorAll<HTMLElement>('.topics, .fields, .preview-label, .chatbox, .fine')).concat(cSend),
+  });
+  if (leadsOn) ($('c-msg') as unknown as HTMLTextAreaElement).maxLength = 900; // leaves room for the topic in the one 'details' line (1,000 cap)
   render();
 </script>
 

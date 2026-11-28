@@ -1,6 +1,7 @@
 ---
 // Order page (D90, D101, D111, D115). Built from Order.dc.html, canvas version 29.
-// No form submission and no database (D22): the fields only fill the pre-filled WhatsApp message to wa.me/923111125124.
+// D283: the order form sends one request to Glacial's own leads sheet (leadEndpoint in src/data/site.ts) and to the team by email; the fields also fill the pre-filled WhatsApp message (the fallback if a send fails, and the whole route while leadEndpoint is empty).
+// Nothing is sold or shared; no other database.
 // Motion: the three way-tile pictures only (D147, 30 Oct); the security tiles stay still. Prices D42/D63; WEB100 only with a new-bottle deposit on a delivery order (D69, D115 b).
 // Step 1 per D151 g (amends D115 f): 'We call you' / 'We call you to confirm your delivery day and time.'
 // 30 Oct (canvas v41, D148 d, D157): Walk-in first, Weekly preselected; way-tile motion; ?new=&ex= presets from Products and prices.
@@ -10,6 +11,7 @@ import { Image } from 'astro:assets';
 import CallIcon from '../components/CallIcon.astro';
 import Base from '../layouts/Base.astro';
 import { phoneDisplay, phoneTel, whatsappUrl } from '../data/site';
+import { leadsOn } from '../lib/leads';
 import BankDetails from '../components/BankDetails.astro';
 import bottleNew from '../assets/home/bottle-new.webp';
 import '../styles/tiles.css';
@@ -226,7 +228,7 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
         <p class="foot" id="foot"></p>
         <p class="foot">You pay nothing on this page. Pay cash when your water arrives, or by bank transfer after each delivery. Buying at the shop? Pay cash at the counter.</p>
       </div>
-      <a class="wa" id="sendHref" href={whatsappUrl}><Fragment set:html={waGlyph} /><span id="sendLabel">Send my order on WhatsApp</span></a>
+      <a class="wa" id="sendHref" href={whatsappUrl}><Fragment set:html={waGlyph} /><span id="sendLabel">{leadsOn ? 'Send my order' : 'Send my order on WhatsApp'}</span></a>
       <a class="call" href={`tel:${phoneTel}`}><CallIcon />Or call {phoneDisplay}</a>
       <p class="foot center">Delivery bookings until 7pm.</p>
     </div>
@@ -250,8 +252,9 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
 
 <script>
   import { armMotion } from '../lib/motion';
+  import { wireLead, leadsOn } from '../lib/leads';
   // Prices: 00-INDEX D42/D63. Offer: D69/D115 b (WEB100, Rs 100 off the deposit, only with a new-bottle deposit on a delivery order).
-  // Nothing is stored or sent anywhere except the pre-filled WhatsApp message the visitor chooses to send (D22).
+  // D283: with the leads address set, the order goes to the leads sheet; otherwise only the pre-filled WhatsApp message the visitor chooses to send.
   const P = { deposit: 1300, exchange: 650, weekly: 260, express: 280, walk: 200, offer: 100 };
   const WA = 'https://wa.me/923111125124';
   const $ = (id: string) => document.getElementById(id) as HTMLElement;
@@ -268,6 +271,9 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
   if (pNew !== null) nNew = pNew;
   if (pEx !== null) nEx = pEx;
 
+  let details = '';
+  // lead is wired after render() is defined; render() calls lead.setActive
+  let lead: { setActive(on: boolean): void } = { setActive() {} };
   function render() {
     const isFirst = who === 'first';
     const count = isFirst ? nNew + nEx : nFill;
@@ -312,7 +318,8 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
     $('offer-box').hidden = !hasOffer;
     $('foot').textContent = feet.join(' ');
     $('nextNote').textContent = way === 'weekly' ? 'Same day, same time, every week.' : 'In 90 minutes or less*';
-    $('sendLabel').textContent = isDelivery ? 'Send my order on WhatsApp' : 'Ask us on WhatsApp';
+    $('sendLabel').textContent = isDelivery ? (leadsOn ? 'Send my order' : 'Send my order on WhatsApp') : 'Ask us on WhatsApp';
+    lead.setActive(isDelivery); // a walk-in needs no order: the button stays a plain WhatsApp link
 
     // WhatsApp message (delivery only); walk-in needs no order
     const href = $('sendHref') as HTMLAnchorElement;
@@ -326,6 +333,8 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
     if (val('o-wa')) m.push('WhatsApp: ' + val('o-wa')); // D165 (d 4): the WhatsApp number is only sent when it differs from the mobile
     m.push('Delivery address: ' + val('o-addr'));
       m.push('Email: ' + val('o-mail')); // D148 (8): the email is required and travels in the message
+      details = m.slice(1).filter((x) => !/^(Name|Mobile|WhatsApp|Delivery address|Email): /.test(x)).join(' | ');
+      details = (isFirst ? 'First order | ' : 'Returning customer | ') + details;
       href.href = WA + '?text=' + encodeURIComponent(m.join('\n'));
     } else {
       href.href = WA;
@@ -363,6 +372,12 @@ const tracker = [['1', 'Bottles'], ['2', 'Delivery'], ['3', 'Send']];
       const el = $(id) as HTMLInputElement;
       if (!el.checkValidity() || !el.value.trim()) { e.preventDefault(); el.reportValidity(); el.focus(); return; }
     }
+  });
+  lead = wireLead({
+    kind: 'order', button: $('sendHref') as HTMLAnchorElement, host: ($('sendHref').closest('.col') as HTMLElement),
+    inputs: ['o-name', 'o-phone', 'o-wa', 'o-addr', 'o-mail'], required: ['o-phone', 'o-mail'], mobileId: 'o-phone',
+    collect: () => ({ name: val('o-name'), mobile: val('o-phone'), whatsapp: val('o-wa'), email: val('o-mail'), address: val('o-addr'), details }),
+    hide: () => [$('details'), ...Array.from($('sendHref').closest('.col')!.children).filter((c) => !c.matches('.summary')) as HTMLElement[]],
   });
   render();
   armMotion(); // D147: the way-tile pictures play once in view (src/lib/motion.ts)

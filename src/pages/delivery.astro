@@ -12,6 +12,7 @@ import WayMotion from '../components/WayMotion.astro';
 import '../styles/tiles.css';
 import '../styles/motion.css';
 import { whatsappUrl, phoneDisplay, phoneTel } from '../data/site';
+import { leadsOn } from '../lib/leads';
 import truck from '../assets/home/truck.jpg';
 import rider from '../assets/home/rider.jpg';
 import rosette from '../assets/home/rosette.png';
@@ -180,10 +181,11 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
         <div class="field"><label for="d-name">Name</label><input id="d-name" type="text" autocomplete="name" /></div>
         <div class="field"><label for="d-phone">Mobile number <span>(we call you on this)</span></label><input id="d-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX-XXXXXXX" /></div>
         <div class="field"><label for="d-wa">WhatsApp number <span>(if different)</span></label><input id="d-wa" type="tel" inputmode="tel" placeholder="03XX-XXXXXXX" /></div>
+        {leadsOn && <div class="field"><label for="d-mail">Email <span>(optional, for a confirmation)</span></label><input id="d-mail" type="email" autocomplete="email" /></div>}
         <div class="field"><label for="d-area-in">Area</label><input id="d-area-in" type="text" autocomplete="address-level3" placeholder="For example, Johar Town" aria-describedby="d-area-answer" /></div>
         <div class="area-live" id="d-area-answer" role="status" aria-live="polite" aria-atomic="true"></div>
       </div>
-      <p class="foot">We'll message you about delivery in your area.</p>
+      <p class="foot">{leadsOn ? 'We\'ll call you about delivery in your area.' : 'We\'ll message you about delivery in your area.'}</p>
       <a class="wa" id="d-area-href" href={whatsappUrl}><Fragment set:html={waGlyph} />Check my area</a>
     </div>
   </section>
@@ -249,6 +251,7 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
 <script>
   import { lookupArea } from '../lib/areaMatch';
   import { armMotion } from '../lib/motion';
+  import { wireLead } from '../lib/leads';
   const WA = 'https://wa.me/923111125124';
   const $ = (id: string) => document.getElementById(id) as HTMLElement;
   const val = (id: string) => ((document.getElementById(id) as HTMLInputElement | null)?.value || '').trim();
@@ -282,6 +285,14 @@ const cells = Array.from({ length: 28 }, (_, i) => ({ on: i % 7 === mark, delay:
   }
   $('d-area-in').addEventListener('input', check);
   ['d-name', 'd-phone', 'd-wa', 'd-area-in'].forEach((id) => $(id).addEventListener('input', link));
+  // D283 / D285: with the leads address set, the area check sends a request to the leads sheet instead of opening WhatsApp.
+  const dHost = $('d-area-href').closest('.col') as HTMLElement;
+  wireLead({
+    kind: 'area-check', button: $('d-area-href') as HTMLAnchorElement, host: dHost,
+    inputs: ['d-name', 'd-phone', 'd-wa', 'd-mail', 'd-area-in'], required: ['d-phone'], mobileId: 'd-phone',
+    collect: () => ({ name: val('d-name'), mobile: val('d-phone'), whatsapp: val('d-wa'), email: val('d-mail'), area: val('d-area-in') }),
+    hide: () => Array.from(dHost.children).filter((c) => !c.matches('h2')) as HTMLElement[],
+  });
   armMotion(); // D110 / D147 / D163: each picture plays once when 35% of it is in view (src/lib/motion.ts)
 </script>
 
